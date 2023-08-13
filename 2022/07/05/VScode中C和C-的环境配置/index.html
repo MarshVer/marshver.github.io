@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 6.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/dragon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/dragon.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/dragon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -17,7 +19,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#FF0000","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"输入关键词","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="在VScode中配置C和C++的运行环境">
@@ -120,6 +122,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -149,20 +152,44 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -180,7 +207,7 @@
     <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2022/07/05/VScode%E4%B8%ADC%E5%92%8CC-%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
+      <meta itemprop="image" content="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
       <meta itemprop="name" content="MarshVer">
       <meta itemprop="description" content="MarshVer's Blog">
     </span>
@@ -210,7 +237,21 @@
                 <time title="修改时间：2023-08-13 15:42:09" itemprop="dateModified" datetime="2023-08-13T15:42:09+08:00">2023-08-13</time>
               </span>
 
-          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
             <div class="post-description">在VScode中配置C和C++的运行环境</div>
 
         </div>
@@ -240,75 +281,75 @@
 <h2 id="7-配置VScode"><a href="#7-配置VScode" class="headerlink" title="7.配置VScode"></a>7.配置VScode</h2><p>打开你的VScode，并打开C_Single文件夹，新建如图文件夹和文件：</p>
 <p><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2022/08/03/j1zDhbCVXqEt3H9.png"></p>
 <p>launch.json:</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json">&#123;
-    &quot;version&quot;: &quot;0.2.0&quot;,
-    &quot;configurations&quot;: [
-        &#123;&#x2F;&#x2F;这个大括号里是我们的‘调试(Debug)’配置
-            &quot;name&quot;: &quot;Debug&quot;, &#x2F;&#x2F; 配置名称
-            &quot;type&quot;: &quot;cppdbg&quot;, &#x2F;&#x2F; 配置类型，cppdbg对应cpptools提供的调试功能；可以认为此处只能是cppdbg
-            &quot;request&quot;: &quot;launch&quot;, &#x2F;&#x2F; 请求配置类型，可以为launch（启动）或attach（附加）
-            &quot;program&quot;: &quot;$&#123;fileDirname&#125;\\bin\\$&#123;fileBasenameNoExtension&#125;.exe&quot;, &#x2F;&#x2F; 将要进行调试的程序的路径
-            &quot;args&quot;: [], &#x2F;&#x2F; 程序调试时传递给程序的命令行参数，这里设为空即可
-            &quot;stopAtEntry&quot;: false, &#x2F;&#x2F; 设为true时程序将暂停在程序入口处，相当于在main上打断点
-            &quot;cwd&quot;: &quot;$&#123;fileDirname&#125;&quot;, &#x2F;&#x2F; 调试程序时的工作目录，此处为源码文件所在目录
-            &quot;environment&quot;: [], &#x2F;&#x2F; 环境变量，这里设为空即可
-            &quot;externalConsole&quot;: false, &#x2F;&#x2F; 为true时使用单独的cmd窗口，跳出小黑框；设为false则是用vscode的内置终端，建议用内置终端
-            &quot;internalConsoleOptions&quot;: &quot;neverOpen&quot;, &#x2F;&#x2F; 如果不设为neverOpen，调试时会跳到“调试控制台”选项卡，新手调试用不到
-            &quot;MIMode&quot;: &quot;gdb&quot;, &#x2F;&#x2F; 指定连接的调试器，gdb是minGW中的调试程序
-            &quot;miDebuggerPath&quot;: &quot;C:\\mingw64\\bin\\gdb.exe&quot;, &#x2F;&#x2F; 指定调试器所在路径，如果你的minGW装在别的地方，则要改成你自己的路径，注意间隔是\\
-            &quot;preLaunchTask&quot;: &quot;build&quot; &#x2F;&#x2F; 调试开始前执行的任务，我们在调试前要编译构建。与tasks.json的label相对应，名字要一样
-    &#125;]
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"0.2.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"configurations"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span><span class="token comment">//这个大括号里是我们的‘调试(Debug)’配置</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Debug"</span><span class="token punctuation">,</span> <span class="token comment">// 配置名称</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"cppdbg"</span><span class="token punctuation">,</span> <span class="token comment">// 配置类型，cppdbg对应cpptools提供的调试功能；可以认为此处只能是cppdbg</span>
+            <span class="token property">"request"</span><span class="token operator">:</span> <span class="token string">"launch"</span><span class="token punctuation">,</span> <span class="token comment">// 请求配置类型，可以为launch（启动）或attach（附加）</span>
+            <span class="token property">"program"</span><span class="token operator">:</span> <span class="token string">"$&#123;fileDirname&#125;\\bin\\$&#123;fileBasenameNoExtension&#125;.exe"</span><span class="token punctuation">,</span> <span class="token comment">// 将要进行调试的程序的路径</span>
+            <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// 程序调试时传递给程序的命令行参数，这里设为空即可</span>
+            <span class="token property">"stopAtEntry"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 设为true时程序将暂停在程序入口处，相当于在main上打断点</span>
+            <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"$&#123;fileDirname&#125;"</span><span class="token punctuation">,</span> <span class="token comment">// 调试程序时的工作目录，此处为源码文件所在目录</span>
+            <span class="token property">"environment"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// 环境变量，这里设为空即可</span>
+            <span class="token property">"externalConsole"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 为true时使用单独的cmd窗口，跳出小黑框；设为false则是用vscode的内置终端，建议用内置终端</span>
+            <span class="token property">"internalConsoleOptions"</span><span class="token operator">:</span> <span class="token string">"neverOpen"</span><span class="token punctuation">,</span> <span class="token comment">// 如果不设为neverOpen，调试时会跳到“调试控制台”选项卡，新手调试用不到</span>
+            <span class="token property">"MIMode"</span><span class="token operator">:</span> <span class="token string">"gdb"</span><span class="token punctuation">,</span> <span class="token comment">// 指定连接的调试器，gdb是minGW中的调试程序</span>
+            <span class="token property">"miDebuggerPath"</span><span class="token operator">:</span> <span class="token string">"C:\\mingw64\\bin\\gdb.exe"</span><span class="token punctuation">,</span> <span class="token comment">// 指定调试器所在路径，如果你的minGW装在别的地方，则要改成你自己的路径，注意间隔是\\</span>
+            <span class="token property">"preLaunchTask"</span><span class="token operator">:</span> <span class="token string">"build"</span> <span class="token comment">// 调试开始前执行的任务，我们在调试前要编译构建。与tasks.json的label相对应，名字要一样</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>倒数第二个代码数据是你自己的gdb文件的位置，我的是 mingw64\bin\gdb.exe。</p>
 <p>tasks.json:</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json">&#123;
-    &quot;version&quot;: &quot;2.0.0&quot;,
-    &quot;tasks&quot;: [
-        &#123;&#x2F;&#x2F;这个大括号里是‘构建（build）’任务
-            &quot;label&quot;: &quot;build&quot;, &#x2F;&#x2F;任务名称，可以更改，不过不建议改
-            &quot;type&quot;: &quot;shell&quot;, &#x2F;&#x2F;任务类型，process是vsc把预定义变量和转义解析后直接全部传给command；shell相当于先打开shell再输入命令，所以args还会经过shell再解析一遍
-            &quot;command&quot;: &quot;gcc&quot;, &#x2F;&#x2F;编译命令，这里是gcc，编译c++的话换成g++
-            &quot;args&quot;: [    &#x2F;&#x2F;方括号里是传给gcc命令的一系列参数，用于实现一些功能
-                &quot;$&#123;file&#125;&quot;, &#x2F;&#x2F;指定要编译的是当前文件
-                &quot;-o&quot;, &#x2F;&#x2F;指定输出文件的路径和名称
-                &quot;$&#123;fileDirname&#125;\\bin\\$&#123;fileBasenameNoExtension&#125;.exe&quot;, &#x2F;&#x2F;承接上一步的-o，让可执行文件输出到源码文件所在的文件夹下的bin文件夹内，并且让它的名字和源码文件相同
-                &quot;-g&quot;, &#x2F;&#x2F;生成和调试有关的信息
-                &quot;-Wall&quot;, &#x2F;&#x2F; 开启额外警告
-                &quot;-static-libgcc&quot;,  &#x2F;&#x2F; 静态链接libgcc
-                &quot;-fexec-charset&#x3D;GBK&quot;, &#x2F;&#x2F; 生成的程序使用GBK编码，不加这一条会导致Win下输出中文乱码
-                &quot;-std&#x3D;c11&quot;, &#x2F;&#x2F; 语言标准，可根据自己的需要进行修改，写c++要换成c++的语言标准，比如c++11
-            ],
-            &quot;group&quot;: &#123;  &#x2F;&#x2F;group表示‘组’，我们可以有很多的task，然后把他们放在一个‘组’里
-                &quot;kind&quot;: &quot;build&quot;,&#x2F;&#x2F;表示这一组任务类型是构建
-                &quot;isDefault&quot;: true&#x2F;&#x2F;表示这个任务是当前这组任务中的默认任务
-            &#125;,
-            &quot;presentation&quot;: &#123; &#x2F;&#x2F;执行这个任务时的一些其他设定
-                &quot;echo&quot;: true,&#x2F;&#x2F;表示在执行任务时在终端要有输出
-                &quot;reveal&quot;: &quot;always&quot;, &#x2F;&#x2F;执行任务时是否跳转到终端面板，可以为always，silent，never
-                &quot;focus&quot;: false, &#x2F;&#x2F;设为true后可以使执行task时焦点聚集在终端，但对编译来说，设为true没有意义，因为运行的时候才涉及到输入
-                &quot;panel&quot;: &quot;new&quot; &#x2F;&#x2F;每次执行这个task时都新建一个终端面板，也可以设置为shared，共用一个面板，不过那样会出现‘任务将被终端重用’的提示，比较烦人
-            &#125;,
-            &quot;problemMatcher&quot;: &quot;$gcc&quot; &#x2F;&#x2F;捕捉编译时编译器在终端里显示的报错信息，将其显示在vscode的‘问题’面板里
-        &#125;,
-        &#123;&#x2F;&#x2F;这个大括号里是‘运行(run)’任务，一些设置与上面的构建任务性质相同
-            &quot;label&quot;: &quot;run&quot;, 
-            &quot;type&quot;: &quot;shell&quot;, 
-            &quot;dependsOn&quot;: &quot;build&quot;, &#x2F;&#x2F;任务依赖，因为要运行必须先构建，所以执行这个任务前必须先执行build任务，
-            &quot;command&quot;: &quot;$&#123;fileDirname&#125;\\bin\\$&#123;fileBasenameNoExtension&#125;.exe&quot;, &#x2F;&#x2F;执行exe文件，只需要指定这个exe文件在哪里就好
-            &quot;group&quot;: &#123;
-                &quot;kind&quot;: &quot;test&quot;, &#x2F;&#x2F;这一组是‘测试’组，将run任务放在test组里方便我们用快捷键执行
-                &quot;isDefault&quot;: true
-            &#125;,
-            &quot;presentation&quot;: &#123;
-                &quot;echo&quot;: true,
-                &quot;reveal&quot;: &quot;always&quot;,
-                &quot;focus&quot;: true, &#x2F;&#x2F;这个就设置为true了，运行任务后将焦点聚集到终端，方便进行输入
-                &quot;panel&quot;: &quot;new&quot;
-            &#125;
-        &#125;
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"2.0.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span><span class="token comment">//这个大括号里是‘构建（build）’任务</span>
+            <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"build"</span><span class="token punctuation">,</span> <span class="token comment">//任务名称，可以更改，不过不建议改</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span> <span class="token comment">//任务类型，process是vsc把预定义变量和转义解析后直接全部传给command；shell相当于先打开shell再输入命令，所以args还会经过shell再解析一遍</span>
+            <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"gcc"</span><span class="token punctuation">,</span> <span class="token comment">//编译命令，这里是gcc，编译c++的话换成g++</span>
+            <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span>    <span class="token comment">//方括号里是传给gcc命令的一系列参数，用于实现一些功能</span>
+                <span class="token string">"$&#123;file&#125;"</span><span class="token punctuation">,</span> <span class="token comment">//指定要编译的是当前文件</span>
+                <span class="token string">"-o"</span><span class="token punctuation">,</span> <span class="token comment">//指定输出文件的路径和名称</span>
+                <span class="token string">"$&#123;fileDirname&#125;\\bin\\$&#123;fileBasenameNoExtension&#125;.exe"</span><span class="token punctuation">,</span> <span class="token comment">//承接上一步的-o，让可执行文件输出到源码文件所在的文件夹下的bin文件夹内，并且让它的名字和源码文件相同</span>
+                <span class="token string">"-g"</span><span class="token punctuation">,</span> <span class="token comment">//生成和调试有关的信息</span>
+                <span class="token string">"-Wall"</span><span class="token punctuation">,</span> <span class="token comment">// 开启额外警告</span>
+                <span class="token string">"-static-libgcc"</span><span class="token punctuation">,</span>  <span class="token comment">// 静态链接libgcc</span>
+                <span class="token string">"-fexec-charset=GBK"</span><span class="token punctuation">,</span> <span class="token comment">// 生成的程序使用GBK编码，不加这一条会导致Win下输出中文乱码</span>
+                <span class="token string">"-std=c11"</span><span class="token punctuation">,</span> <span class="token comment">// 语言标准，可根据自己的需要进行修改，写c++要换成c++的语言标准，比如c++11</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"group"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>  <span class="token comment">//group表示‘组’，我们可以有很多的task，然后把他们放在一个‘组’里</span>
+                <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"build"</span><span class="token punctuation">,</span><span class="token comment">//表示这一组任务类型是构建</span>
+                <span class="token property">"isDefault"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token comment">//表示这个任务是当前这组任务中的默认任务</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"presentation"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token comment">//执行这个任务时的一些其他设定</span>
+                <span class="token property">"echo"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><span class="token comment">//表示在执行任务时在终端要有输出</span>
+                <span class="token property">"reveal"</span><span class="token operator">:</span> <span class="token string">"always"</span><span class="token punctuation">,</span> <span class="token comment">//执行任务时是否跳转到终端面板，可以为always，silent，never</span>
+                <span class="token property">"focus"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">//设为true后可以使执行task时焦点聚集在终端，但对编译来说，设为true没有意义，因为运行的时候才涉及到输入</span>
+                <span class="token property">"panel"</span><span class="token operator">:</span> <span class="token string">"new"</span> <span class="token comment">//每次执行这个task时都新建一个终端面板，也可以设置为shared，共用一个面板，不过那样会出现‘任务将被终端重用’的提示，比较烦人</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"problemMatcher"</span><span class="token operator">:</span> <span class="token string">"$gcc"</span> <span class="token comment">//捕捉编译时编译器在终端里显示的报错信息，将其显示在vscode的‘问题’面板里</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span><span class="token comment">//这个大括号里是‘运行(run)’任务，一些设置与上面的构建任务性质相同</span>
+            <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"run"</span><span class="token punctuation">,</span> 
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span> 
+            <span class="token property">"dependsOn"</span><span class="token operator">:</span> <span class="token string">"build"</span><span class="token punctuation">,</span> <span class="token comment">//任务依赖，因为要运行必须先构建，所以执行这个任务前必须先执行build任务，</span>
+            <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"$&#123;fileDirname&#125;\\bin\\$&#123;fileBasenameNoExtension&#125;.exe"</span><span class="token punctuation">,</span> <span class="token comment">//执行exe文件，只需要指定这个exe文件在哪里就好</span>
+            <span class="token property">"group"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"test"</span><span class="token punctuation">,</span> <span class="token comment">//这一组是‘测试’组，将run任务放在test组里方便我们用快捷键执行</span>
+                <span class="token property">"isDefault"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"presentation"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"echo"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+                <span class="token property">"reveal"</span><span class="token operator">:</span> <span class="token string">"always"</span><span class="token punctuation">,</span>
+                <span class="token property">"focus"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">//这个就设置为true了，运行任务后将焦点聚集到终端，方便进行输入</span>
+                <span class="token property">"panel"</span><span class="token operator">:</span> <span class="token string">"new"</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
 
-    ]
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>第三行代码如果是配置C++的环境则改成g++（配置C++只有这一步与C不同，其他的跟配置C环境相同）。</p>
 <h2 id="8-安装插件"><a href="#8-安装插件" class="headerlink" title="8.安装插件"></a>8.安装插件</h2><p><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/06/KU9tvCADylZz7pc.png" alt="插件.png"></p>
 <p>从上到下依次为：自定义背景图片——C&#x2F;C++所需插件——汉化包——Markdown预览——Vscode文件美化图标——好用的背景色</p>
@@ -406,7 +447,7 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="MarshVer"
-      src="/images/touxiang.png">
+      src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
   <p class="site-author-name" itemprop="name">MarshVer</p>
   <div class="site-description" itemprop="description">MarshVer's Blog</div>
 </div>
@@ -429,16 +470,20 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
       </span>
   </div>
 
 
 
       </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
 
     </div>
   </aside>
@@ -456,12 +501,22 @@
 
 <div class="copyright">
   
-  &copy; 2020 – 
+  &copy; 2022 – 
   <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">MarshVer</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">32k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">53 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -481,6 +536,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 
@@ -502,6 +558,10 @@
 
 
 
+  
+<script src="/js/local-search.js"></script>
+
+
 
 
 
@@ -518,6 +578,16 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://marshver.github.io/2022/07/05/VScode%E4%B8%ADC%E5%92%8CC-%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/',]
+      });
+      });
+  </script>
 
 
         <style>

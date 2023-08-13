@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 6.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/dragon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/dragon.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/dragon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -17,18 +19,18 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#FF0000","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"输入关键词","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="MarshVer&#39;s Blog">
 <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
+<meta property="og:title" content="标签">
 <meta property="og:url" content="https://marshver.github.io/tags/index.html">
 <meta property="og:site_name" content="MarshVer">
 <meta property="og:description" content="MarshVer&#39;s Blog">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-28T15:32:31.000Z">
-<meta property="article:modified_time" content="2023-08-13T07:42:11.787Z">
+<meta property="article:modified_time" content="2023-08-13T14:09:23.833Z">
 <meta property="article:author" content="MarshVer">
 <meta property="article:tag" content="MarshVer">
 <meta name="twitter:card" content="summary">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title>tags | MarshVer
+  <title>标签 | MarshVer
 </title>
   
 
@@ -105,6 +107,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -134,20 +137,44 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -166,7 +193,7 @@
     <div class="post-block" lang="zh-CN">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">tags
+<h1 class="post-title" itemprop="name headline">标签
 </h1>
 
 <div class="post-meta">
@@ -255,7 +282,7 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="MarshVer"
-      src="/images/touxiang.png">
+      src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
   <p class="site-author-name" itemprop="name">MarshVer</p>
   <div class="site-description" itemprop="description">MarshVer's Blog</div>
 </div>
@@ -278,16 +305,20 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
       </span>
   </div>
 
 
 
       </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
 
     </div>
   </aside>
@@ -305,12 +336,22 @@
 
 <div class="copyright">
   
-  &copy; 2020 – 
+  &copy; 2022 – 
   <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">MarshVer</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">32k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">53 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -330,6 +371,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 
@@ -351,6 +393,10 @@
 
 
 
+  
+<script src="/js/local-search.js"></script>
+
+
 
 
 
@@ -367,6 +413,16 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://marshver.github.io/tags/',]
+      });
+      });
+  </script>
 
 
         <style>
