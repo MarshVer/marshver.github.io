@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 6.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/dragon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/dragon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/dragon.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
@@ -17,21 +17,21 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="注：这种方法申请的域名无法备案。 一、注册并申请域名 进入官网：https:&#x2F;&#x2F;nic.eu.org&#x2F;  注册账号：注册账号最好用谷歌邮箱，且注册账号需要大概一天的审核时间，审核成功的邮件在谷歌邮箱的垃圾邮件里。 登陆账号，点击new domain第一个信息填入你的域名地址，带.eu.org（如marshver.eu.org）后面信息按要求填写Check for correctness of:选择">
+  <meta name="description" content="申请一个免费域名，并绑定Cloudflare，同时在Vercel中自定义域名加速访问博客">
 <meta property="og:type" content="article">
 <meta property="og:title" content="申请免费域名并绑定Cloudflare">
 <meta property="og:url" content="https://marshver.github.io/2022/08/19/%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/index.html">
 <meta property="og:site_name" content="MarshVer">
-<meta property="og:description" content="注：这种方法申请的域名无法备案。 一、注册并申请域名 进入官网：https:&#x2F;&#x2F;nic.eu.org&#x2F;  注册账号：注册账号最好用谷歌邮箱，且注册账号需要大概一天的审核时间，审核成功的邮件在谷歌邮箱的垃圾邮件里。 登陆账号，点击new domain第一个信息填入你的域名地址，带.eu.org（如marshver.eu.org）后面信息按要求填写Check for correctness of:选择">
+<meta property="og:description" content="申请一个免费域名，并绑定Cloudflare，同时在Vercel中自定义域名加速访问博客">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/08/19/qIjnzVX5JNx8EBG.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/19/oMWZNxlDwygGuK9.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/19/ZlMGk968xwU1jsD.png">
 <meta property="article:published_time" content="2022-08-19T06:11:29.000Z">
-<meta property="article:modified_time" content="2022-08-19T07:27:36.000Z">
+<meta property="article:modified_time" content="2023-08-13T07:42:06.657Z">
 <meta property="article:author" content="MarshVer">
 <meta property="article:tag" content="博客">
 <meta name="twitter:card" content="summary">
@@ -122,9 +122,19 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
   </ul>
@@ -158,7 +168,7 @@
     <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2022/08/19/%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/touxiang.png">
       <meta itemprop="name" content="MarshVer">
       <meta itemprop="description" content="MarshVer's Blog">
     </span>
@@ -177,12 +187,19 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-19 14:11:29 / 修改时间：15:27:36" itemprop="dateCreated datePublished" datetime="2022-08-19T14:11:29+08:00">2022-08-19</time>
+              <time title="创建时间：2022-08-19 14:11:29" itemprop="dateCreated datePublished" datetime="2022-08-19T14:11:29+08:00">2022-08-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-13 15:42:06" itemprop="dateModified" datetime="2023-08-13T15:42:06+08:00">2023-08-13</time>
+              </span>
 
           
+            <div class="post-description">申请一个免费域名，并绑定Cloudflare，同时在Vercel中自定义域名加速访问博客</div>
 
         </div>
       </header>
@@ -302,6 +319,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="MarshVer"
+      src="/images/touxiang.png">
   <p class="site-author-name" itemprop="name">MarshVer</p>
   <div class="site-description" itemprop="description">MarshVer's Blog</div>
 </div>
@@ -316,11 +335,20 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
+          
         <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 
@@ -342,14 +370,14 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2020 – 
   <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">MarshVer</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -375,7 +403,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -398,6 +426,8 @@
 
 
 
+
+  
 
   
 
