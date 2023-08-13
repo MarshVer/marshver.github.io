@@ -9,8 +9,6 @@
   <link rel="icon" type="image/png" sizes="32x32" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
-  <link rel="manifest" href="/images/manifest.json">
-  <meta name="msapplication-config" content="/images/browserconfig.xml">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -19,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#FF0000","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"输入关键词","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#FF0000","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"输入关键词","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="MarshVer&#39;s Blog">
@@ -104,7 +102,6 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -134,38 +131,11 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
   </ul>
 </nav>
 
 
 
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result">
-  <div id="no-result">
-    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-  </div>
-</div>
-
-    </div>
-  </div>
 
 </div>
     </header>
@@ -234,6 +204,7 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>3 分钟</span>
             </span>
+            <div class="post-description">创建博客以及与博客相关的操作</div>
 
         </div>
       </header>
@@ -244,15 +215,89 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>创建博客以及与博客相关的操作</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/07/01/%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h1><ol>
+<li>官网下载：<a target="_blank" rel="noopener" href="https://nodejs.org/en/">https://nodejs.org/en/</a></li>
+<li>安装</li>
+</ol>
+<p>增加环境变量<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/tiz9TqIJlxeP1HZ.png"><br>不勾选<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/6YwUQpCckMhbOIF.png">、<br>其他默认安装</p>
+<h1 id="下载cnpm"><a href="#下载cnpm" class="headerlink" title="下载cnpm"></a>下载cnpm</h1><pre class="line-numbers language-none"><code class="language-none">npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h1><ol>
+<li>官网下载：<a target="_blank" rel="noopener" href="https://git-scm.com/">https://git-scm.com/</a></li>
+<li>安装：全部默认下一步</li>
+</ol>
+<h1 id="下载hexo"><a href="#下载hexo" class="headerlink" title="下载hexo"></a>下载hexo</h1><p>右键左下角win图标，运行Windows powershell（管理员），输入：cnpm install hexo-cli -g</p>
+<h1 id="测试node，git和hexo是否安装成功"><a href="#测试node，git和hexo是否安装成功" class="headerlink" title="测试node，git和hexo是否安装成功"></a>测试node，git和hexo是否安装成功</h1><p>打开cmd运行：</p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">node -v
+npm -v
+git --version
+hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>显示版本号即安装成功</p>
+<h1 id="搭建github仓库"><a href="#搭建github仓库" class="headerlink" title="搭建github仓库"></a>搭建github仓库</h1><ol>
+<li>仓库名为:你的用户名.github.io</li>
+<li>勾选add a readme file</li>
+</ol>
+<h1 id="本地生成博客文件"><a href="#本地生成博客文件" class="headerlink" title="本地生成博客文件"></a>本地生成博客文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo init <span class="token comment"># 初始化hexo博客</span>
+hexo s <span class="token comment"># 静态生成hexo页面</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>#配置文件修改</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> git
+  <span class="token key atrule">repository</span><span class="token punctuation">:</span> 
+      <span class="token key atrule">github</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//github.com/MarshVer/Marshver.github.io.git
+      <span class="token key atrule">gitee</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//gitee.com/zhuze1117/zhuze1117.git
+  <span class="token key atrule">branch</span><span class="token punctuation">:</span> main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>gitee是用于上传到gitee仓库，只使用GitHub可删除</p>
+<h1 id="下载hex-deployer插件用于上传文件"><a href="#下载hex-deployer插件用于上传文件" class="headerlink" title="下载hex-deployer插件用于上传文件"></a>下载hex-deployer插件用于上传文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm instail hexo-deployer-git <span class="token parameter variable">--save</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>接下来就可以用hexo d上传文件至GitHub仓库</p>
+<h1 id="hexo-d出现的错误"><a href="#hexo-d出现的错误" class="headerlink" title="hexo d出现的错误"></a>hexo d出现的错误</h1><ol>
+<li>please tell me who you are<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ol>
+<h1 id="个人备份习惯"><a href="#个人备份习惯" class="headerlink" title="个人备份习惯"></a>个人备份习惯</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
+hexo g
+hexo d
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Backup"</span>
+<span class="token function">git</span> push <span class="token parameter variable">-u</span> origin <span class="token builtin class-name">source</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>前三个用于上传.deploy_git到github的main；<br>后三个用于上传整个源文件夹到github的branch</p>
+<h1 id="更新hexo和hexo插件"><a href="#更新hexo和hexo插件" class="headerlink" title="更新hexo和hexo插件"></a>更新hexo和hexo插件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 使用淘宝源的 cnpm 替换 npm</span>
+<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm <span class="token parameter variable">--registry</span><span class="token operator">=</span>https://registry.npm.taobao.org
+<span class="token comment"># 升级 npm</span>
+cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm     
+<span class="token comment"># 清除 npm 缓存            </span>
+cnpm cache clean <span class="token parameter variable">-f</span>                
+
+<span class="token operator">==</span><span class="token operator">=</span>更新 hexo: 进入 blog 目录，执行如下命令<span class="token operator">==</span><span class="token operator">=</span> 
+<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
+<span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
+cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-check
+<span class="token comment"># 升级系统中的插件           </span>
+cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-upgrade         
+npm-check
+npm-upgrade
+<span class="token comment"># 更新 hexo 及所有插件</span>
+cnpm update
+<span class="token comment"># 确认 hexo 已经更新</span>
+hexo <span class="token parameter variable">-v</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>注更新完记得把修改的内容改过来：</p>
+<ol>
+<li>D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</li>
+</ol>
+<h1 id="恢复博客"><a href="#恢复博客" class="headerlink" title="恢复博客"></a>恢复博客</h1><p>安装git、nodejs、hexo等等。。然后克隆项目到本地<br>输入下列命令克隆博客必须文件(hexo分支)</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">git</span> clone https://github.com/marshver/marshver.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在clone下来的那个文件夹里面执行</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> hexo-cli
+<span class="token function">npm</span> <span class="token function">install</span> hexo-deployer-git
+
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>主机将：D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</p>
+<p>最后可以执行如下代码就可以开始你的博客了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
+hexo g
+hexo d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
       
     </div>
 
@@ -352,10 +397,10 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+        <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
   </div>
 
@@ -437,10 +482,6 @@
   
 
 
-
-
-  
-<script src="/js/local-search.js"></script>
 
 
 

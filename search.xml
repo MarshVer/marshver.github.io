@@ -434,68 +434,6 @@ hexo d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
       </tags>
   </entry>
   <entry>
-    <title>服务器部署项目</title>
-    <url>/2023/05/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/</url>
-    <content><![CDATA[<h1 id="springboot项目打包"><a href="#springboot项目打包" class="headerlink" title="springboot项目打包"></a>springboot项目打包</h1><pre class="line-numbers language-none"><code class="language-none">mvn clean package -DskipTests<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="vue项目打包"><a href="#vue项目打包" class="headerlink" title="vue项目打包"></a>vue项目打包</h1><pre class="line-numbers language-none"><code class="language-none">npm run build<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="linux指令"><a href="#linux指令" class="headerlink" title="linux指令"></a>linux指令</h1><pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F;进入springboot目录
-cd &#x2F;home&#x2F;server&#x2F;springboot&#x2F;
-&#x2F;&#x2F;授权
-chmod 777 springboot-0.0.1-SNAPSHOT.jar
-&#x2F;&#x2F;后台启动springboot
-nohup java -jar springboot-0.0.1-SNAPSHOT.jar &amp;
-&#x2F;&#x2F;查看java进程
-ps -ef | grep java
-&#x2F;&#x2F;取消进程
-kill -9 [进程号]
-
-&#x2F;&#x2F;进入mysql目录
-cd &#x2F;usr&#x2F;local&#x2F;
-&#x2F;&#x2F;启动数据库
-docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD&#x3D;123456 -d mysql:5.7
-&#x2F;&#x2F;产看数据库进程
-docker ps
-&#x2F;&#x2F;结束数据库进程
-docker remove [进程名]
-&#x2F;&#x2F;进入数据库
-docker exec -it [进程号] &#x2F;bin&#x2F;bash
-&#x2F;&#x2F;登录数据库
-mysql -uroot -p123456
-&#x2F;&#x2F;退出mysq和docker
-exit
-&#x2F;&#x2F;查看当前目录权限
-ll
-
-&#x2F;&#x2F;进入nginx目录
-cd &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin
-&#x2F;&#x2F;启动nginx
-.&#x2F;nginx
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="出现跨域错误"><a href="#出现跨域错误" class="headerlink" title="出现跨域错误"></a>出现跨域错误</h1><p>config文件夹下建CorsConfig文件，输入以下代码：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
-    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CorsConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
-
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addCorsMappings</span><span class="token punctuation">(</span><span class="token class-name">CorsRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            registry<span class="token punctuation">.</span><span class="token function">addMapping</span><span class="token punctuation">(</span><span class="token string">"/**"</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowedOriginPatterns</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token string">"GET"</span><span class="token punctuation">,</span> <span class="token string">"HEAD"</span><span class="token punctuation">,</span> <span class="token string">"POST"</span><span class="token punctuation">,</span> <span class="token string">"PUT"</span><span class="token punctuation">,</span> <span class="token string">"DELETE"</span><span class="token punctuation">,</span> <span class="token string">"OPTIONS"</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowCredentials</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">maxAge</span><span class="token punctuation">(</span><span class="token number">3600</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowedHeaders</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-      <tags>
-        <tag>项目</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构</title>
     <url>/2022/09/09/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<h1 id="一、绪论"><a href="#一、绪论" class="headerlink" title="一、绪论"></a>一、绪论</h1><h2 id="1-数据结构基本概念"><a href="#1-数据结构基本概念" class="headerlink" title="1.数据结构基本概念"></a>1.数据结构基本概念</h2><ul>
@@ -1310,6 +1248,68 @@ cd &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin
 ]]></content>
       <tags>
         <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器部署项目</title>
+    <url>/2023/05/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/</url>
+    <content><![CDATA[<h1 id="springboot项目打包"><a href="#springboot项目打包" class="headerlink" title="springboot项目打包"></a>springboot项目打包</h1><pre class="line-numbers language-none"><code class="language-none">mvn clean package -DskipTests<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="vue项目打包"><a href="#vue项目打包" class="headerlink" title="vue项目打包"></a>vue项目打包</h1><pre class="line-numbers language-none"><code class="language-none">npm run build<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="linux指令"><a href="#linux指令" class="headerlink" title="linux指令"></a>linux指令</h1><pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F;进入springboot目录
+cd &#x2F;home&#x2F;server&#x2F;springboot&#x2F;
+&#x2F;&#x2F;授权
+chmod 777 springboot-0.0.1-SNAPSHOT.jar
+&#x2F;&#x2F;后台启动springboot
+nohup java -jar springboot-0.0.1-SNAPSHOT.jar &amp;
+&#x2F;&#x2F;查看java进程
+ps -ef | grep java
+&#x2F;&#x2F;取消进程
+kill -9 [进程号]
+
+&#x2F;&#x2F;进入mysql目录
+cd &#x2F;usr&#x2F;local&#x2F;
+&#x2F;&#x2F;启动数据库
+docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD&#x3D;123456 -d mysql:5.7
+&#x2F;&#x2F;产看数据库进程
+docker ps
+&#x2F;&#x2F;结束数据库进程
+docker remove [进程名]
+&#x2F;&#x2F;进入数据库
+docker exec -it [进程号] &#x2F;bin&#x2F;bash
+&#x2F;&#x2F;登录数据库
+mysql -uroot -p123456
+&#x2F;&#x2F;退出mysq和docker
+exit
+&#x2F;&#x2F;查看当前目录权限
+ll
+
+&#x2F;&#x2F;进入nginx目录
+cd &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin
+&#x2F;&#x2F;启动nginx
+.&#x2F;nginx
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="出现跨域错误"><a href="#出现跨域错误" class="headerlink" title="出现跨域错误"></a>出现跨域错误</h1><p>config文件夹下建CorsConfig文件，输入以下代码：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CorsConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
+
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addCorsMappings</span><span class="token punctuation">(</span><span class="token class-name">CorsRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            registry<span class="token punctuation">.</span><span class="token function">addMapping</span><span class="token punctuation">(</span><span class="token string">"/**"</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowedOriginPatterns</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token string">"GET"</span><span class="token punctuation">,</span> <span class="token string">"HEAD"</span><span class="token punctuation">,</span> <span class="token string">"POST"</span><span class="token punctuation">,</span> <span class="token string">"PUT"</span><span class="token punctuation">,</span> <span class="token string">"DELETE"</span><span class="token punctuation">,</span> <span class="token string">"OPTIONS"</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowCredentials</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">maxAge</span><span class="token punctuation">(</span><span class="token number">3600</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowedHeaders</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>项目</tag>
       </tags>
   </entry>
   <entry>
