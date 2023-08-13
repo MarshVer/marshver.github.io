@@ -119,20 +119,6 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
       </tags>
   </entry>
   <entry>
-    <title>word使用技巧</title>
-    <url>/2022/08/20/word%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<h1 id="在正方形里打勾"><a href="#在正方形里打勾" class="headerlink" title="在正方形里打勾"></a>在正方形里打勾</h1><p>输入2611，全选ALT+x即可出现打勾的正方形</p>
-<h1 id="上下标"><a href="#上下标" class="headerlink" title="上下标"></a>上下标</h1><ul>
-<li>上标：ctrl、shift、+</li>
-<li>下标：ctrl、+</li>
-</ul>
-<h1 id="清除所有格式"><a href="#清除所有格式" class="headerlink" title="清除所有格式"></a>清除所有格式</h1><p><a href="https://imgse.com/i/ppCA2qS"><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s1.ax1x.com/2023/02/27/ppCA2qS.png" alt="清除所有格式"></a></p>
-]]></content>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>VScode中C和C++的环境配置</title>
     <url>/2022/07/05/VScode%E4%B8%ADC%E5%92%8CC-%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="VScode中配置C-C"><a href="#VScode中配置C-C" class="headerlink" title="VScode中配置C&#x2F;C++"></a>VScode中配置C&#x2F;C++</h1><p>这是一个教程，（在windows 10中）为vscode配置C&#x2F;C++的运行环境。</p>
@@ -235,33 +221,17 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
       </tags>
   </entry>
   <entry>
-    <title>安装英伟达显卡旧版驱动</title>
-    <url>/2022/11/26/%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E6%97%A7%E7%89%88%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/</url>
-    <content><![CDATA[<ul>
-<li><p>第三方网站下载：<a href="https://cn.driverscollection.com/?H=GeForce%20GTX%201050&By=NVidia">https://cn.driverscollection.com/?H=GeForce%20GTX%201050&amp;By=NVidia</a></p>
-</li>
-<li><p>官网下载</p>
-</li>
+    <title>word使用技巧</title>
+    <url>/2022/08/20/word%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<h1 id="在正方形里打勾"><a href="#在正方形里打勾" class="headerlink" title="在正方形里打勾"></a>在正方形里打勾</h1><p>输入2611，全选ALT+x即可出现打勾的正方形</p>
+<h1 id="上下标"><a href="#上下标" class="headerlink" title="上下标"></a>上下标</h1><ul>
+<li>上标：ctrl、shift、+</li>
+<li>下标：ctrl、+</li>
 </ul>
-<ol>
-<li>英伟达官网-&gt; 驱动程序-&gt;GEFORCE驱动程序-&gt; 选择你的显卡型号<br><a href="https://www.nvidia.cn/geforce/drivers/">https://www.nvidia.cn/geforce/drivers/</a></li>
-<li>按f12，点击Console或者控制台，右键 清除控制台&#x2F;clear Console</li>
-<li>粘贴下面代码，并回车<pre class="line-numbers language-none"><code class="language-none">SystemScanner.prototype.DriverSearch &#x3D; function(psid, pfid, osID, langCode, whql, beta, dltype, numresults ) &#123;numresults&#x3D;100;this.scannerStatusUpdate(GFE_SERVER_CONNECTING);theScanner.scannedDevice.downloadInfo&#x3D;new Object();var parameters&#x3D;&#39;psid&#x3D;&#39;+psid;parameters+&#x3D;&#39;&amp;pfid&#x3D;&#39;+pfid;parameters+&#x3D;&#39;&amp;osID&#x3D;&#39;+osID;parameters+&#x3D;&#39;&amp;languageCode&#x3D;&#39;+langCode;parameters+&#x3D;&#39;&amp;beta&#x3D;&#39;+beta;parameters+&#x3D;&#39;&amp;isWHQL&#x3D;&#39;+whql;parameters+&#x3D;&quot;&amp;dltype&#x3D;&quot;+dltype;parameters+&#x3D;&quot;&amp;sort1&#x3D;0&quot;;parameters+&#x3D;&quot;&amp;numberOfResults&#x3D;&quot;+numresults;var requestUrl&#x3D;this.driverManualLookupUrl+parameters;this.driversLogUIEvent(&quot;warn&quot;,&quot;SUID:&quot;+this.tracker.scanID+&quot; BEGIN DriverSearch requestUrl:&quot;+requestUrl);this.debugTrace(requestUrl);jQuery.ajax(&#123;url:requestUrl,async:false,type:&#39;get&#39;,success:function(response)&#123;try&#123;theScanner.debugTrace(&quot;The Driver Lookup Service Returned:\n\n(&quot;+response+&quot;)&quot;);if(response.length&gt;0)&#123;theScanner.resetResults();var driverLookupJsonObj&#x3D;&#39;(&#39;+response+&#39;)&#39;;theScanner.resultsList&#x3D;new Object();theScanner.resultsList&#x3D;eval(driverLookupJsonObj)&#125;if(theScanner.resultsList.Success&#x3D;&#x3D;0)&#123;theScanner.scannerStatus&#x3D;&quot;No driver available&quot;&#125;else&#123;theScanner.scannerStatus&#x3D;&quot;Results Ready&quot;&#125;&#125;catch(e)&#123;this.driversLogUIEvent(&quot;error&quot;,&quot; FAIL catch DriverSearch&quot;);theScanner.resetResults();theScanner.scannerStatus&#x3D;&quot;No driver available&quot;&#125;&#125;,error:function(response)&#123;theScanner.resetResults();theScanner.scannerStatus&#x3D;&quot;AJAX Call failed&quot;&#125;&#125;);this.driversLogUIEvent(&quot;warn&quot;,&quot;SUID:&quot;+this.tracker.scanID+&quot; END DriverSearch requestUrl:&quot;+requestUrl);&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-</ol>
-<ul>
-<li><p>如果未有想要的驱动可以任选一个旧版驱动然后手动修改下载网址中的驱动版本号</p>
-</li>
-<li><p>安装：</p>
-</li>
-</ul>
-<ol>
-<li>找到想下载的显卡驱动版本，点击下载即可</li>
-<li>然后用ddu卸载 (或者其他方法彻底卸载）原来的显卡驱动，卸载过程会重启电脑</li>
-<li>重启电脑后双击安装刚刚下载的显卡驱动即可</li>
-</ol>
+<h1 id="清除所有格式"><a href="#清除所有格式" class="headerlink" title="清除所有格式"></a>清除所有格式</h1><p><a href="https://imgse.com/i/ppCA2qS"><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s1.ax1x.com/2023/02/27/ppCA2qS.png" alt="清除所有格式"></a></p>
 ]]></content>
       <tags>
-        <tag>搞机</tag>
+        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -341,6 +311,188 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
 ]]></content>
       <tags>
         <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客相关</title>
+    <url>/2022/07/01/%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<h1 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h1><ol>
+<li>官网下载：<a href="https://nodejs.org/en/">https://nodejs.org/en/</a></li>
+<li>安装</li>
+</ol>
+<p>增加环境变量<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/tiz9TqIJlxeP1HZ.png"><br>不勾选<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/6YwUQpCckMhbOIF.png">、<br>其他默认安装</p>
+<h1 id="下载cnpm"><a href="#下载cnpm" class="headerlink" title="下载cnpm"></a>下载cnpm</h1><pre class="line-numbers language-none"><code class="language-none">npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h1><ol>
+<li>官网下载：<a href="https://git-scm.com/">https://git-scm.com/</a></li>
+<li>安装：全部默认下一步</li>
+</ol>
+<h1 id="下载hexo"><a href="#下载hexo" class="headerlink" title="下载hexo"></a>下载hexo</h1><p>右键左下角win图标，运行Windows powershell（管理员），输入：cnpm install hexo-cli -g</p>
+<h1 id="测试node，git和hexo是否安装成功"><a href="#测试node，git和hexo是否安装成功" class="headerlink" title="测试node，git和hexo是否安装成功"></a>测试node，git和hexo是否安装成功</h1><p>打开cmd运行：</p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">node -v
+npm -v
+git --version
+hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>显示版本号即安装成功</p>
+<h1 id="搭建github仓库"><a href="#搭建github仓库" class="headerlink" title="搭建github仓库"></a>搭建github仓库</h1><ol>
+<li>仓库名为:你的用户名.github.io</li>
+<li>勾选add a readme file</li>
+</ol>
+<h1 id="本地生成博客文件"><a href="#本地生成博客文件" class="headerlink" title="本地生成博客文件"></a>本地生成博客文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo init <span class="token comment"># 初始化hexo博客</span>
+hexo s <span class="token comment"># 静态生成hexo页面</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>#配置文件修改</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> git
+  <span class="token key atrule">repository</span><span class="token punctuation">:</span> 
+      <span class="token key atrule">github</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//github.com/MarshVer/Marshver.github.io.git
+      <span class="token key atrule">gitee</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//gitee.com/zhuze1117/zhuze1117.git
+  <span class="token key atrule">branch</span><span class="token punctuation">:</span> main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>gitee是用于上传到gitee仓库，只使用GitHub可删除</p>
+<h1 id="下载hex-deployer插件用于上传文件"><a href="#下载hex-deployer插件用于上传文件" class="headerlink" title="下载hex-deployer插件用于上传文件"></a>下载hex-deployer插件用于上传文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm instail hexo-deployer-git <span class="token parameter variable">--save</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>接下来就可以用hexo d上传文件至GitHub仓库</p>
+<h1 id="hexo-d出现的错误"><a href="#hexo-d出现的错误" class="headerlink" title="hexo d出现的错误"></a>hexo d出现的错误</h1><ol>
+<li>please tell me who you are<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ol>
+<h1 id="个人备份习惯"><a href="#个人备份习惯" class="headerlink" title="个人备份习惯"></a>个人备份习惯</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
+hexo g
+hexo d
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Backup"</span>
+<span class="token function">git</span> push <span class="token parameter variable">-u</span> origin <span class="token builtin class-name">source</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>前三个用于上传.deploy_git到github的main；<br>后三个用于上传整个源文件夹到github的branch</p>
+<h1 id="更新hexo和hexo插件"><a href="#更新hexo和hexo插件" class="headerlink" title="更新hexo和hexo插件"></a>更新hexo和hexo插件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 使用淘宝源的 cnpm 替换 npm</span>
+<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm <span class="token parameter variable">--registry</span><span class="token operator">=</span>https://registry.npm.taobao.org
+<span class="token comment"># 升级 npm</span>
+cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm     
+<span class="token comment"># 清除 npm 缓存            </span>
+cnpm cache clean <span class="token parameter variable">-f</span>                
+
+<span class="token operator">==</span><span class="token operator">=</span>更新 hexo: 进入 blog 目录，执行如下命令<span class="token operator">==</span><span class="token operator">=</span> 
+<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
+<span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
+cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-check
+<span class="token comment"># 升级系统中的插件           </span>
+cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-upgrade         
+npm-check
+npm-upgrade
+<span class="token comment"># 更新 hexo 及所有插件</span>
+cnpm update
+<span class="token comment"># 确认 hexo 已经更新</span>
+hexo <span class="token parameter variable">-v</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>注更新完记得把修改的内容改过来：</p>
+<ol>
+<li>D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</li>
+</ol>
+<h1 id="恢复博客"><a href="#恢复博客" class="headerlink" title="恢复博客"></a>恢复博客</h1><p>安装git、nodejs、hexo等等。。然后克隆项目到本地<br>输入下列命令克隆博客必须文件(hexo分支)</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">git</span> clone https://github.com/marshver/marshver.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在clone下来的那个文件夹里面执行</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> hexo-cli
+<span class="token function">npm</span> <span class="token function">install</span> hexo-deployer-git
+
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>主机将：D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</p>
+<p>最后可以执行如下代码就可以开始你的博客了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
+hexo g
+hexo d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安装英伟达显卡旧版驱动</title>
+    <url>/2022/11/26/%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E6%97%A7%E7%89%88%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/</url>
+    <content><![CDATA[<ul>
+<li><p>第三方网站下载：<a href="https://cn.driverscollection.com/?H=GeForce%20GTX%201050&By=NVidia">https://cn.driverscollection.com/?H=GeForce%20GTX%201050&amp;By=NVidia</a></p>
+</li>
+<li><p>官网下载</p>
+</li>
+</ul>
+<ol>
+<li>英伟达官网-&gt; 驱动程序-&gt;GEFORCE驱动程序-&gt; 选择你的显卡型号<br><a href="https://www.nvidia.cn/geforce/drivers/">https://www.nvidia.cn/geforce/drivers/</a></li>
+<li>按f12，点击Console或者控制台，右键 清除控制台&#x2F;clear Console</li>
+<li>粘贴下面代码，并回车<pre class="line-numbers language-none"><code class="language-none">SystemScanner.prototype.DriverSearch &#x3D; function(psid, pfid, osID, langCode, whql, beta, dltype, numresults ) &#123;numresults&#x3D;100;this.scannerStatusUpdate(GFE_SERVER_CONNECTING);theScanner.scannedDevice.downloadInfo&#x3D;new Object();var parameters&#x3D;&#39;psid&#x3D;&#39;+psid;parameters+&#x3D;&#39;&amp;pfid&#x3D;&#39;+pfid;parameters+&#x3D;&#39;&amp;osID&#x3D;&#39;+osID;parameters+&#x3D;&#39;&amp;languageCode&#x3D;&#39;+langCode;parameters+&#x3D;&#39;&amp;beta&#x3D;&#39;+beta;parameters+&#x3D;&#39;&amp;isWHQL&#x3D;&#39;+whql;parameters+&#x3D;&quot;&amp;dltype&#x3D;&quot;+dltype;parameters+&#x3D;&quot;&amp;sort1&#x3D;0&quot;;parameters+&#x3D;&quot;&amp;numberOfResults&#x3D;&quot;+numresults;var requestUrl&#x3D;this.driverManualLookupUrl+parameters;this.driversLogUIEvent(&quot;warn&quot;,&quot;SUID:&quot;+this.tracker.scanID+&quot; BEGIN DriverSearch requestUrl:&quot;+requestUrl);this.debugTrace(requestUrl);jQuery.ajax(&#123;url:requestUrl,async:false,type:&#39;get&#39;,success:function(response)&#123;try&#123;theScanner.debugTrace(&quot;The Driver Lookup Service Returned:\n\n(&quot;+response+&quot;)&quot;);if(response.length&gt;0)&#123;theScanner.resetResults();var driverLookupJsonObj&#x3D;&#39;(&#39;+response+&#39;)&#39;;theScanner.resultsList&#x3D;new Object();theScanner.resultsList&#x3D;eval(driverLookupJsonObj)&#125;if(theScanner.resultsList.Success&#x3D;&#x3D;0)&#123;theScanner.scannerStatus&#x3D;&quot;No driver available&quot;&#125;else&#123;theScanner.scannerStatus&#x3D;&quot;Results Ready&quot;&#125;&#125;catch(e)&#123;this.driversLogUIEvent(&quot;error&quot;,&quot; FAIL catch DriverSearch&quot;);theScanner.resetResults();theScanner.scannerStatus&#x3D;&quot;No driver available&quot;&#125;&#125;,error:function(response)&#123;theScanner.resetResults();theScanner.scannerStatus&#x3D;&quot;AJAX Call failed&quot;&#125;&#125;);this.driversLogUIEvent(&quot;warn&quot;,&quot;SUID:&quot;+this.tracker.scanID+&quot; END DriverSearch requestUrl:&quot;+requestUrl);&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<ul>
+<li><p>如果未有想要的驱动可以任选一个旧版驱动然后手动修改下载网址中的驱动版本号</p>
+</li>
+<li><p>安装：</p>
+</li>
+</ul>
+<ol>
+<li>找到想下载的显卡驱动版本，点击下载即可</li>
+<li>然后用ddu卸载 (或者其他方法彻底卸载）原来的显卡驱动，卸载过程会重启电脑</li>
+<li>重启电脑后双击安装刚刚下载的显卡驱动即可</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>搞机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器部署项目</title>
+    <url>/2023/05/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/</url>
+    <content><![CDATA[<h1 id="springboot项目打包"><a href="#springboot项目打包" class="headerlink" title="springboot项目打包"></a>springboot项目打包</h1><pre class="line-numbers language-none"><code class="language-none">mvn clean package -DskipTests<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="vue项目打包"><a href="#vue项目打包" class="headerlink" title="vue项目打包"></a>vue项目打包</h1><pre class="line-numbers language-none"><code class="language-none">npm run build<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="linux指令"><a href="#linux指令" class="headerlink" title="linux指令"></a>linux指令</h1><pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F;进入springboot目录
+cd &#x2F;home&#x2F;server&#x2F;springboot&#x2F;
+&#x2F;&#x2F;授权
+chmod 777 springboot-0.0.1-SNAPSHOT.jar
+&#x2F;&#x2F;后台启动springboot
+nohup java -jar springboot-0.0.1-SNAPSHOT.jar &amp;
+&#x2F;&#x2F;查看java进程
+ps -ef | grep java
+&#x2F;&#x2F;取消进程
+kill -9 [进程号]
+
+&#x2F;&#x2F;进入mysql目录
+cd &#x2F;usr&#x2F;local&#x2F;
+&#x2F;&#x2F;启动数据库
+docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD&#x3D;123456 -d mysql:5.7
+&#x2F;&#x2F;产看数据库进程
+docker ps
+&#x2F;&#x2F;结束数据库进程
+docker remove [进程名]
+&#x2F;&#x2F;进入数据库
+docker exec -it [进程号] &#x2F;bin&#x2F;bash
+&#x2F;&#x2F;登录数据库
+mysql -uroot -p123456
+&#x2F;&#x2F;退出mysq和docker
+exit
+&#x2F;&#x2F;查看当前目录权限
+ll
+
+&#x2F;&#x2F;进入nginx目录
+cd &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin
+&#x2F;&#x2F;启动nginx
+.&#x2F;nginx
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="出现跨域错误"><a href="#出现跨域错误" class="headerlink" title="出现跨域错误"></a>出现跨域错误</h1><p>config文件夹下建CorsConfig文件，输入以下代码：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CorsConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
+
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addCorsMappings</span><span class="token punctuation">(</span><span class="token class-name">CorsRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            registry<span class="token punctuation">.</span><span class="token function">addMapping</span><span class="token punctuation">(</span><span class="token string">"/**"</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowedOriginPatterns</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token string">"GET"</span><span class="token punctuation">,</span> <span class="token string">"HEAD"</span><span class="token punctuation">,</span> <span class="token string">"POST"</span><span class="token punctuation">,</span> <span class="token string">"PUT"</span><span class="token punctuation">,</span> <span class="token string">"DELETE"</span><span class="token punctuation">,</span> <span class="token string">"OPTIONS"</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowCredentials</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">maxAge</span><span class="token punctuation">(</span><span class="token number">3600</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">allowedHeaders</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>项目</tag>
       </tags>
   </entry>
   <entry>
@@ -1161,155 +1313,26 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
       </tags>
   </entry>
   <entry>
-    <title>博客相关</title>
-    <url>/2022/07/01/%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3/</url>
-    <content><![CDATA[<h1 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h1><ol>
-<li>官网下载：<a href="https://nodejs.org/en/">https://nodejs.org/en/</a></li>
-<li>安装</li>
-</ol>
-<p>增加环境变量<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/tiz9TqIJlxeP1HZ.png"><br>不勾选<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/6YwUQpCckMhbOIF.png">、<br>其他默认安装</p>
-<h1 id="下载cnpm"><a href="#下载cnpm" class="headerlink" title="下载cnpm"></a>下载cnpm</h1><pre class="line-numbers language-none"><code class="language-none">npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h1><ol>
-<li>官网下载：<a href="https://git-scm.com/">https://git-scm.com/</a></li>
-<li>安装：全部默认下一步</li>
-</ol>
-<h1 id="下载hexo"><a href="#下载hexo" class="headerlink" title="下载hexo"></a>下载hexo</h1><p>右键左下角win图标，运行Windows powershell（管理员），输入：cnpm install hexo-cli -g</p>
-<h1 id="测试node，git和hexo是否安装成功"><a href="#测试node，git和hexo是否安装成功" class="headerlink" title="测试node，git和hexo是否安装成功"></a>测试node，git和hexo是否安装成功</h1><p>打开cmd运行：</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">node -v
-npm -v
-git --version
-hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>显示版本号即安装成功</p>
-<h1 id="搭建github仓库"><a href="#搭建github仓库" class="headerlink" title="搭建github仓库"></a>搭建github仓库</h1><ol>
-<li>仓库名为:你的用户名.github.io</li>
-<li>勾选add a readme file</li>
-</ol>
-<h1 id="本地生成博客文件"><a href="#本地生成博客文件" class="headerlink" title="本地生成博客文件"></a>本地生成博客文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo init <span class="token comment"># 初始化hexo博客</span>
-hexo s <span class="token comment"># 静态生成hexo页面</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>#配置文件修改</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">deploy</span><span class="token punctuation">:</span>
-  <span class="token key atrule">type</span><span class="token punctuation">:</span> git
-  <span class="token key atrule">repository</span><span class="token punctuation">:</span> 
-      <span class="token key atrule">github</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//github.com/MarshVer/Marshver.github.io.git
-      <span class="token key atrule">gitee</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//gitee.com/zhuze1117/zhuze1117.git
-  <span class="token key atrule">branch</span><span class="token punctuation">:</span> main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>gitee是用于上传到gitee仓库，只使用GitHub可删除</p>
-<h1 id="下载hex-deployer插件用于上传文件"><a href="#下载hex-deployer插件用于上传文件" class="headerlink" title="下载hex-deployer插件用于上传文件"></a>下载hex-deployer插件用于上传文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm instail hexo-deployer-git <span class="token parameter variable">--save</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>接下来就可以用hexo d上传文件至GitHub仓库</p>
-<h1 id="hexo-d出现的错误"><a href="#hexo-d出现的错误" class="headerlink" title="hexo d出现的错误"></a>hexo d出现的错误</h1><ol>
-<li>please tell me who you are<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
-<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-</ol>
-<h1 id="个人备份习惯"><a href="#个人备份习惯" class="headerlink" title="个人备份习惯"></a>个人备份习惯</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
-hexo g
-hexo d
-<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
-<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Backup"</span>
-<span class="token function">git</span> push <span class="token parameter variable">-u</span> origin <span class="token builtin class-name">source</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>前三个用于上传.deploy_git到github的main；<br>后三个用于上传整个源文件夹到github的branch</p>
-<h1 id="更新hexo和hexo插件"><a href="#更新hexo和hexo插件" class="headerlink" title="更新hexo和hexo插件"></a>更新hexo和hexo插件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 使用淘宝源的 cnpm 替换 npm</span>
-<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm <span class="token parameter variable">--registry</span><span class="token operator">=</span>https://registry.npm.taobao.org
-<span class="token comment"># 升级 npm</span>
-cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm     
-<span class="token comment"># 清除 npm 缓存            </span>
-cnpm cache clean <span class="token parameter variable">-f</span>                
-
-<span class="token operator">==</span><span class="token operator">=</span>更新 hexo: 进入 blog 目录，执行如下命令<span class="token operator">==</span><span class="token operator">=</span> 
-<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
-<span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
-cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-check
-<span class="token comment"># 升级系统中的插件           </span>
-cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-upgrade         
-npm-check
-npm-upgrade
-<span class="token comment"># 更新 hexo 及所有插件</span>
-cnpm update
-<span class="token comment"># 确认 hexo 已经更新</span>
-hexo <span class="token parameter variable">-v</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>注更新完记得把修改的内容改过来：</p>
-<ol>
-<li>D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</li>
-</ol>
-<h1 id="恢复博客"><a href="#恢复博客" class="headerlink" title="恢复博客"></a>恢复博客</h1><p>安装git、nodejs、hexo等等。。然后克隆项目到本地<br>输入下列命令克隆博客必须文件(hexo分支)</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">git</span> clone https://github.com/marshver/marshver.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>在clone下来的那个文件夹里面执行</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> hexo-cli
-<span class="token function">npm</span> <span class="token function">install</span> hexo-deployer-git
-
-<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
-<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>主机将：D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</p>
-<p>最后可以执行如下代码就可以开始你的博客了</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
-hexo g
-hexo d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+    <title>电脑必装软件合集</title>
+    <url>/2022/08/04/%E7%94%B5%E8%84%91%E5%BF%85%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%90%88%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="桌面图标美化"><a href="#桌面图标美化" class="headerlink" title="桌面图标美化"></a>桌面图标美化</h1><h2 id="RocketDock"><a href="#RocketDock" class="headerlink" title="RocketDock"></a>RocketDock</h2><p>RocketDock是一款模仿苹果的win下的桌面美化工具。<br>官网：<a href="https://punklabs.com/">https://punklabs.com/</a></p>
+<h2 id="Stacks-Docklet-2-0"><a href="#Stacks-Docklet-2-0" class="headerlink" title="Stacks Docklet 2.0"></a>Stacks Docklet 2.0</h2><p>Stacks Docklet是RocketDock中的一个插件，可以实现软件图标的折叠与展开。<br>下载地址<a href="https://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/Stacks-Docklet.shtml">https://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/Stacks-Docklet.shtml</a><br><strong>注意</strong>：安装过程中记得把其他的安装的√给×了<br>安装完成后把整个文件夹剪切到&#x2F;RocketDock&#x2F;Docklets文件夹下</p>
+<h1 id="7-Zip"><a href="#7-Zip" class="headerlink" title="7-Zip"></a>7-Zip</h1><p>强力的压缩软件。<br>官网：<a href="https://www.7-zip.org/">https://www.7-zip.org/</a></p>
+<h1 id="360驱动大师"><a href="#360驱动大师" class="headerlink" title="360驱动大师"></a>360驱动大师</h1><p>简洁的驱动更新软件，不过全面诊断的的时候*<strong>不要</strong>修复系统安全防护，该项会安装360全家桶。<br>官网：<a href="http://dm.weishi.360.cn/home.html">http://dm.weishi.360.cn/home.html</a></p>
+<h1 id="格式工厂"><a href="#格式工厂" class="headerlink" title="格式工厂"></a>格式工厂</h1><p>格式工厂是一款免费多功能的多媒体格式转换软件(视频，图片的格式转换)。<br>官网：<a href="http://www.pcgeshi.com/">http://www.pcgeshi.com/</a></p>
+<h1 id="IDM"><a href="#IDM" class="headerlink" title="IDM"></a>IDM</h1><p>IDM是Internet Download Manager的简称，是一款电脑专业的下载器，不仅下载速度快，还能嗅探网站的视频并下载。<br>官网：<a href="https://www.internetdownloadmanager.cn/">https://www.internetdownloadmanager.cn/</a><br>破解版链接：<a href="https://pan.baidu.com/s/1OaXHih42NmHGNZEkVzIL-Q?pwd=1234">https://pan.baidu.com/s/1OaXHih42NmHGNZEkVzIL-Q?pwd=1234</a></p>
+<h1 id="章鱼加速器"><a href="#章鱼加速器" class="headerlink" title="章鱼加速器"></a>章鱼加速器</h1><p>章鱼加速器是一款持续很久的免费游戏加速器。<br>官网：<a href="https://www.zyjsq6.com/">https://www.zyjsq6.com/</a></p>
+<h1 id="potplayer"><a href="#potplayer" class="headerlink" title="potplayer"></a>potplayer</h1><p>PotPlayer 是 KMPlayer 的原制作者姜龙喜进入 Daum 公司后的新一代网络播放器。PotPlayer 的优势在于强大的内置解码器；而 KMPlayer 的优势在于强大的定制能力和个性化功能。<br>下载地址：<a href="https://potplayer.en.softonic.com/">https://potplayer.en.softonic.com/</a></p>
+<h1 id="Snipaste"><a href="#Snipaste" class="headerlink" title="Snipaste"></a>Snipaste</h1><p>强大的截图软件。<br>官网：<a href="https://zh.snipaste.com/">https://zh.snipaste.com/</a></p>
+<h1 id="Uninstall-Tool"><a href="#Uninstall-Tool" class="headerlink" title="Uninstall Tool"></a>Uninstall Tool</h1><p>强力的卸载软件。<br>官网：<a href="https://crystalidea.com/uninstall-tool">https://crystalidea.com/uninstall-tool</a></p>
+<h1 id="酷我音乐"><a href="#酷我音乐" class="headerlink" title="酷我音乐"></a>酷我音乐</h1><p>破解版链接：<a href="https://pan.baidu.com/s/1RBsaENvxxdLleblqRFl0bA?pwd=x8i0">https://pan.baidu.com/s/1RBsaENvxxdLleblqRFl0bA?pwd=x8i0</a> </p>
+<h1 id="Ocam"><a href="#Ocam" class="headerlink" title="Ocam"></a>Ocam</h1><p>小巧免费的录屏软件。<br>下载地址：<a href="https://ocam.en.softonic.com/">https://ocam.en.softonic.com/</a></p>
+<h1 id="Joplin"><a href="#Joplin" class="headerlink" title="Joplin"></a>Joplin</h1><p>三端同步Markdown编辑器，可利用onedrive存储同步数据，5G存放markdown文件也足够了。<br>官网：<a href="https://joplinapp.org/">https://joplinapp.org/</a></p>
+<h1 id="百度网盘7-24旧版本"><a href="#百度网盘7-24旧版本" class="headerlink" title="百度网盘7.24旧版本"></a>百度网盘7.24旧版本</h1><p>链接：<a href="https://pan.baidu.com/s/1s1KjxuA0ghA1f38gsks-Ng">https://pan.baidu.com/s/1s1KjxuA0ghA1f38gsks-Ng</a><br>提取码：hn0o<br>断网删除三个文件防止自动更新，autoUpdate文件夹、autoDiagnoseUpdate.exe、kernellUpdate.exe<br>搭配CE修改器使用可解除限速：</p>
+<h1 id="CE修改器"><a href="#CE修改器" class="headerlink" title="CE修改器"></a>CE修改器</h1><p>链接：<a href="https://pan.baidu.com/s/19j22yJ8P-QH4kmkGzX80OQ">https://pan.baidu.com/s/19j22yJ8P-QH4kmkGzX80OQ</a><br>提取码：0n19</p>
 ]]></content>
       <tags>
-        <tag>博客</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务器部署项目</title>
-    <url>/2023/05/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/</url>
-    <content><![CDATA[<h1 id="springboot项目打包"><a href="#springboot项目打包" class="headerlink" title="springboot项目打包"></a>springboot项目打包</h1><pre class="line-numbers language-none"><code class="language-none">mvn clean package -DskipTests<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="vue项目打包"><a href="#vue项目打包" class="headerlink" title="vue项目打包"></a>vue项目打包</h1><pre class="line-numbers language-none"><code class="language-none">npm run build<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="linux指令"><a href="#linux指令" class="headerlink" title="linux指令"></a>linux指令</h1><pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F;进入springboot目录
-cd &#x2F;home&#x2F;server&#x2F;springboot&#x2F;
-&#x2F;&#x2F;授权
-chmod 777 springboot-0.0.1-SNAPSHOT.jar
-&#x2F;&#x2F;后台启动springboot
-nohup java -jar springboot-0.0.1-SNAPSHOT.jar &amp;
-&#x2F;&#x2F;查看java进程
-ps -ef | grep java
-&#x2F;&#x2F;取消进程
-kill -9 [进程号]
-
-&#x2F;&#x2F;进入mysql目录
-cd &#x2F;usr&#x2F;local&#x2F;
-&#x2F;&#x2F;启动数据库
-docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD&#x3D;123456 -d mysql:5.7
-&#x2F;&#x2F;产看数据库进程
-docker ps
-&#x2F;&#x2F;结束数据库进程
-docker remove [进程名]
-&#x2F;&#x2F;进入数据库
-docker exec -it [进程号] &#x2F;bin&#x2F;bash
-&#x2F;&#x2F;登录数据库
-mysql -uroot -p123456
-&#x2F;&#x2F;退出mysq和docker
-exit
-&#x2F;&#x2F;查看当前目录权限
-ll
-
-&#x2F;&#x2F;进入nginx目录
-cd &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin
-&#x2F;&#x2F;启动nginx
-.&#x2F;nginx
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="出现跨域错误"><a href="#出现跨域错误" class="headerlink" title="出现跨域错误"></a>出现跨域错误</h1><p>config文件夹下建CorsConfig文件，输入以下代码：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
-    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CorsConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
-
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addCorsMappings</span><span class="token punctuation">(</span><span class="token class-name">CorsRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            registry<span class="token punctuation">.</span><span class="token function">addMapping</span><span class="token punctuation">(</span><span class="token string">"/**"</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowedOriginPatterns</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token string">"GET"</span><span class="token punctuation">,</span> <span class="token string">"HEAD"</span><span class="token punctuation">,</span> <span class="token string">"POST"</span><span class="token punctuation">,</span> <span class="token string">"PUT"</span><span class="token punctuation">,</span> <span class="token string">"DELETE"</span><span class="token punctuation">,</span> <span class="token string">"OPTIONS"</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowCredentials</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">maxAge</span><span class="token punctuation">(</span><span class="token number">3600</span><span class="token punctuation">)</span>
-                    <span class="token punctuation">.</span><span class="token function">allowedHeaders</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-      <tags>
-        <tag>项目</tag>
+        <tag>搞机</tag>
       </tags>
   </entry>
   <entry>
@@ -1338,29 +1361,6 @@ cd &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin
 ]]></content>
       <tags>
         <tag>博客</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>电脑必装软件合集</title>
-    <url>/2022/08/04/%E7%94%B5%E8%84%91%E5%BF%85%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%90%88%E9%9B%86/</url>
-    <content><![CDATA[<h1 id="桌面图标美化"><a href="#桌面图标美化" class="headerlink" title="桌面图标美化"></a>桌面图标美化</h1><h2 id="RocketDock"><a href="#RocketDock" class="headerlink" title="RocketDock"></a>RocketDock</h2><p>RocketDock是一款模仿苹果的win下的桌面美化工具。<br>官网：<a href="https://punklabs.com/">https://punklabs.com/</a></p>
-<h2 id="Stacks-Docklet-2-0"><a href="#Stacks-Docklet-2-0" class="headerlink" title="Stacks Docklet 2.0"></a>Stacks Docklet 2.0</h2><p>Stacks Docklet是RocketDock中的一个插件，可以实现软件图标的折叠与展开。<br>下载地址<a href="https://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/Stacks-Docklet.shtml">https://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/Stacks-Docklet.shtml</a><br><strong>注意</strong>：安装过程中记得把其他的安装的√给×了<br>安装完成后把整个文件夹剪切到&#x2F;RocketDock&#x2F;Docklets文件夹下</p>
-<h1 id="7-Zip"><a href="#7-Zip" class="headerlink" title="7-Zip"></a>7-Zip</h1><p>强力的压缩软件。<br>官网：<a href="https://www.7-zip.org/">https://www.7-zip.org/</a></p>
-<h1 id="360驱动大师"><a href="#360驱动大师" class="headerlink" title="360驱动大师"></a>360驱动大师</h1><p>简洁的驱动更新软件，不过全面诊断的的时候*<strong>不要</strong>修复系统安全防护，该项会安装360全家桶。<br>官网：<a href="http://dm.weishi.360.cn/home.html">http://dm.weishi.360.cn/home.html</a></p>
-<h1 id="格式工厂"><a href="#格式工厂" class="headerlink" title="格式工厂"></a>格式工厂</h1><p>格式工厂是一款免费多功能的多媒体格式转换软件(视频，图片的格式转换)。<br>官网：<a href="http://www.pcgeshi.com/">http://www.pcgeshi.com/</a></p>
-<h1 id="IDM"><a href="#IDM" class="headerlink" title="IDM"></a>IDM</h1><p>IDM是Internet Download Manager的简称，是一款电脑专业的下载器，不仅下载速度快，还能嗅探网站的视频并下载。<br>官网：<a href="https://www.internetdownloadmanager.cn/">https://www.internetdownloadmanager.cn/</a><br>破解版链接：<a href="https://pan.baidu.com/s/1OaXHih42NmHGNZEkVzIL-Q?pwd=1234">https://pan.baidu.com/s/1OaXHih42NmHGNZEkVzIL-Q?pwd=1234</a></p>
-<h1 id="章鱼加速器"><a href="#章鱼加速器" class="headerlink" title="章鱼加速器"></a>章鱼加速器</h1><p>章鱼加速器是一款持续很久的免费游戏加速器。<br>官网：<a href="https://www.zyjsq6.com/">https://www.zyjsq6.com/</a></p>
-<h1 id="potplayer"><a href="#potplayer" class="headerlink" title="potplayer"></a>potplayer</h1><p>PotPlayer 是 KMPlayer 的原制作者姜龙喜进入 Daum 公司后的新一代网络播放器。PotPlayer 的优势在于强大的内置解码器；而 KMPlayer 的优势在于强大的定制能力和个性化功能。<br>下载地址：<a href="https://potplayer.en.softonic.com/">https://potplayer.en.softonic.com/</a></p>
-<h1 id="Snipaste"><a href="#Snipaste" class="headerlink" title="Snipaste"></a>Snipaste</h1><p>强大的截图软件。<br>官网：<a href="https://zh.snipaste.com/">https://zh.snipaste.com/</a></p>
-<h1 id="Uninstall-Tool"><a href="#Uninstall-Tool" class="headerlink" title="Uninstall Tool"></a>Uninstall Tool</h1><p>强力的卸载软件。<br>官网：<a href="https://crystalidea.com/uninstall-tool">https://crystalidea.com/uninstall-tool</a></p>
-<h1 id="酷我音乐"><a href="#酷我音乐" class="headerlink" title="酷我音乐"></a>酷我音乐</h1><p>破解版链接：<a href="https://pan.baidu.com/s/1RBsaENvxxdLleblqRFl0bA?pwd=x8i0">https://pan.baidu.com/s/1RBsaENvxxdLleblqRFl0bA?pwd=x8i0</a> </p>
-<h1 id="Ocam"><a href="#Ocam" class="headerlink" title="Ocam"></a>Ocam</h1><p>小巧免费的录屏软件。<br>下载地址：<a href="https://ocam.en.softonic.com/">https://ocam.en.softonic.com/</a></p>
-<h1 id="Joplin"><a href="#Joplin" class="headerlink" title="Joplin"></a>Joplin</h1><p>三端同步Markdown编辑器，可利用onedrive存储同步数据，5G存放markdown文件也足够了。<br>官网：<a href="https://joplinapp.org/">https://joplinapp.org/</a></p>
-<h1 id="百度网盘7-24旧版本"><a href="#百度网盘7-24旧版本" class="headerlink" title="百度网盘7.24旧版本"></a>百度网盘7.24旧版本</h1><p>链接：<a href="https://pan.baidu.com/s/1s1KjxuA0ghA1f38gsks-Ng">https://pan.baidu.com/s/1s1KjxuA0ghA1f38gsks-Ng</a><br>提取码：hn0o<br>断网删除三个文件防止自动更新，autoUpdate文件夹、autoDiagnoseUpdate.exe、kernellUpdate.exe<br>搭配CE修改器使用可解除限速：</p>
-<h1 id="CE修改器"><a href="#CE修改器" class="headerlink" title="CE修改器"></a>CE修改器</h1><p>链接：<a href="https://pan.baidu.com/s/19j22yJ8P-QH4kmkGzX80OQ">https://pan.baidu.com/s/19j22yJ8P-QH4kmkGzX80OQ</a><br>提取码：0n19</p>
-]]></content>
-      <tags>
-        <tag>搞机</tag>
       </tags>
   </entry>
 </search>
