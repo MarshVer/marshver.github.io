@@ -111,3 +111,21 @@ lazyload:
   loadingImg:  https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif # 加载图片 eg ./images/loading.gif
   isSPA: true # optional
   preloadRatio: 3 # 默认是 1
+
+# 显示文章字数
+symbols_count_time:
+  symbols: true
+  time: true
+  total_symbols: true
+  total_time: true
+  exclude_codeblock: false
+  awl: 2
+  wpm: 300
+  suffix: "mins."
+
+# 搜索服务
+search:
+  path: search.xml
+  field: post   
+  content: true
+  format: html

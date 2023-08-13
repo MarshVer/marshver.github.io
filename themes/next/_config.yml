@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------
-# Theme Core Configuration Settings
+# 主题核心配置
 # See: https://theme-next.org/docs/theme-settings/
 # ---------------------------------------------------------------
 
@@ -7,20 +7,29 @@
 # If true, will fully override default configuration by options from `_data/next.yml` (override). Only for NexT settings.
 # And if true, all config from default NexT `_config.yml` have to be copied into `next.yml`. Use if you know what you are doing.
 # Useful if you want to comment some options from NexT `_config.yml` by `next.yml` without editing default config.
+# 如果为false，则将“_data/next.yml”中的配置合并到默认配置中（重写）。
+# 如果为true，将通过`_data/next.yml`（override）中的选项完全覆盖默认配置。仅适用于NexT设置。
+# 如果为true，则默认NexT `_config.yml`中的所有配置都必须复制到`NexT.yml'中。如果您知道自己在做什么，请使用。
+# 如果您想在不编辑默认配置的情况下，通过`NexT.yml`注释NexT `_config.yml'中的一些选项，这将非常有用。
 override: false
 
 # Console reminder if new version released.
+# 控制台提醒（如果发布了新版本）。
 reminder: false
 
 # Allow to cache content generation. Introduced in NexT v6.0.0.
+# 允许缓存内容生成。在NexT v6.0.0中引入
 cache:
   enable: true
 
 # Remove unnecessary files after hexo generate.
+# 在生成hexo后删除不必要的文件。
 minify: false
 
 # Define custom file paths.
 # Create your custom files in site directory `source/_data` and uncomment needed files below.
+# 定义自定义文件路径。
+# 在站点目录“source/_data”中创建自定义文件，并在下面取消对所需文件的注释。
 custom_file_path:
   #head: source/_data/head.swig
   #header: source/_data/header.swig
@@ -37,39 +46,49 @@ custom_file_path:
 # ---------------------------------------------------------------
 # Site Information Settings
 # See: https://theme-next.org/docs/getting-started/
+# 站点信息设置
+# 请参阅：https://theme-next.org/docs/getting-started/
 # ---------------------------------------------------------------
 
 favicon:
-  small: /images/dragon.png
-  medium: /images/dragon.png
-  apple_touch_icon: /images/dragon.png
+  small: https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png
+  medium: https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png
+  apple_touch_icon: https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png
   safari_pinned_tab: /images/logo.svg
-  #android_manifest: /images/manifest.json
-  #ms_browserconfig: /images/browserconfig.xml
+  android_manifest: /images/manifest.json
+  ms_browserconfig: /images/browserconfig.xml
 
 # Show multilingual switcher in footer.
-language_switcher: false
+# 在页脚中显示多语言切换器。
+language_switcher: true
 
 footer:
   # Specify the date when the site was setup. If not defined, current year will be used.
-  since: 2020
+  # 指定网站的设置日期。如果未定义，则使用当前年份。
+  since: 2022
 
   # Icon between year and copyright info.
+  # 年份和版权信息之间的图标。
   icon:
     # Icon name in Font Awesome. See: https://fontawesome.com/icons
     name: fa fa-heart
     # If you want to animate the icon, set it to true.
-    animated: false
+    # 如果要设置图标的动画，请将其设置为true。
+    animated: true
     # Change the color of icon, using Hex Code.
+    # 使用十六进制代码更改图标的颜色。
     color: "#ff0000"
 
   # If not defined, `author` from Hexo `_config.yml` will be used.
+  # 如果未定义，将使用Hexo `_config.yml`中的`author`。
   copyright:
 
   # Powered by Hexo & NexT
+  # 由Hexo&NexT提供动力
   powered: true
 
   # Beian ICP and gongan information for Chinese users. See: https://beian.miit.gov.cn, http://www.beian.gov.cn
+  # 域名备案相关
   beian:
     enable: false
     icp:
@@ -85,6 +104,7 @@ footer:
 # Available values of license: by | by-nc | by-nc-nd | by-nc-sa | by-nd | by-sa | zero
 # You can set a language value if you prefer a translated version of CC license, e.g. deed.zh
 # CC licenses are available in 39 languages, you can find the specific and correct abbreviation you need on https://creativecommons.org
+# CC许可证相关
 creative_commons:
   license: by-nc-sa
   sidebar: false
@@ -133,18 +153,20 @@ menu_settings:
 
 # ---------------------------------------------------------------
 # Sidebar Settings
+# 边栏设置
 # See: https://theme-next.org/docs/theme-settings/sidebar
 # ---------------------------------------------------------------
 
 sidebar:
   # Sidebar Position.
+  # 侧边栏的位置
   position: left
   #position: right
 
   # Manual define the sidebar width. If commented, will be default for:
   # Muse | Mist: 320
   # Pisces | Gemini: 240
-  #width: 300
+  # width: 300
 
   # Sidebar Display (only for Muse | Mist), available values:
   #  - post    expand on posts automatically. Default.
@@ -154,8 +176,10 @@ sidebar:
   display: post
 
   # Sidebar padding in pixels.
+  # 以像素为单位的边栏填充。
   padding: 18
   # Sidebar offset from top menubar in pixels (only for Pisces | Gemini).
+  # 边栏与顶部菜单栏的偏移量（以像素为单位）（仅适用于双鱼|Gemini）。
   offset: 12
   # Enable sidebar on narrow view (only for Muse | Mist).
   onmobile: false
@@ -163,16 +187,18 @@ sidebar:
 # Sidebar Avatar
 avatar:
   # Replace the default image and set the url here.
-  url: /images/touxiang.png #/images/avatar.gif
+  url: https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png #/images/avatar.gif
   # If true, the avatar will be dispalyed in circle.
   rounded: true
   # If true, the avatar will be rotated with the cursor.
-  rotated: false
+  rotated: true
 
 # Posts / Categories / Tags in sidebar.
+# 侧边栏中的帖子/类别/标签。
 site_state: true
 
 # Social Links
+# 社交链接
 # Usage: `Key: permalink || icon`
 # Key is the link label showing to end users.
 # Value before `||` delimiter is the target permalink, value after `||` delimiter is the name of Font Awesome icon.
@@ -190,10 +216,11 @@ social:
 
 social_icons:
   enable: true
-  icons_only: false
-  transition: false
+  icons_only: true
+  transition: true
 
 # Blog rolls
+# 博客滚动
 links_settings:
   icon: fa fa-link
   title: Links
@@ -205,6 +232,8 @@ links:
 
 # Table of Contents in the Sidebar
 # Front-matter variable (unsupport wrap expand_all).
+# 边栏中的目录
+# Front matter变量（不支持wrap expand_all）。
 toc:
   enable: true
   # Automatically add list number to toc.
@@ -218,9 +247,11 @@ toc:
 
 # A button to open designated chat widget in sidebar.
 # Firstly, you need enable the chat service you want to activate its sidebar button.
+# 在侧边栏中打开指定聊天小部件的按钮。
+# 首先，你需要启用聊天服务，你想激活它的侧边栏按钮。
 chat:
   enable: false
-  #service: chatra
+  service: chatra
   #service: tidio
   icon: fa fa-comment # Icon name in Font Awesome, set false to disable icon.
   text: Chat # Button text, change it as you wish.
@@ -228,17 +259,22 @@ chat:
 
 # ---------------------------------------------------------------
 # Post Settings
+# 张贴设置
 # See: https://theme-next.org/docs/theme-settings/posts
 # ---------------------------------------------------------------
 
 # Automatically excerpt description in homepage as preamble text.
+# 自动摘录主页中的描述作为序言文本。
 excerpt_description: true
 
 # Read more button
 # If true, the read more button will be displayed in excerpt section.
+# “阅读更多”按钮
+# 如果为true，则“阅读更多”按钮将显示在摘录部分。
 read_more_btn: true
 
 # Post meta display settings
+# 发布元显示设置
 post_meta:
   item_text: true
   created_at: true
@@ -248,6 +284,7 @@ post_meta:
   categories: true
 
 # Post wordcount display settings
+# 文章字数显示设置
 # Dependencies: https://github.com/theme-next/hexo-symbols-count-time
 symbols_count_time:
   separated_meta: true
@@ -255,6 +292,7 @@ symbols_count_time:
   item_text_total: false
 
 # Use icon instead of the symbol # to indicate the tag at the bottom of the post
+# 使用图标而不是符号#来指示帖子底部的标签
 tag_icon: false
 
 # Reward (Donate)
@@ -280,6 +318,7 @@ follow_me:
   #RSS: /atom.xml || fa fa-rss
 
 # Related popular posts
+# 相关热门帖子
 # Dependencies: https://github.com/tea3/hexo-related-popular-posts
 related_posts:
   enable: false
@@ -293,6 +332,7 @@ related_posts:
     #isExcerpt: false
 
 # Post edit
+# 后期编辑
 # Dependencies: https://github.com/hexojs/hexo-deployer-git
 post_edit:
   enable: false
@@ -306,10 +346,12 @@ post_navigation: left
 
 # ---------------------------------------------------------------
 # Custom Page Settings
+# 自定义页面设置
 # See: https://theme-next.org/docs/theme-settings/custom-pages
 # ---------------------------------------------------------------
 
 # TagCloud settings for tags page.
+# 标记页面的TagCloud设置。
 tagcloud:
   # All values below are same as default, change them by yourself.
   min: 12 # Minimun font size in px
@@ -319,6 +361,7 @@ tagcloud:
   amount: 200 # Amount of tags, change it if you have more than 200 tags
 
 # Google Calendar
+# 谷歌日历
 # Share your recent schedule to others via calendar page.
 calendar:
   calendar_id: <required> # Your Google account E-Mail
@@ -333,21 +376,25 @@ calendar:
 
 # ---------------------------------------------------------------
 # Misc Theme Settings
+# 其他主题设置
 # ---------------------------------------------------------------
 
 # Set the text alignment in posts / pages.
+# 设置帖子/页面中的文本对齐方式
 text_align:
   # Available values: start | end | left | right | center | justify | justify-all | match-parent
   desktop: justify
   mobile: justify
 
 # Reduce padding / margin indents on devices with narrow width.
+# 在宽度较窄的设备上减少填充/边距缩进。
 mobile_layout_economy: false
 
 # Android Chrome header panel color ($brand-bg / $headband-bg => $black-deep).
 android_chrome_color: "#222"
 
 # Custom Logo (Do not support scheme Mist)
+# 自定义徽标（不支持方案Mist）
 custom_logo: #/uploads/custom-logo.jpg
 
 codeblock:
@@ -357,45 +404,51 @@ codeblock:
   highlight_theme: galactic
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: true
     # Show text copy result.
-    show_result: false
+    show_result: true
     # Available values: default | flat | mac
-    style:
+    style: default
 
 back2top:
   enable: true
   # Back to top in sidebar.
-  sidebar: false
+  # 回到侧边栏的顶部。
+  sidebar: true
   # Scroll percent label in b2t button.
-  scrollpercent: false
+  # 滚动b2t按钮中的百分比标签。
+  scrollpercent: true
 
 # Reading progress bar
+# 读取进度条
 reading_progress:
-  enable: false
+  enable: true
   # Available values: top | bottom
   position: top
-  color: "#37c6c0"
+  color: "#FF0000"
   height: 3px
 
 # Bookmark Support
+# 书签支持
 bookmark:
   enable: false
   # Customize the color of the bookmark.
-  color: "#222"
+  color: "#FF0000"
   # If auto, save the reading progress when closing the page or clicking the bookmark-icon.
   # If manual, only save it by clicking the bookmark-icon.
   save: auto
 
 # `Follow me on GitHub` banner in the top-right corner.
+# 右上角的“在GitHub上关注我”横幅。
 github_banner:
   enable: false
-  permalink: https://github.com/yourname
+  permalink: https://github.com/marshver
   title: Follow me on GitHub
 
 
 # ---------------------------------------------------------------
 # Font Settings
+# 字体设置
 # See: https://theme-next.org/docs/theme-settings/#Fonts-Customization
 # ---------------------------------------------------------------
 # Find fonts on Google Fonts (https://www.google.com/fonts)
@@ -483,6 +536,7 @@ baidu_push: false
 
 # ---------------------------------------------------------------
 # Third Party Plugins & Services Settings
+# 第三方插件和服务设置
 # See: https://theme-next.org/docs/third-party-services/
 # More plugins: https://github.com/theme-next/awesome-next
 # You may need to install dependencies or set CDN URLs in `vendors`
@@ -492,13 +546,18 @@ baidu_push: false
 # ---------------------------------------------------------------
 
 # Math Formulas Render Support
+# 数学公式渲染支持
 math:
   # Default (true) will load mathjax / katex script on demand.
   # That is it only render those page which has `mathjax: true` in Front-matter.
   # If you set it to false, it will load mathjax / katex srcipt EVERY PAGE.
+  # 默认值（true）将根据需要加载mathjax/katex脚本。
+  # 也就是说，它只呈现那些在Front matter中具有“mathjax:true”的页面。
+  # 如果您将其设置为false，它将在每页加载mathjax/katex-srcipt
   per_page: true
 
   # hexo-renderer-pandoc (or hexo-renderer-kramed) required for full MathJax support.
+  # 完全支持MathJax所需的hexo渲染器pandoc（或hexo呈现器kramed）。
   mathjax:
     enable: true
     # See: https://mhchem.github.io/MathJax-mhchem/
@@ -511,19 +570,24 @@ math:
     copy_tex: false
 
 # Easily enable fast Ajax navigation on your website.
+# 在您的网站上轻松启用快速Ajax导航。
 # Dependencies: https://github.com/theme-next/theme-next-pjax
 pjax: false
 
 # FancyBox is a tool that offers a nice and elegant way to add zooming functionality for images.
+# FancyBox是一个为图像添加缩放功能的工具，它提供了一种漂亮而优雅的方式。
 # For more information: https://fancyapps.com/fancybox
 fancybox: false
 
 # A JavaScript library for zooming images like Medium.
 # Do not enable both `fancybox` and `mediumzoom`.
+# 用于缩放Medium等图像的JavaScript库。
+# 不要同时启用“fancybox”和“medium zoom”。
 # For more information: https://github.com/francoischalifour/medium-zoom
-mediumzoom: false
+mediumzoom: true
 
 # Vanilla JavaScript plugin for lazyloading images.
+# 用于懒加载图像的Vanilla JavaScript插件。
 # For more information: https://github.com/ApoorvSaxena/lozad.js
 lazyload: false
 
@@ -532,31 +596,39 @@ lazyload: false
 pangu: false
 
 # Quicklink Support
+# 快加载
 # Do not enable both `pjax` and `quicklink`.
 # For more information: https://github.com/GoogleChromeLabs/quicklink
 # Front-matter (unsupport home archive).
 quicklink:
-  enable: false
+  enable: true
 
   # Home page and archive page can be controlled through home and archive options below.
   # This configuration item is independent of `enable`.
-  home: false
-  archive: false
+  # 主页和归档页面可以通过下面的主页和归档选项进行控制。
+  # 此配置项独立于“启用”。
+  home: true
+  archive: true
 
   # Default (true) will initialize quicklink after the load event fires.
+  # 默认值（true）将在加载事件触发后初始化快速链接。
   delay: true
   # Custom a time in milliseconds by which the browser must execute prefetching.
+  # 自定义浏览器必须执行预取的时间（以毫秒为单位）。
   timeout: 3000
   # Default (true) will enable fetch() or falls back to XHR.
+  # 默认值（true）将启用fetch（）或回退到XHR。
   priority: true
 
   # For more flexibility you can add some patterns (RegExp, Function, or Array) to ignores.
+  # 为了获得更大的灵活性，您可以添加一些模式（RegExp、Function或Array）来忽略。
   # See: https://github.com/GoogleChromeLabs/quicklink#custom-ignore-patterns
   ignores:
 
 
 # ---------------------------------------------------------------
 # Comments Settings
+# 评论设置
 # See: https://theme-next.org/docs/third-party-services/comments
 # ---------------------------------------------------------------
 
@@ -648,10 +720,12 @@ gitalk:
 
 # ---------------------------------------------------------------
 # Post Widgets & Content Sharing Services
+# 发布小工具和内容共享服务
 # See: https://theme-next.org/docs/third-party-services/post-widgets
 # ---------------------------------------------------------------
 
 # Star rating support to each article.
+# 每一篇文章的星级支持。
 # To get your ID visit https://widgetpack.com
 rating:
   enable: false
@@ -665,6 +739,7 @@ add_this_id:
 
 # ---------------------------------------------------------------
 # Statistics and Analytics
+# 统计和分析
 # See: https://theme-next.org/docs/third-party-services/statistics-and-analytics
 # ---------------------------------------------------------------
 
@@ -722,6 +797,7 @@ busuanzi_count:
 
 # ---------------------------------------------------------------
 # Search Services
+# 搜索服务
 # See: https://theme-next.org/docs/third-party-services/search-services
 # ---------------------------------------------------------------
 
@@ -732,22 +808,27 @@ algolia_search:
   hits:
     per_page: 10
   labels:
-    input_placeholder: Search for Posts
+    input_placeholder: 输入关键词
     hits_empty: "We didn't find any results for the search: ${query}"
     hits_stats: "${hits} results found in ${time} ms"
 
 # Local Search
 # Dependencies: https://github.com/theme-next/hexo-generator-searchdb
 local_search:
-  enable: false
+  enable: true
   # If auto, trigger search by changing input.
   # If manual, trigger search by pressing enter key or search button.
+  # 如果为自动，则通过更改输入触发搜索。
+  # 如果是手动的，按下回车键或搜索按钮触发搜索。
   trigger: auto
   # Show top n results per article, show all results by setting to -1
-  top_n_per_article: 1
+  # 显示每篇文章的前n个结果，通过设置为-1显示所有结果
+  top_n_per_article: -1
   # Unescape html strings to the readable one.
-  unescape: false
+  # 将html字符串解压缩为可读字符串。
+  unescape: true
   # Preload the search data when the page loads.
+  # 加载页面时预加载搜索数据。
   preload: false
 
 # Swiftype Search API Key
@@ -756,6 +837,7 @@ swiftype_key:
 
 # ---------------------------------------------------------------
 # Chat Services
+# 聊天服务
 # See: https://theme-next.org/docs/third-party-services/chat-services
 # ---------------------------------------------------------------
 
@@ -778,6 +860,7 @@ tidio:
 
 # ---------------------------------------------------------------
 # Tags Settings
+# 标签设置
 # See: https://theme-next.org/docs/tag-plugins/
 # ---------------------------------------------------------------
 
@@ -818,9 +901,11 @@ mermaid:
 
 # ---------------------------------------------------------------
 # Animation Settings
+# 动画设置
 # ---------------------------------------------------------------
 
 # Use velocity to animate everything.
+# 使用速度设置所有内容的动画。
 # For more information: http://velocityjs.org
 motion:
   enable: true
@@ -841,6 +926,7 @@ motion:
     sidebar: slideUpIn
 
 # Progress bar in the top during page loading.
+# 页面加载过程中顶部的进度条。
 # Dependencies: https://github.com/theme-next/theme-next-pace
 # For more information: https://github.com/HubSpot/pace
 pace:
@@ -851,6 +937,7 @@ pace:
   theme: minimal
 
 # JavaScript 3D library.
+# JavaScript 3D库。
 # Dependencies: https://github.com/theme-next/theme-next-three
 three:
   enable: false
@@ -859,6 +946,7 @@ three:
   canvas_sphere: false
 
 # Canvas-ribbon
+# 画布色带
 # Dependencies: https://github.com/theme-next/theme-next-canvas-ribbon
 # For more information: https://github.com/zproo/canvas-ribbon
 canvas_ribbon:
@@ -871,6 +959,8 @@ canvas_ribbon:
 #! ---------------------------------------------------------------
 #! DO NOT EDIT THE FOLLOWING SETTINGS
 #! UNLESS YOU KNOW WHAT YOU ARE DOING
+#! 不要编辑以下设置
+#! 除非你知道自己在做什么
 #! See: https://theme-next.org/docs/advanced-settings
 #! ---------------------------------------------------------------
 
