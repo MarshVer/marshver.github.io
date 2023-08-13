@@ -3,7 +3,7 @@ title: VScode中C和C++的环境配置
 tags: 配置
 abbrlink: 27168
 date: 2022-07-05 10:22:25
-summary: 在VScode中配置C和C++的运行环境
+description: 在VScode中配置C和C++的运行环境
 ---
 
 # VScode中配置C/C++
