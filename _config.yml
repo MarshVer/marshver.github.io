@@ -122,10 +122,3 @@ symbols_count_time:
   awl: 2
   wpm: 300
   suffix: "mins."
-
-# 搜索服务
-search:
-  path: search.xml
-  field: post   
-  content: true
-  format: html
