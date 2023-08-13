@@ -94,7 +94,7 @@ ignore:
 # 主题
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: next
 
 # 部署
 ## Docs: https://hexo.io/docs/one-command-deployment
