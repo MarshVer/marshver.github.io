@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="MarshVer">
 <meta property="og:description" content="创建博客以及与博客相关的操作">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/02/07/tiz9TqIJlxeP1HZ.png">
-<meta property="og:image" content="https://s2.loli.net/2023/02/07/6YwUQpCckMhbOIF.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif">
+<meta property="og:image" content="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif">
 <meta property="article:published_time" content="2022-07-01T07:27:42.000Z">
 <meta property="article:modified_time" content="2023-08-13T07:42:10.658Z">
 <meta property="article:author" content="MarshVer">
 <meta property="article:tag" content="博客">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2023/02/07/tiz9TqIJlxeP1HZ.png">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif">
 
 <link rel="canonical" href="https://marshver.github.io/2022/07/01/%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3/">
 
@@ -213,7 +213,7 @@
 <li>官网下载：<a target="_blank" rel="noopener" href="https://nodejs.org/en/">https://nodejs.org/en/</a></li>
 <li>安装</li>
 </ol>
-<p>增加环境变量<br><img src="https://s2.loli.net/2023/02/07/tiz9TqIJlxeP1HZ.png"><br>不勾选<br><img src="https://s2.loli.net/2023/02/07/6YwUQpCckMhbOIF.png">、<br>其他默认安装</p>
+<p>增加环境变量<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/tiz9TqIJlxeP1HZ.png"><br>不勾选<br><img src="https://s2.loli.net/2022/08/03/yJ23MDaUGdg7LCk.gif" data-original="https://s2.loli.net/2023/02/07/6YwUQpCckMhbOIF.png">、<br>其他默认安装</p>
 <h1 id="下载cnpm"><a href="#下载cnpm" class="headerlink" title="下载cnpm"></a>下载cnpm</h1><pre class="line-numbers language-none"><code class="language-none">npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h1 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h1><ol>
@@ -231,61 +231,61 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <li>仓库名为:你的用户名.github.io</li>
 <li>勾选add a readme file</li>
 </ol>
-<h1 id="本地生成博客文件"><a href="#本地生成博客文件" class="headerlink" title="本地生成博客文件"></a>本地生成博客文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo init <span class="token comment"># 初始化hexo博客</span>
-hexo s <span class="token comment"># 静态生成hexo页面</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h1 id="本地生成博客文件"><a href="#本地生成博客文件" class="headerlink" title="本地生成博客文件"></a>本地生成博客文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo init # 初始化hexo博客
+hexo s # 静态生成hexo页面<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>#配置文件修改</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">deploy</span><span class="token punctuation">:</span>
-  <span class="token key atrule">type</span><span class="token punctuation">:</span> git
-  <span class="token key atrule">repository</span><span class="token punctuation">:</span> 
-      <span class="token key atrule">github</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//github.com/MarshVer/Marshver.github.io.git
-      <span class="token key atrule">gitee</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//gitee.com/zhuze1117/zhuze1117.git
-  <span class="token key atrule">branch</span><span class="token punctuation">:</span> main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">deploy:
+  type: git
+  repository: 
+      github: https:&#x2F;&#x2F;github.com&#x2F;MarshVer&#x2F;Marshver.github.io.git
+      gitee: https:&#x2F;&#x2F;gitee.com&#x2F;zhuze1117&#x2F;zhuze1117.git
+  branch: main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>gitee是用于上传到gitee仓库，只使用GitHub可删除</p>
-<h1 id="下载hex-deployer插件用于上传文件"><a href="#下载hex-deployer插件用于上传文件" class="headerlink" title="下载hex-deployer插件用于上传文件"></a>下载hex-deployer插件用于上传文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm instail hexo-deployer-git <span class="token parameter variable">--save</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="下载hex-deployer插件用于上传文件"><a href="#下载hex-deployer插件用于上传文件" class="headerlink" title="下载hex-deployer插件用于上传文件"></a>下载hex-deployer插件用于上传文件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm instail hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>接下来就可以用hexo d上传文件至GitHub仓库</p>
 <h1 id="hexo-d出现的错误"><a href="#hexo-d出现的错误" class="headerlink" title="hexo d出现的错误"></a>hexo d出现的错误</h1><ol>
-<li>please tell me who you are<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
-<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>please tell me who you are<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">git config --global user.email &quot;用户名@gmail.com&quot;
+git config --global user.name &quot;用户名&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 </ol>
 <h1 id="个人备份习惯"><a href="#个人备份习惯" class="headerlink" title="个人备份习惯"></a>个人备份习惯</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
 hexo g
 hexo d
-<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
-<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Backup"</span>
-<span class="token function">git</span> push <span class="token parameter variable">-u</span> origin <span class="token builtin class-name">source</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+git add .
+git commit -m &quot;Backup&quot;
+git push -u origin source<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>前三个用于上传.deploy_git到github的main；<br>后三个用于上传整个源文件夹到github的branch</p>
-<h1 id="更新hexo和hexo插件"><a href="#更新hexo和hexo插件" class="headerlink" title="更新hexo和hexo插件"></a>更新hexo和hexo插件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 使用淘宝源的 cnpm 替换 npm</span>
-<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm <span class="token parameter variable">--registry</span><span class="token operator">=</span>https://registry.npm.taobao.org
-<span class="token comment"># 升级 npm</span>
-cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> cnpm     
-<span class="token comment"># 清除 npm 缓存            </span>
-cnpm cache clean <span class="token parameter variable">-f</span>                
+<h1 id="更新hexo和hexo插件"><a href="#更新hexo和hexo插件" class="headerlink" title="更新hexo和hexo插件"></a>更新hexo和hexo插件</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"># 使用淘宝源的 cnpm 替换 npm
+npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org
+# 升级 npm
+cnpm install -g cnpm     
+# 清除 npm 缓存            
+cnpm cache clean -f                
 
-<span class="token operator">==</span><span class="token operator">=</span>更新 hexo: 进入 blog 目录，执行如下命令<span class="token operator">==</span><span class="token operator">=</span> 
-<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
-<span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
-cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-check
-<span class="token comment"># 升级系统中的插件           </span>
-cnpm <span class="token function">install</span> <span class="token parameter variable">-g</span> npm-upgrade         
+&#x3D;&#x3D;&#x3D;更新 hexo: 进入 blog 目录，执行如下命令&#x3D;&#x3D;&#x3D; 
+# 更新 package.json 中的 hexo 及个插件版本
+# 检查之前安装的插件，都有哪些是可以升级的 
+cnpm install -g npm-check
+# 升级系统中的插件           
+cnpm install -g npm-upgrade         
 npm-check
 npm-upgrade
-<span class="token comment"># 更新 hexo 及所有插件</span>
+# 更新 hexo 及所有插件
 cnpm update
-<span class="token comment"># 确认 hexo 已经更新</span>
-hexo <span class="token parameter variable">-v</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+# 确认 hexo 已经更新
+hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>注更新完记得把修改的内容改过来：</p>
 <ol>
 <li>D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</li>
 </ol>
 <h1 id="恢复博客"><a href="#恢复博客" class="headerlink" title="恢复博客"></a>恢复博客</h1><p>安装git、nodejs、hexo等等。。然后克隆项目到本地<br>输入下列命令克隆博客必须文件(hexo分支)</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">git</span> clone https://github.com/marshver/marshver.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ git clone https:&#x2F;&#x2F;github.com&#x2F;marshver&#x2F;marshver.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>在clone下来的那个文件夹里面执行</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> hexo-cli
-<span class="token function">npm</span> <span class="token function">install</span> hexo-deployer-git
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npm install hexo-cli
+npm install hexo-deployer-git
 
-<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"用户名@gmail.com"</span>
-<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"用户名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+git config --global user.email &quot;用户名@gmail.com&quot;
+git config --global user.name &quot;用户名&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>主机将：D:\MarshVer’s Blog\node_modules\hexo-deployer-git\lib\parse_config.js中的master改为main（F3查询替换）</p>
 <p>最后可以执行如下代码就可以开始你的博客了</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">hexo cl
@@ -491,5 +491,18 @@ hexo d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 
   
 
-</body>
+
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: true,
+                preloadRatio: 3,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body>
 </html>
