@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -8,13 +10,13 @@
   <link rel="icon" type="image/png" sizes="16x16" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
+<link rel="stylesheet" href="/css/main.css">
 
 
-
-
-  
-  
-  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
@@ -78,14 +80,14 @@
   </style>
 </noscript>
 
-<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');loadCss('//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css"></noscript></head>
+</head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage">
+<body itemscope itemtype="http://schema.org/WebPage">
 
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
@@ -159,16 +161,16 @@
     
   
   
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2022/11/26/%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E6%97%A7%E7%89%88%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/">
 
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
       <meta itemprop="name" content="MarshVer">
       <meta itemprop="description" content="个人博客">
     </span>
 
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="MarshVer">
     </span>
       <header class="post-header">
@@ -205,7 +207,7 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
-                <span class="post-meta-item-text">阅读时长 ≈</span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>4 分钟</span>
             </span>
             <div class="post-description">安装英伟达显卡旧版驱动</div>
@@ -220,15 +222,15 @@
 
       
         <ul>
-<li><p>第三方网站下载：<a target="_blank" rel="noopener" href="https://cn.driverscollection.com/?H=GeForce%20GTX%201050&amp;By=NVidia">https://cn.driverscollection.com/?H=GeForce%20GTX%201050&amp;By=NVidia</a></p>
+<li><p>第三方网站下载：<a target="_blank" rel="noopener" href="https://cn.driverscollection.com/?H=GeForce%20GTX%201050&By=NVidia">https://cn.driverscollection.com/?H=GeForce%20GTX%201050&amp;By=NVidia</a></p>
 </li>
 <li><p>官网下载</p>
 </li>
 </ul>
 <ol>
 <li>英伟达官网-&gt; 驱动程序-&gt;GEFORCE驱动程序-&gt; 选择你的显卡型号<br><a target="_blank" rel="noopener" href="https://www.nvidia.cn/geforce/drivers/">https://www.nvidia.cn/geforce/drivers/</a></li>
-<li>按f12，点击Console或者控制台，右键 清除控制台/clear Console</li>
-<li>粘贴下面代码，并回车<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">SystemScanner</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">DriverSearch</span> = <span class="keyword">function</span>(<span class="params">psid, pfid, osID, langCode, whql, beta, dltype, numresults </span>) {numresults=<span class="number">100</span>;<span class="variable language_">this</span>.<span class="title function_">scannerStatusUpdate</span>(<span class="variable constant_">GFE_SERVER_CONNECTING</span>);theScanner.<span class="property">scannedDevice</span>.<span class="property">downloadInfo</span>=<span class="keyword">new</span> <span class="title class_">Object</span>();<span class="keyword">var</span> parameters=<span class="string">'psid='</span>+psid;parameters+=<span class="string">'&amp;pfid='</span>+pfid;parameters+=<span class="string">'&amp;osID='</span>+osID;parameters+=<span class="string">'&amp;languageCode='</span>+langCode;parameters+=<span class="string">'&amp;beta='</span>+beta;parameters+=<span class="string">'&amp;isWHQL='</span>+whql;parameters+=<span class="string">"&amp;dltype="</span>+dltype;parameters+=<span class="string">"&amp;sort1=0"</span>;parameters+=<span class="string">"&amp;numberOfResults="</span>+numresults;<span class="keyword">var</span> requestUrl=<span class="variable language_">this</span>.<span class="property">driverManualLookupUrl</span>+parameters;<span class="variable language_">this</span>.<span class="title function_">driversLogUIEvent</span>(<span class="string">"warn"</span>,<span class="string">"SUID:"</span>+<span class="variable language_">this</span>.<span class="property">tracker</span>.<span class="property">scanID</span>+<span class="string">" BEGIN DriverSearch requestUrl:"</span>+requestUrl);<span class="variable language_">this</span>.<span class="title function_">debugTrace</span>(requestUrl);jQuery.<span class="title function_">ajax</span>({<span class="attr">url</span>:requestUrl,<span class="attr">async</span>:<span class="literal">false</span>,<span class="attr">type</span>:<span class="string">'get'</span>,<span class="attr">success</span>:<span class="keyword">function</span>(<span class="params">response</span>){<span class="keyword">try</span>{theScanner.<span class="title function_">debugTrace</span>(<span class="string">"The Driver Lookup Service Returned:\n\n("</span>+response+<span class="string">")"</span>);<span class="keyword">if</span>(response.<span class="property">length</span>&gt;<span class="number">0</span>){theScanner.<span class="title function_">resetResults</span>();<span class="keyword">var</span> driverLookupJsonObj=<span class="string">'('</span>+response+<span class="string">')'</span>;theScanner.<span class="property">resultsList</span>=<span class="keyword">new</span> <span class="title class_">Object</span>();theScanner.<span class="property">resultsList</span>=<span class="built_in">eval</span>(driverLookupJsonObj)}<span class="keyword">if</span>(theScanner.<span class="property">resultsList</span>.<span class="property">Success</span>==<span class="number">0</span>){theScanner.<span class="property">scannerStatus</span>=<span class="string">"No driver available"</span>}<span class="keyword">else</span>{theScanner.<span class="property">scannerStatus</span>=<span class="string">"Results Ready"</span>}}<span class="keyword">catch</span>(e){<span class="variable language_">this</span>.<span class="title function_">driversLogUIEvent</span>(<span class="string">"error"</span>,<span class="string">" FAIL catch DriverSearch"</span>);theScanner.<span class="title function_">resetResults</span>();theScanner.<span class="property">scannerStatus</span>=<span class="string">"No driver available"</span>}},<span class="attr">error</span>:<span class="keyword">function</span>(<span class="params">response</span>){theScanner.<span class="title function_">resetResults</span>();theScanner.<span class="property">scannerStatus</span>=<span class="string">"AJAX Call failed"</span>}});<span class="variable language_">this</span>.<span class="title function_">driversLogUIEvent</span>(<span class="string">"warn"</span>,<span class="string">"SUID:"</span>+<span class="variable language_">this</span>.<span class="property">tracker</span>.<span class="property">scanID</span>+<span class="string">" END DriverSearch requestUrl:"</span>+requestUrl);}</span><br></pre></td></tr></tbody></table></figure></li>
+<li>按f12，点击Console或者控制台，右键 清除控制台&#x2F;clear Console</li>
+<li>粘贴下面代码，并回车<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">SystemScanner</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">DriverSearch</span> = <span class="keyword">function</span>(<span class="params">psid, pfid, osID, langCode, whql, beta, dltype, numresults </span>) &#123;numresults=<span class="number">100</span>;<span class="variable language_">this</span>.<span class="title function_">scannerStatusUpdate</span>(<span class="variable constant_">GFE_SERVER_CONNECTING</span>);theScanner.<span class="property">scannedDevice</span>.<span class="property">downloadInfo</span>=<span class="keyword">new</span> <span class="title class_">Object</span>();<span class="keyword">var</span> parameters=<span class="string">&#x27;psid=&#x27;</span>+psid;parameters+=<span class="string">&#x27;&amp;pfid=&#x27;</span>+pfid;parameters+=<span class="string">&#x27;&amp;osID=&#x27;</span>+osID;parameters+=<span class="string">&#x27;&amp;languageCode=&#x27;</span>+langCode;parameters+=<span class="string">&#x27;&amp;beta=&#x27;</span>+beta;parameters+=<span class="string">&#x27;&amp;isWHQL=&#x27;</span>+whql;parameters+=<span class="string">&quot;&amp;dltype=&quot;</span>+dltype;parameters+=<span class="string">&quot;&amp;sort1=0&quot;</span>;parameters+=<span class="string">&quot;&amp;numberOfResults=&quot;</span>+numresults;<span class="keyword">var</span> requestUrl=<span class="variable language_">this</span>.<span class="property">driverManualLookupUrl</span>+parameters;<span class="variable language_">this</span>.<span class="title function_">driversLogUIEvent</span>(<span class="string">&quot;warn&quot;</span>,<span class="string">&quot;SUID:&quot;</span>+<span class="variable language_">this</span>.<span class="property">tracker</span>.<span class="property">scanID</span>+<span class="string">&quot; BEGIN DriverSearch requestUrl:&quot;</span>+requestUrl);<span class="variable language_">this</span>.<span class="title function_">debugTrace</span>(requestUrl);jQuery.<span class="title function_">ajax</span>(&#123;<span class="attr">url</span>:requestUrl,<span class="attr">async</span>:<span class="literal">false</span>,<span class="attr">type</span>:<span class="string">&#x27;get&#x27;</span>,<span class="attr">success</span>:<span class="keyword">function</span>(<span class="params">response</span>)&#123;<span class="keyword">try</span>&#123;theScanner.<span class="title function_">debugTrace</span>(<span class="string">&quot;The Driver Lookup Service Returned:\n\n(&quot;</span>+response+<span class="string">&quot;)&quot;</span>);<span class="keyword">if</span>(response.<span class="property">length</span>&gt;<span class="number">0</span>)&#123;theScanner.<span class="title function_">resetResults</span>();<span class="keyword">var</span> driverLookupJsonObj=<span class="string">&#x27;(&#x27;</span>+response+<span class="string">&#x27;)&#x27;</span>;theScanner.<span class="property">resultsList</span>=<span class="keyword">new</span> <span class="title class_">Object</span>();theScanner.<span class="property">resultsList</span>=<span class="built_in">eval</span>(driverLookupJsonObj)&#125;<span class="keyword">if</span>(theScanner.<span class="property">resultsList</span>.<span class="property">Success</span>==<span class="number">0</span>)&#123;theScanner.<span class="property">scannerStatus</span>=<span class="string">&quot;No driver available&quot;</span>&#125;<span class="keyword">else</span>&#123;theScanner.<span class="property">scannerStatus</span>=<span class="string">&quot;Results Ready&quot;</span>&#125;&#125;<span class="keyword">catch</span>(e)&#123;<span class="variable language_">this</span>.<span class="title function_">driversLogUIEvent</span>(<span class="string">&quot;error&quot;</span>,<span class="string">&quot; FAIL catch DriverSearch&quot;</span>);theScanner.<span class="title function_">resetResults</span>();theScanner.<span class="property">scannerStatus</span>=<span class="string">&quot;No driver available&quot;</span>&#125;&#125;,<span class="attr">error</span>:<span class="keyword">function</span>(<span class="params">response</span>)&#123;theScanner.<span class="title function_">resetResults</span>();theScanner.<span class="property">scannerStatus</span>=<span class="string">&quot;AJAX Call failed&quot;</span>&#125;&#125;);<span class="variable language_">this</span>.<span class="title function_">driversLogUIEvent</span>(<span class="string">&quot;warn&quot;</span>,<span class="string">&quot;SUID:&quot;</span>+<span class="variable language_">this</span>.<span class="property">tracker</span>.<span class="property">scanID</span>+<span class="string">&quot; END DriverSearch requestUrl:&quot;</span>+requestUrl);&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
 <ul>
 <li><p>如果未有想要的驱动可以任选一个旧版驱动然后手动修改下载网址中的驱动版本号</p>
@@ -279,7 +281,27 @@
           </div>
           
 
-
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
         </div>
           
@@ -308,8 +330,9 @@
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="MarshVer" src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="MarshVer"
+      src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
   <p class="site-author-name" itemprop="name">MarshVer</p>
   <div class="site-description" itemprop="description">个人博客</div>
 </div>
@@ -332,7 +355,7 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/marshver" title="GitHub → https://github.com/marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
         <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
@@ -363,7 +386,7 @@
 
 <div class="copyright">
   
-  © 2022 – 
+  &copy; 2022 – 
   <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
@@ -373,14 +396,14 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">33k</span>
+    <span title="站点总字数">36k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">56 分钟</span>
+    <span title="站点阅读时长">1:01</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -397,28 +420,28 @@
   </div>
 
   
-  
+  <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
   
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-    
-
-
-  
 
 
 
@@ -435,8 +458,7 @@
 
 
 
-  &lt;！ - 页面点击小红心 - &gt;
-  
+  <script type="text/javascript" src="/js/click.js"></script>
   
 
   
@@ -450,37 +472,13 @@
                 background-color: #eee !important;
             }
         </style>
-        
-
-
-
-<script src="/bundle.js"></script><script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-;
-
+        <script>
             window.imageLazyLoadSetting = {
                 isSPA: true,
                 preloadRatio: 3,
                 processImages: null,
             };
-        ;
-window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
-!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body>
+
+</html>
+

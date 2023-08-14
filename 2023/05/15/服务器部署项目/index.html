@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -8,13 +10,13 @@
   <link rel="icon" type="image/png" sizes="16x16" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
+<link rel="stylesheet" href="/css/main.css">
 
 
-
-
-  
-  
-  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
@@ -78,14 +80,14 @@
   </style>
 </noscript>
 
-<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');loadCss('//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css"></noscript></head>
+</head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage">
+<body itemscope itemtype="http://schema.org/WebPage">
 
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
@@ -159,16 +161,16 @@
     
   
   
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2023/05/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/">
 
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
       <meta itemprop="name" content="MarshVer">
       <meta itemprop="description" content="个人博客">
     </span>
 
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="MarshVer">
     </span>
       <header class="post-header">
@@ -205,7 +207,7 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
-                <span class="post-meta-item-text">阅读时长 ≈</span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>2 分钟</span>
             </span>
             <div class="post-description">springboot+vue项目打包部署至服务器</div>
@@ -219,16 +221,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="springboot项目打包"><a href="#springboot项目打包" class="headerlink" title="springboot项目打包"></a>springboot项目打包</h1><figure class="highlight ada"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean <span class="keyword">package</span> <span class="title">-DskipTests</span></span><br></pre></td></tr></tbody></table></figure>
+        <h1 id="springboot项目打包"><a href="#springboot项目打包" class="headerlink" title="springboot项目打包"></a>springboot项目打包</h1><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean <span class="keyword">package</span> <span class="title">-DskipTests</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="vue项目打包"><a href="#vue项目打包" class="headerlink" title="vue项目打包"></a>vue项目打包</h1><figure class="highlight routeros"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="built_in">run</span> build</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="vue项目打包"><a href="#vue项目打包" class="headerlink" title="vue项目打包"></a>vue项目打包</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="built_in">run</span> build</span><br></pre></td></tr></table></figure>
 
-<h1 id="linux指令"><a href="#linux指令" class="headerlink" title="linux指令"></a>linux指令</h1><figure class="highlight awk"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span>进入springboot目录</span><br><span class="line">cd <span class="regexp">/home/</span>server<span class="regexp">/springboot/</span></span><br><span class="line"><span class="regexp">//</span>授权</span><br><span class="line">chmod <span class="number">777</span> springboot-<span class="number">0.0</span>.<span class="number">1</span>-SNAPSHOT.jar</span><br><span class="line"><span class="regexp">//</span>后台启动springboot</span><br><span class="line">nohup java -jar springboot-<span class="number">0.0</span>.<span class="number">1</span>-SNAPSHOT.jar &amp;</span><br><span class="line"><span class="regexp">//</span>查看java进程</span><br><span class="line">ps -ef | grep java</span><br><span class="line"><span class="regexp">//</span>取消进程</span><br><span class="line">kill -<span class="number">9</span> [进程号]</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span>进入mysql目录</span><br><span class="line">cd <span class="regexp">/usr/</span>local/</span><br><span class="line"><span class="regexp">//</span>启动数据库</span><br><span class="line">docker run -p <span class="number">3306</span>:<span class="number">3306</span> --name mysql -e MYSQL_ROOT_PASSWORD=<span class="number">123456</span> -d mysql:<span class="number">5.7</span></span><br><span class="line"><span class="regexp">//</span>产看数据库进程</span><br><span class="line">docker ps</span><br><span class="line"><span class="regexp">//</span>结束数据库进程</span><br><span class="line">docker remove [进程名]</span><br><span class="line"><span class="regexp">//</span>进入数据库</span><br><span class="line">docker exec -it [进程号] <span class="regexp">/bin/</span>bash</span><br><span class="line"><span class="regexp">//</span>登录数据库</span><br><span class="line">mysql -uroot -p123456</span><br><span class="line"><span class="regexp">//</span>退出mysq和docker</span><br><span class="line"><span class="keyword">exit</span></span><br><span class="line"><span class="regexp">//</span>查看当前目录权限</span><br><span class="line">ll</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span>进入nginx目录</span><br><span class="line">cd <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>sbin</span><br><span class="line"><span class="regexp">//</span>启动nginx</span><br><span class="line">./nginx</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="linux指令"><a href="#linux指令" class="headerlink" title="linux指令"></a>linux指令</h1><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span>进入springboot目录</span><br><span class="line">cd <span class="regexp">/home/</span>server<span class="regexp">/springboot/</span></span><br><span class="line"><span class="regexp">//</span>授权</span><br><span class="line">chmod <span class="number">777</span> springboot-<span class="number">0.0</span>.<span class="number">1</span>-SNAPSHOT.jar</span><br><span class="line"><span class="regexp">//</span>后台启动springboot</span><br><span class="line">nohup java -jar springboot-<span class="number">0.0</span>.<span class="number">1</span>-SNAPSHOT.jar &amp;</span><br><span class="line"><span class="regexp">//</span>查看java进程</span><br><span class="line">ps -ef | grep java</span><br><span class="line"><span class="regexp">//</span>取消进程</span><br><span class="line">kill -<span class="number">9</span> [进程号]</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span>进入mysql目录</span><br><span class="line">cd <span class="regexp">/usr/</span>local/</span><br><span class="line"><span class="regexp">//</span>启动数据库</span><br><span class="line">docker run -p <span class="number">3306</span>:<span class="number">3306</span> --name mysql -e MYSQL_ROOT_PASSWORD=<span class="number">123456</span> -d mysql:<span class="number">5.7</span></span><br><span class="line"><span class="regexp">//</span>产看数据库进程</span><br><span class="line">docker ps</span><br><span class="line"><span class="regexp">//</span>结束数据库进程</span><br><span class="line">docker remove [进程名]</span><br><span class="line"><span class="regexp">//</span>进入数据库</span><br><span class="line">docker exec -it [进程号] <span class="regexp">/bin/</span>bash</span><br><span class="line"><span class="regexp">//</span>登录数据库</span><br><span class="line">mysql -uroot -p123456</span><br><span class="line"><span class="regexp">//</span>退出mysq和docker</span><br><span class="line"><span class="keyword">exit</span></span><br><span class="line"><span class="regexp">//</span>查看当前目录权限</span><br><span class="line">ll</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span>进入nginx目录</span><br><span class="line">cd <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>sbin</span><br><span class="line"><span class="regexp">//</span>启动nginx</span><br><span class="line">./nginx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
 <h1 id="出现跨域错误"><a href="#出现跨域错误" class="headerlink" title="出现跨域错误"></a>出现跨域错误</h1><p>config文件夹下建CorsConfig文件，输入以下代码：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CorsConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> {</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> {</span><br><span class="line">            registry.addMapping(<span class="string">"/**"</span>)</span><br><span class="line">                    .allowedOriginPatterns(<span class="string">"*"</span>)</span><br><span class="line">                    .allowedMethods(<span class="string">"GET"</span>, <span class="string">"HEAD"</span>, <span class="string">"POST"</span>, <span class="string">"PUT"</span>, <span class="string">"DELETE"</span>, <span class="string">"OPTIONS"</span>)</span><br><span class="line">                    .allowCredentials(<span class="literal">true</span>)</span><br><span class="line">                    .maxAge(<span class="number">3600</span>)</span><br><span class="line">                    .allowedHeaders(<span class="string">"*"</span>);</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CorsConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> &#123;</span><br><span class="line">            registry.addMapping(<span class="string">&quot;/**&quot;</span>)</span><br><span class="line">                    .allowedOriginPatterns(<span class="string">&quot;*&quot;</span>)</span><br><span class="line">                    .allowedMethods(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;HEAD&quot;</span>, <span class="string">&quot;POST&quot;</span>, <span class="string">&quot;PUT&quot;</span>, <span class="string">&quot;DELETE&quot;</span>, <span class="string">&quot;OPTIONS&quot;</span>)</span><br><span class="line">                    .allowCredentials(<span class="literal">true</span>)</span><br><span class="line">                    .maxAge(<span class="number">3600</span>)</span><br><span class="line">                    .allowedHeaders(<span class="string">&quot;*&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -266,7 +268,27 @@
           </div>
           
 
-
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
         </div>
           
@@ -296,8 +318,9 @@
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="MarshVer" src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="MarshVer"
+      src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
   <p class="site-author-name" itemprop="name">MarshVer</p>
   <div class="site-description" itemprop="description">个人博客</div>
 </div>
@@ -320,7 +343,7 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/marshver" title="GitHub → https://github.com/marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
         <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
@@ -351,7 +374,7 @@
 
 <div class="copyright">
   
-  © 2022 – 
+  &copy; 2022 – 
   <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
@@ -361,14 +384,14 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">33k</span>
+    <span title="站点总字数">36k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">56 分钟</span>
+    <span title="站点阅读时长">1:01</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -385,28 +408,28 @@
   </div>
 
   
-  
+  <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
   
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-    
-
-
-  
 
 
 
@@ -423,8 +446,7 @@
 
 
 
-  &lt;！ - 页面点击小红心 - &gt;
-  
+  <script type="text/javascript" src="/js/click.js"></script>
   
 
   
@@ -438,37 +460,13 @@
                 background-color: #eee !important;
             }
         </style>
-        
-
-
-
-<script src="/bundle.js"></script><script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-;
-
+        <script>
             window.imageLazyLoadSetting = {
                 isSPA: true,
                 preloadRatio: 3,
                 processImages: null,
             };
-        ;
-window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
-!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body>
+
+</html>
+
