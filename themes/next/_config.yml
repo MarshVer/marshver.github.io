@@ -20,7 +20,7 @@ reminder: false
 # Allow to cache content generation. Introduced in NexT v6.0.0.
 # 允许缓存内容生成。在NexT v6.0.0中引入
 cache:
-  enable: true
+  enable: false
 
 # Remove unnecessary files after hexo generate.
 # 在生成hexo后删除不必要的文件。
@@ -60,7 +60,7 @@ favicon:
 
 # Show multilingual switcher in footer.
 # 在页脚中显示多语言切换器。
-language_switcher: true
+language_switcher: false
 
 footer:
   # Specify the date when the site was setup. If not defined, current year will be used.
@@ -265,7 +265,7 @@ chat:
 
 # Automatically excerpt description in homepage as preamble text.
 # 自动摘录主页中的描述作为序言文本。
-excerpt_description: false
+excerpt_description: true
 
 # Read more button
 # If true, the read more button will be displayed in excerpt section.
@@ -401,14 +401,14 @@ codeblock:
   # Code Highlight theme
   # Available values: normal | night | night eighties | night blue | night bright | solarized | solarized dark | galactic
   # See: https://github.com/chriskempson/tomorrow-theme
-  highlight_theme: galactic
+  highlight_theme: solarized
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: true
     # Show text copy result.
     show_result: true
     # Available values: default | flat | mac
-    style: default
+    style: mac
 
 back2top:
   enable: true
@@ -577,7 +577,7 @@ pjax: false
 # FancyBox is a tool that offers a nice and elegant way to add zooming functionality for images.
 # FancyBox是一个为图像添加缩放功能的工具，它提供了一种漂亮而优雅的方式。
 # For more information: https://fancyapps.com/fancybox
-fancybox: false
+fancybox: true
 
 # A JavaScript library for zooming images like Medium.
 # Do not enable both `fancybox` and `mediumzoom`.
@@ -930,7 +930,7 @@ motion:
 # Dependencies: https://github.com/theme-next/theme-next-pace
 # For more information: https://github.com/HubSpot/pace
 pace:
-  enable: false
+  enable: true
   # Themes list:
   # big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple
   # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal
@@ -952,8 +952,17 @@ three:
 canvas_ribbon:
   enable: false
   size: 300 # The width of the ribbon
-  alpha: 0.6 # The transparency of the ribbon
+  alpha: 1 # The transparency of the ribbon
   zIndex: -1 # The display level of the ribbon
+
+# canvas_nest
+canvas_nest:
+  enable: true
+  onmobile: true # Display on mobile or not
+  color: "255,0,0" # RGB values, use `,` to separate
+  opacity: 1 # The opacity of line: 0~1
+  zIndex: -1 # z-index property of the background
+  count: 99 # The number of lines
 
 
 #! ---------------------------------------------------------------
@@ -1002,7 +1011,7 @@ vendors:
   # fancybox: //cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js
   # fancybox_css: //cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css
   # jquery: //cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js
-  fancybox:
+  fancybox: false
   fancybox_css:
 
   # Medium-zoom
