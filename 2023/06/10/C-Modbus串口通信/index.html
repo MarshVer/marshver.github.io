@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -10,14 +8,17 @@
   <link rel="icon" type="image/png" sizes="16x16" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+  
+  
+  
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#FF0000","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"输入关键词","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"marshver.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#FF0000","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"输入关键词","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="C#Modbus串口通信，即按照Modbus协议请求从站读或写，然后从站将发回响应报文，从中截取需要的数据即可。">
@@ -77,13 +78,13 @@
   </style>
 </noscript>
 
-</head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css"></noscript></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
+<body itemscope="" itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
@@ -157,16 +158,16 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2023/06/10/C-Modbus%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
       <meta itemprop="name" content="MarshVer">
-      <meta itemprop="description" content="MarshVer's Blog">
+      <meta itemprop="description" content="个人博客">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="MarshVer">
     </span>
       <header class="post-header">
@@ -203,7 +204,7 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                <span class="post-meta-item-text">阅读时长 ≈</span>
               <span>5 分钟</span>
             </span>
             <div class="post-description">C#Modbus串口通信，即按照Modbus协议请求从站读或写，然后从站将发回响应报文，从中截取需要的数据即可。</div>
@@ -217,108 +218,108 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="03请求读"><a href="#03请求读" class="headerlink" title="03请求读"></a>03请求读</h1><pre class="line-numbers language-C#" data-language="C#"><code class="language-C#">ushort startAddr &#x3D; 0;
-ushort readLen &#x3D; 2;
+        <h1 id="03请求读"><a href="#03请求读" class="headerlink" title="03请求读"></a>03请求读</h1><pre class="line-numbers language-C#" data-language="C#"><code class="language-C#">ushort startAddr = 0;
+ushort readLen = 2;
 
-List&lt;byte&gt; command &#x3D; new List&lt;byte&gt;();
-&#x2F;&#x2F;从站地址
+List&lt;byte&gt; command = new List&lt;byte&gt;();
+//从站地址
 command.Add(0x01);
-&#x2F;&#x2F;功能码，读保持寄存器
+//功能码，读保持寄存器
 command.Add(0x03);
-&#x2F;&#x2F;起始地址
+//起始地址
 command.Add(BitConverter.GetBytes(startAddr)[1]);
 command.Add(BitConverter.GetBytes(startAddr)[0]);
-&#x2F;&#x2F;读取数量
+//读取数量
 command.Add(BitConverter.GetBytes(readLen)[1]);
 command.Add(BitConverter.GetBytes(readLen)[0]);
-&#x2F;&#x2F;CRC校验
-command &#x3D; CRC16(command);
+//CRC校验
+command = CRC16(command);
 
 serialPort.Write(command.ToArray(), 0, command.Count);
 
-&#x2F;&#x2F;固定请求读
-Task.Run(() &#x3D;&gt;
-    &#123;
-        byte[] respBytes1 &#x3D; &#123;0x01, 0x03, 0x4e, 0x20, 0x00, 0x0A, 0xd3, 0x25&#125;;
-        byte[] respBytes2 &#x3D; &#123;0x02, 0x03, 0x4e, 0x20, 0x00, 0x0A, 0xd3, 0x25&#125;;
+//固定请求读
+Task.Run(() =&gt;
+    {
+        byte[] respBytes1 = {0x01, 0x03, 0x4e, 0x20, 0x00, 0x0A, 0xd3, 0x25};
+        byte[] respBytes2 = {0x02, 0x03, 0x4e, 0x20, 0x00, 0x0A, 0xd3, 0x25};
         serialPort1.Write(respBytes1, 0, 8);
         Thread.Sleep(1000);
         serialPort1.Write(respBytes2, 0, 8);
         Thread.Sleep(1000);
-    &#125;);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    });<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
-<h1 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h1><pre class="line-numbers language-C#" data-language="C#"><code class="language-C#">byte[] respBytes &#x3D; new byte[serialPort.BytesToRead];
+<h1 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h1><pre class="line-numbers language-C#" data-language="C#"><code class="language-C#">byte[] respBytes = new byte[serialPort.BytesToRead];
 serialPort.Read(respBytes, 0, respBytes.Length);
-List&lt;byte&gt; respList &#x3D; new List&lt;byte&gt;(respBytes);
+List&lt;byte&gt; respList = new List&lt;byte&gt;(respBytes);
 
-respList.RemoveRange(0, 3);&#x2F;&#x2F;截去：从站地址  功能码  字节计数
-respList.RemoveRange(respList.Count - 2, 2);&#x2F;&#x2F;截去：校验位
+respList.RemoveRange(0, 3);//截去：从站地址  功能码  字节计数
+respList.RemoveRange(respList.Count - 2, 2);//截去：校验位
 
-byte[] data &#x3D; new byte[2];&#x2F;&#x2F;获取需要的2个字节数据
-data[0] &#x3D; respList[N * 2 + 1];&#x2F;&#x2F;N为第N+1个字节数据
-data[1] &#x3D; respList[N * 2];
-string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其转化为字符型<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+byte[] data = new byte[2];//获取需要的2个字节数据
+data[0] = respList[N * 2 + 1];//N为第N+1个字节数据
+data[1] = respList[N * 2];
+string value = BitConverter.ToUInt16(data, 0).ToString();//将其转化为字符型<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="10请求写"><a href="#10请求写" class="headerlink" title="10请求写"></a>10请求写</h1><pre class="line-numbers language-C#" data-language="C#"><code class="language-C#">private void correct(string text, ushort slave)
-&#123;
-    ushort startAddr &#x3D; 0;&#x2F;&#x2F;写入地址
-    ushort writeLen &#x3D; 1;&#x2F;&#x2F;写入数量
-    ushort value &#x3D; ushort.Parse(text);&#x2F;&#x2F;写入值
+{
+    ushort startAddr = 0;//写入地址
+    ushort writeLen = 1;//写入数量
+    ushort value = ushort.Parse(text);//写入值
 
-    List&lt;byte&gt; command &#x3D; new List&lt;byte&gt;();
+    List&lt;byte&gt; command = new List&lt;byte&gt;();
 
-    command.Add((byte)slave);&#x2F;&#x2F;从站地址
-    command.Add(0x10);&#x2F;&#x2F;功能码，写多个寄存器
-    &#x2F;&#x2F;写入地址
+    command.Add((byte)slave);//从站地址
+    command.Add(0x10);//功能码，写多个寄存器
+    //写入地址
     command.Add(BitConverter.GetBytes(startAddr)[1]);
     command.Add(BitConverter.GetBytes(startAddr)[0]);
-    &#x2F;&#x2F;写入数量
+    //写入数量
     command.Add(BitConverter.GetBytes(writeLen)[1]);
      command.Add(BitConverter.GetBytes(writeLen)[0]);
-    &#x2F;&#x2F;字节数
-    byte[] valueBytes &#x3D; BitConverter.GetBytes(value);
+    //字节数
+    byte[] valueBytes = BitConverter.GetBytes(value);
     command.Add((byte)valueBytes.Length);
-    &#x2F;&#x2F;写入值
+    //写入值
     command.Add(BitConverter.GetBytes(value)[1]);
     command.Add(BitConverter.GetBytes(value)[0]);
-    &#x2F;&#x2F;CRC校验
-    command &#x3D; CRC16(command);
+    //CRC校验
+    command = CRC16(command);
 
     serialPort.Write(command.ToArray(), 0, command.Count);
 
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
-<h1 id="CRC校验"><a href="#CRC校验" class="headerlink" title="CRC校验"></a>CRC校验</h1><pre class="line-numbers language-C#" data-language="C#"><code class="language-C#"> static List&lt;byte&gt; CRC16(List&lt;byte&gt; value, ushort poly &#x3D; 0xA001, ushort crcInit &#x3D; 0xFFFF)
- &#123;
-    if (value &#x3D;&#x3D; null || !value.Any())
-    throw new ArgumentException(&quot;&quot;);
+<h1 id="CRC校验"><a href="#CRC校验" class="headerlink" title="CRC校验"></a>CRC校验</h1><pre class="line-numbers language-C#" data-language="C#"><code class="language-C#"> static List&lt;byte&gt; CRC16(List&lt;byte&gt; value, ushort poly = 0xA001, ushort crcInit = 0xFFFF)
+ {
+    if (value == null || !value.Any())
+    throw new ArgumentException("");
 
-    &#x2F;&#x2F;运算
-    ushort crc &#x3D; crcInit;
-    for (int i &#x3D; 0; i &lt; value.Count; i++)
-    &#123;
-        crc &#x3D; (ushort)(crc ^ (value[i]));
-        for (int j &#x3D; 0; j &lt; 8; j++)
-        &#123;
-            crc &#x3D; (crc &amp; 1) !&#x3D; 0 ? (ushort)((crc &gt;&gt; 1) ^ poly) : (ushort)(crc &gt;&gt; 1);
-        &#125;
-    &#125;
-    byte hi &#x3D; (byte)((crc &amp; 0xFF00) &gt;&gt; 8);  &#x2F;&#x2F;高位置
-    byte lo &#x3D; (byte)(crc &amp; 0x00FF);         &#x2F;&#x2F;低位置
+    //运算
+    ushort crc = crcInit;
+    for (int i = 0; i &lt; value.Count; i++)
+    {
+        crc = (ushort)(crc ^ (value[i]));
+        for (int j = 0; j &lt; 8; j++)
+        {
+            crc = (crc &amp; 1) != 0 ? (ushort)((crc &gt;&gt; 1) ^ poly) : (ushort)(crc &gt;&gt; 1);
+        }
+    }
+    byte hi = (byte)((crc &amp; 0xFF00) &gt;&gt; 8);  //高位置
+    byte lo = (byte)(crc &amp; 0x00FF);         //低位置
 
-    List&lt;byte&gt; buffer &#x3D; new List&lt;byte&gt;();
-    &#x2F;&#x2F;添加校验原始值
+    List&lt;byte&gt; buffer = new List&lt;byte&gt;();
+    //添加校验原始值
     buffer.AddRange(value);
-    &#x2F;&#x2F;添加校验位值
+    //添加校验位值
     buffer.Add(lo);
     buffer.Add(hi);
 
-    &#x2F;&#x2F;加上原始校验值返回
+    //加上原始校验值返回
     return buffer;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
     </div>
 
     
@@ -353,27 +354,7 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
           </div>
           
 
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
+
 
         </div>
           
@@ -403,11 +384,10 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="MarshVer"
-      src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="MarshVer" src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
   <p class="site-author-name" itemprop="name">MarshVer</p>
-  <div class="site-description" itemprop="description">MarshVer's Blog</div>
+  <div class="site-description" itemprop="description">个人博客</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
@@ -428,7 +408,7 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/marshver" title="GitHub → https://github.com/marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
         <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
@@ -459,7 +439,7 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
 
 <div class="copyright">
   
-  &copy; 2022 – 
+  © 2022 – 
   <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
@@ -476,7 +456,7 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
     </span>
     <span title="站点阅读时长">53 分钟</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -493,19 +473,23 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
+  
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  
+  
 
 
-<script src="/js/next-boot.js"></script>
+
+
+
+
+
+
+
+
 
 
 
@@ -539,11 +523,35 @@ string value &#x3D; BitConverter.ToUInt16(data, 0).ToString();&#x2F;&#x2F;将其
                 background-color: #eee !important;
             }
         </style>
-        <script>
+        
+
+<script src="/bundle.js"></script><script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+;
+
             window.imageLazyLoadSetting = {
                 isSPA: true,
                 preloadRatio: 3,
                 processImages: null,
             };
-        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body>
-</html>
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
