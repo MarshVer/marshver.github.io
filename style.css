@@ -1250,7 +1250,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff0eff;
+  background: #791a59;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2642,3 +2642,5 @@ mjx-container + br {
     margin: 8px 0 0;
   }
 }
+
+.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:rgb(255, 0, 0);position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}

@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -10,13 +8,13 @@
   <link rel="icon" type="image/png" sizes="16x16" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
-  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
-  <script src="/lib/pace/pace.min.js"></script>
+
+
+  
+  
+  
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
@@ -80,14 +78,14 @@
   </style>
 </noscript>
 
-</head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');loadCss('//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css"></noscript></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
+<body itemscope="" itemtype="http://schema.org/WebPage">
 
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
@@ -161,16 +159,16 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2023/06/10/C-Modbus%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
       <meta itemprop="name" content="MarshVer">
       <meta itemprop="description" content="个人博客">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="MarshVer">
     </span>
       <header class="post-header">
@@ -207,7 +205,7 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                <span class="post-meta-item-text">阅读时长 ≈</span>
               <span>4 分钟</span>
             </span>
             <div class="post-description">C#Modbus串口通信，即按照Modbus协议请求从站读或写，然后从站将发回响应报文，从中截取需要的数据即可。</div>
@@ -221,16 +219,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="03请求读"><a href="#03请求读" class="headerlink" title="03请求读"></a>03请求读</h1><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ushort startAddr = <span class="number">0</span>;</span><br><span class="line">ushort readLen = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">List&lt;byte&gt; command = <span class="keyword">new</span> List&lt;byte&gt;<span class="literal">()</span>;</span><br><span class="line"><span class="comment">//从站地址</span></span><br><span class="line">command.<span class="constructor">Add(0x01)</span>;</span><br><span class="line"><span class="comment">//功能码，读保持寄存器</span></span><br><span class="line">command.<span class="constructor">Add(0x03)</span>;</span><br><span class="line"><span class="comment">//起始地址</span></span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line"><span class="comment">//读取数量</span></span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">readLen</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">readLen</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line"><span class="comment">//CRC校验</span></span><br><span class="line">command = <span class="constructor">CRC16(<span class="params">command</span>)</span>;</span><br><span class="line"></span><br><span class="line">serialPort.<span class="constructor">Write(<span class="params">command</span>.ToArray()</span>, <span class="number">0</span>, command.Count);</span><br><span class="line"></span><br><span class="line"><span class="comment">//固定请求读</span></span><br><span class="line">Task.<span class="constructor">Run(()</span> =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        byte<span class="literal">[]</span> respBytes1 = &#123;<span class="number">0x01</span>, <span class="number">0x03</span>, <span class="number">0x4e</span>, <span class="number">0x20</span>, <span class="number">0x00</span>, <span class="number">0x0A</span>, <span class="number">0xd3</span>, <span class="number">0x25</span>&#125;;</span><br><span class="line">        byte<span class="literal">[]</span> respBytes2 = &#123;<span class="number">0x02</span>, <span class="number">0x03</span>, <span class="number">0x4e</span>, <span class="number">0x20</span>, <span class="number">0x00</span>, <span class="number">0x0A</span>, <span class="number">0xd3</span>, <span class="number">0x25</span>&#125;;</span><br><span class="line">        serialPort1.<span class="constructor">Write(<span class="params">respBytes1</span>, 0, 8)</span>;</span><br><span class="line">        Thread.<span class="constructor">Sleep(1000)</span>;</span><br><span class="line">        serialPort1.<span class="constructor">Write(<span class="params">respBytes2</span>, 0, 8)</span>;</span><br><span class="line">        Thread.<span class="constructor">Sleep(1000)</span>;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+        <h1 id="03请求读"><a href="#03请求读" class="headerlink" title="03请求读"></a>03请求读</h1><figure class="highlight reasonml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ushort startAddr = <span class="number">0</span>;</span><br><span class="line">ushort readLen = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">List&lt;byte&gt; command = <span class="keyword">new</span> List&lt;byte&gt;<span class="literal">()</span>;</span><br><span class="line"><span class="comment">//从站地址</span></span><br><span class="line">command.<span class="constructor">Add(0x01)</span>;</span><br><span class="line"><span class="comment">//功能码，读保持寄存器</span></span><br><span class="line">command.<span class="constructor">Add(0x03)</span>;</span><br><span class="line"><span class="comment">//起始地址</span></span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line"><span class="comment">//读取数量</span></span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">readLen</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">readLen</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line"><span class="comment">//CRC校验</span></span><br><span class="line">command = <span class="constructor">CRC16(<span class="params">command</span>)</span>;</span><br><span class="line"></span><br><span class="line">serialPort.<span class="constructor">Write(<span class="params">command</span>.ToArray()</span>, <span class="number">0</span>, command.Count);</span><br><span class="line"></span><br><span class="line"><span class="comment">//固定请求读</span></span><br><span class="line">Task.<span class="constructor">Run(()</span> =&gt;</span><br><span class="line">    {</span><br><span class="line">        byte<span class="literal">[]</span> respBytes1 = {<span class="number">0x01</span>, <span class="number">0x03</span>, <span class="number">0x4e</span>, <span class="number">0x20</span>, <span class="number">0x00</span>, <span class="number">0x0A</span>, <span class="number">0xd3</span>, <span class="number">0x25</span>};</span><br><span class="line">        byte<span class="literal">[]</span> respBytes2 = {<span class="number">0x02</span>, <span class="number">0x03</span>, <span class="number">0x4e</span>, <span class="number">0x20</span>, <span class="number">0x00</span>, <span class="number">0x0A</span>, <span class="number">0xd3</span>, <span class="number">0x25</span>};</span><br><span class="line">        serialPort1.<span class="constructor">Write(<span class="params">respBytes1</span>, 0, 8)</span>;</span><br><span class="line">        Thread.<span class="constructor">Sleep(1000)</span>;</span><br><span class="line">        serialPort1.<span class="constructor">Write(<span class="params">respBytes2</span>, 0, 8)</span>;</span><br><span class="line">        Thread.<span class="constructor">Sleep(1000)</span>;</span><br><span class="line">    });</span><br></pre></td></tr></tbody></table></figure>
 
 
 
-<h1 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h1><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">byte<span class="literal">[]</span> respBytes = <span class="keyword">new</span> byte<span class="literal">[<span class="identifier">serialPort</span>.B<span class="identifier">ytesToRead</span>]</span>;</span><br><span class="line">serialPort.<span class="constructor">Read(<span class="params">respBytes</span>, 0, <span class="params">respBytes</span>.Length)</span>;</span><br><span class="line">List&lt;byte&gt; respList = <span class="keyword">new</span> List&lt;byte&gt;(respBytes);</span><br><span class="line"></span><br><span class="line">respList.<span class="constructor">RemoveRange(0, 3)</span>;<span class="comment">//截去：从站地址  功能码  字节计数</span></span><br><span class="line">respList.<span class="constructor">RemoveRange(<span class="params">respList</span>.Count - 2, 2)</span>;<span class="comment">//截去：校验位</span></span><br><span class="line"></span><br><span class="line">byte<span class="literal">[]</span> data = <span class="keyword">new</span> byte<span class="literal">[<span class="number">2</span>]</span>;<span class="comment">//获取需要的2个字节数据</span></span><br><span class="line">data<span class="literal">[<span class="number">0</span>]</span> = respList<span class="literal">[N <span class="operator">*</span> <span class="number">2</span> + <span class="number">1</span>]</span>;<span class="comment">//N为第N+1个字节数据</span></span><br><span class="line">data<span class="literal">[<span class="number">1</span>]</span> = respList<span class="literal">[N <span class="operator">*</span> <span class="number">2</span>]</span>;</span><br><span class="line"><span class="built_in">string</span> value = BitConverter.<span class="constructor">ToUInt16(<span class="params">data</span>, 0)</span>.<span class="constructor">ToString()</span>;<span class="comment">//将其转化为字符型</span></span><br></pre></td></tr></table></figure>
+<h1 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h1><figure class="highlight reasonml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">byte<span class="literal">[]</span> respBytes = <span class="keyword">new</span> byte<span class="literal">[<span class="identifier">serialPort</span>.B<span class="identifier">ytesToRead</span>]</span>;</span><br><span class="line">serialPort.<span class="constructor">Read(<span class="params">respBytes</span>, 0, <span class="params">respBytes</span>.Length)</span>;</span><br><span class="line">List&lt;byte&gt; respList = <span class="keyword">new</span> List&lt;byte&gt;(respBytes);</span><br><span class="line"></span><br><span class="line">respList.<span class="constructor">RemoveRange(0, 3)</span>;<span class="comment">//截去：从站地址  功能码  字节计数</span></span><br><span class="line">respList.<span class="constructor">RemoveRange(<span class="params">respList</span>.Count - 2, 2)</span>;<span class="comment">//截去：校验位</span></span><br><span class="line"></span><br><span class="line">byte<span class="literal">[]</span> data = <span class="keyword">new</span> byte<span class="literal">[<span class="number">2</span>]</span>;<span class="comment">//获取需要的2个字节数据</span></span><br><span class="line">data<span class="literal">[<span class="number">0</span>]</span> = respList<span class="literal">[N <span class="operator">*</span> <span class="number">2</span> + <span class="number">1</span>]</span>;<span class="comment">//N为第N+1个字节数据</span></span><br><span class="line">data<span class="literal">[<span class="number">1</span>]</span> = respList<span class="literal">[N <span class="operator">*</span> <span class="number">2</span>]</span>;</span><br><span class="line"><span class="built_in">string</span> value = BitConverter.<span class="constructor">ToUInt16(<span class="params">data</span>, 0)</span>.<span class="constructor">ToString()</span>;<span class="comment">//将其转化为字符型</span></span><br></pre></td></tr></tbody></table></figure>
 
-<h1 id="10请求写"><a href="#10请求写" class="headerlink" title="10请求写"></a>10请求写</h1><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> void correct(<span class="built_in">string</span> text, ushort slave)</span><br><span class="line">&#123;</span><br><span class="line">    ushort startAddr = <span class="number">0</span>;<span class="comment">//写入地址</span></span><br><span class="line">    ushort writeLen = <span class="number">1</span>;<span class="comment">//写入数量</span></span><br><span class="line">    ushort value = ushort.<span class="constructor">Parse(<span class="params">text</span>)</span>;<span class="comment">//写入值</span></span><br><span class="line"></span><br><span class="line">    List&lt;byte&gt; command = <span class="keyword">new</span> List&lt;byte&gt;<span class="literal">()</span>;</span><br><span class="line"></span><br><span class="line">    command.<span class="constructor">Add((<span class="params">byte</span>)</span>slave);<span class="comment">//从站地址</span></span><br><span class="line">    command.<span class="constructor">Add(0x10)</span>;<span class="comment">//功能码，写多个寄存器</span></span><br><span class="line">    <span class="comment">//写入地址</span></span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line">    <span class="comment">//写入数量</span></span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">writeLen</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">     command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">writeLen</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line">    <span class="comment">//字节数</span></span><br><span class="line">    byte<span class="literal">[]</span> valueBytes = BitConverter.<span class="constructor">GetBytes(<span class="params">value</span>)</span>;</span><br><span class="line">    command.<span class="constructor">Add((<span class="params">byte</span>)</span>valueBytes.Length);</span><br><span class="line">    <span class="comment">//写入值</span></span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">value</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">value</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line">    <span class="comment">//CRC校验</span></span><br><span class="line">    command = <span class="constructor">CRC16(<span class="params">command</span>)</span>;</span><br><span class="line"></span><br><span class="line">    serialPort.<span class="constructor">Write(<span class="params">command</span>.ToArray()</span>, <span class="number">0</span>, command.Count);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="10请求写"><a href="#10请求写" class="headerlink" title="10请求写"></a>10请求写</h1><figure class="highlight reasonml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> void correct(<span class="built_in">string</span> text, ushort slave)</span><br><span class="line">{</span><br><span class="line">    ushort startAddr = <span class="number">0</span>;<span class="comment">//写入地址</span></span><br><span class="line">    ushort writeLen = <span class="number">1</span>;<span class="comment">//写入数量</span></span><br><span class="line">    ushort value = ushort.<span class="constructor">Parse(<span class="params">text</span>)</span>;<span class="comment">//写入值</span></span><br><span class="line"></span><br><span class="line">    List&lt;byte&gt; command = <span class="keyword">new</span> List&lt;byte&gt;<span class="literal">()</span>;</span><br><span class="line"></span><br><span class="line">    command.<span class="constructor">Add((<span class="params">byte</span>)</span>slave);<span class="comment">//从站地址</span></span><br><span class="line">    command.<span class="constructor">Add(0x10)</span>;<span class="comment">//功能码，写多个寄存器</span></span><br><span class="line">    <span class="comment">//写入地址</span></span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">startAddr</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line">    <span class="comment">//写入数量</span></span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">writeLen</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">     command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">writeLen</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line">    <span class="comment">//字节数</span></span><br><span class="line">    byte<span class="literal">[]</span> valueBytes = BitConverter.<span class="constructor">GetBytes(<span class="params">value</span>)</span>;</span><br><span class="line">    command.<span class="constructor">Add((<span class="params">byte</span>)</span>valueBytes.Length);</span><br><span class="line">    <span class="comment">//写入值</span></span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">value</span>)</span><span class="literal">[<span class="number">1</span>]</span>);</span><br><span class="line">    command.<span class="constructor">Add(BitConverter.GetBytes(<span class="params">value</span>)</span><span class="literal">[<span class="number">0</span>]</span>);</span><br><span class="line">    <span class="comment">//CRC校验</span></span><br><span class="line">    command = <span class="constructor">CRC16(<span class="params">command</span>)</span>;</span><br><span class="line"></span><br><span class="line">    serialPort.<span class="constructor">Write(<span class="params">command</span>.ToArray()</span>, <span class="number">0</span>, command.Count);</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 
-<h1 id="CRC校验"><a href="#CRC校验" class="headerlink" title="CRC校验"></a>CRC校验</h1><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">static</span> List&lt;<span class="built_in">byte</span>&gt; <span class="title">CRC16</span>(<span class="params">List&lt;<span class="built_in">byte</span>&gt; <span class="keyword">value</span>, <span class="built_in">ushort</span> poly = <span class="number">0xA001</span>, <span class="built_in">ushort</span> crcInit = <span class="number">0xFFFF</span></span>)</span></span><br><span class="line"> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">value</span> == <span class="literal">null</span> || !<span class="keyword">value</span>.Any())</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ArgumentException(<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//运算</span></span><br><span class="line">    <span class="built_in">ushort</span> crc = crcInit;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">value</span>.Count; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        crc = (<span class="built_in">ushort</span>)(crc ^ (<span class="keyword">value</span>[i]));</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            crc = (crc &amp; <span class="number">1</span>) != <span class="number">0</span> ? (<span class="built_in">ushort</span>)((crc &gt;&gt; <span class="number">1</span>) ^ poly) : (<span class="built_in">ushort</span>)(crc &gt;&gt; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">byte</span> hi = (<span class="built_in">byte</span>)((crc &amp; <span class="number">0xFF00</span>) &gt;&gt; <span class="number">8</span>);  <span class="comment">//高位置</span></span><br><span class="line">    <span class="built_in">byte</span> lo = (<span class="built_in">byte</span>)(crc &amp; <span class="number">0x00FF</span>);         <span class="comment">//低位置</span></span><br><span class="line"></span><br><span class="line">    List&lt;<span class="built_in">byte</span>&gt; buffer = <span class="keyword">new</span> List&lt;<span class="built_in">byte</span>&gt;();</span><br><span class="line">    <span class="comment">//添加校验原始值</span></span><br><span class="line">    buffer.AddRange(<span class="keyword">value</span>);</span><br><span class="line">    <span class="comment">//添加校验位值</span></span><br><span class="line">    buffer.Add(lo);</span><br><span class="line">    buffer.Add(hi);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加上原始校验值返回</span></span><br><span class="line">    <span class="keyword">return</span> buffer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="CRC校验"><a href="#CRC校验" class="headerlink" title="CRC校验"></a>CRC校验</h1><figure class="highlight csharp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">static</span> List&lt;<span class="built_in">byte</span>&gt; <span class="title">CRC16</span>(<span class="params">List&lt;<span class="built_in">byte</span>&gt; <span class="keyword">value</span>, <span class="built_in">ushort</span> poly = <span class="number">0xA001</span>, <span class="built_in">ushort</span> crcInit = <span class="number">0xFFFF</span></span>)</span></span><br><span class="line"> {</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">value</span> == <span class="literal">null</span> || !<span class="keyword">value</span>.Any())</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ArgumentException(<span class="string">""</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//运算</span></span><br><span class="line">    <span class="built_in">ushort</span> crc = crcInit;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">value</span>.Count; i++)</span><br><span class="line">    {</span><br><span class="line">        crc = (<span class="built_in">ushort</span>)(crc ^ (<span class="keyword">value</span>[i]));</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++)</span><br><span class="line">        {</span><br><span class="line">            crc = (crc &amp; <span class="number">1</span>) != <span class="number">0</span> ? (<span class="built_in">ushort</span>)((crc &gt;&gt; <span class="number">1</span>) ^ poly) : (<span class="built_in">ushort</span>)(crc &gt;&gt; <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">byte</span> hi = (<span class="built_in">byte</span>)((crc &amp; <span class="number">0xFF00</span>) &gt;&gt; <span class="number">8</span>);  <span class="comment">//高位置</span></span><br><span class="line">    <span class="built_in">byte</span> lo = (<span class="built_in">byte</span>)(crc &amp; <span class="number">0x00FF</span>);         <span class="comment">//低位置</span></span><br><span class="line"></span><br><span class="line">    List&lt;<span class="built_in">byte</span>&gt; buffer = <span class="keyword">new</span> List&lt;<span class="built_in">byte</span>&gt;();</span><br><span class="line">    <span class="comment">//添加校验原始值</span></span><br><span class="line">    buffer.AddRange(<span class="keyword">value</span>);</span><br><span class="line">    <span class="comment">//添加校验位值</span></span><br><span class="line">    buffer.Add(lo);</span><br><span class="line">    buffer.Add(hi);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加上原始校验值返回</span></span><br><span class="line">    <span class="keyword">return</span> buffer;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
     </div>
 
     
@@ -265,27 +263,7 @@
           </div>
           
 
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
+
 
         </div>
           
@@ -315,9 +293,8 @@
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="MarshVer"
-      src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="MarshVer" src="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
   <p class="site-author-name" itemprop="name">MarshVer</p>
   <div class="site-description" itemprop="description">个人博客</div>
 </div>
@@ -340,7 +317,7 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/marshver" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/marshver" title="GitHub → https://github.com/marshver" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
         <a href="mailto:1954440662@qq.com" title="E-Mail → mailto:1954440662@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
@@ -371,7 +348,7 @@
 
 <div class="copyright">
   
-  &copy; 2022 – 
+  © 2022 – 
   <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
@@ -388,7 +365,7 @@
     </span>
     <span title="站点阅读时长">1:01</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -405,25 +382,25 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
+  
   <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
+  
+  
 
 
-<script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js"></script>
 
 
-  <script defer src="/lib/three/three.min.js"></script>
-    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+
+
+
+
+  
+    
 
 
   
@@ -443,7 +420,7 @@
 
 
 
-  <script type="text/javascript" src="/js/click.js"></script>
+  
   
 
   
@@ -457,13 +434,37 @@
                 background-color: #eee !important;
             }
         </style>
-        <script>
+        
+
+
+
+<script src="/bundle.js"></script><script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+;
+
             window.imageLazyLoadSetting = {
                 isSPA: true,
                 preloadRatio: 3,
                 processImages: null,
             };
-        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body>
-
-</html>
-
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
