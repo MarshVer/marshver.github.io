@@ -10,6 +10,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
+
   <div class="container{%- if theme.motion.enable %} use-motion{%- endif %}">
     <div class="headband"></div>
 
@@ -46,6 +47,9 @@
   {{ partial('_scripts/index.swig', {}, {cache: theme.cache.enable}) }}
   {{ partial('_third-party/index.swig', {}, {cache: theme.cache.enable}) }}
 
+  <！ - 页面点击小红心 - >
+  <script type="text/javascript" src="/js/click.js"></script>
+
   {%- if theme.pjax %}
     <div id="pjax">
   {%- endif %}
@@ -57,4 +61,6 @@
     </div>
   {%- endif %}
 </body>
+
 </html>
+

@@ -940,8 +940,8 @@ pace:
 # JavaScript 3D库。
 # Dependencies: https://github.com/theme-next/theme-next-three
 three:
-  enable: false
-  three_waves: false
+  enable: true
+  three_waves: true
   canvas_lines: false
   canvas_sphere: false
 
@@ -957,9 +957,9 @@ canvas_ribbon:
 
 # canvas_nest
 canvas_nest:
-  enable: true
+  enable: false
   onmobile: true # Display on mobile or not
-  color: "255,255,255" # RGB values, use `,` to separate
+  color: "255, 255, 255" # RGB values, use `,` to separate
   opacity: 1 # The opacity of line: 0~1
   zIndex: -1 # z-index property of the background
   count: 99 # The number of lines
