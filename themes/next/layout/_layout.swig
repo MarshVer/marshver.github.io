@@ -47,7 +47,6 @@
   {{ partial('_scripts/index.swig', {}, {cache: theme.cache.enable}) }}
   {{ partial('_third-party/index.swig', {}, {cache: theme.cache.enable}) }}
 
-  <！ - 页面点击小红心 - >
   <script type="text/javascript" src="/js/click.js"></script>
 
   {%- if theme.pjax %}

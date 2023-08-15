@@ -109,7 +109,7 @@ theme: next
 deploy:
   type: git
   repository: 
-      github: https://github.com/MarshVer/Marshver.github.io.git
+      github: git@github.com:MarshVer/marshver.github.io.git
   branch: main
 
 # 图片懒加载
