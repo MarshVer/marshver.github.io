@@ -360,6 +360,8 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  
 
 
         <style>
@@ -393,6 +395,15 @@
     });
   }
 ;
+
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://marshver.github.io/tags/%E9%85%8D%E7%BD%AE/',]
+      });
+      });
+  ;
 
             window.imageLazyLoadSetting = {
                 isSPA: true,

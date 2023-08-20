@@ -417,6 +417,8 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  
 
 
         <style>
@@ -450,6 +452,15 @@
     });
   }
 ;
+
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://marshver.github.io/2023/02/20/NoTebookFancontrol%E4%BD%BF%E7%94%A8/',]
+      });
+      });
+  ;
 
             window.imageLazyLoadSetting = {
                 isSPA: true,
