@@ -124,7 +124,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">10</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -152,6 +152,86 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2023/11/07/c-%E8%AF%BB%E5%8F%96Excel%E5%B9%B6%E5%86%99%E5%85%A5txt%E6%96%87%E4%BB%B6/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
+      <meta itemprop="name" content="MarshVer">
+      <meta itemprop="description" content="个人博客">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MarshVer">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/07/c-%E8%AF%BB%E5%8F%96Excel%E5%B9%B6%E5%86%99%E5%85%A5txt%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">c#读取Excel并按规则替换Excel数据写入txt文件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-11-07 17:44:04 / 修改时间：18:00:13" itemprop="dateCreated datePublished" datetime="2023-11-07T17:44:04+08:00">2023-11-07</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 ≈</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="安装NPOI"><a href="#安装NPOI" class="headerlink" title="安装NPOI"></a>安装NPOI</h1><ol>
+<li>vs-工具-NuGet程序包管理器-管理解决方案的NuGet程序包</li>
+<li>搜索NPOI下载并安装</li>
+</ol>
+<p>注：若编译器报错可选择较低版本</p>
+<h1 id="选择文件"><a href="#选择文件" class="headerlink" title="选择文件"></a>选择文件</h1><figure class="highlight c#"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">SelectFolder1</span>(<span class="params">TextBox tb</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="built_in">string</span> ret = <span class="string">""</span>;</span><br><span class="line">    System.Windows.Forms.OpenFileDialog dialog = <span class="keyword">new</span> System.Windows.Forms.OpenFileDialog();</span><br><span class="line">    <span class="keyword">if</span> (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)</span><br><span class="line">    {</span><br><span class="line">        tb.Text = dialog.FileName;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="选择文件夹"><a href="#选择文件夹" class="headerlink" title="选择文件夹"></a>选择文件夹</h1><figure class="highlight c#"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">SelectFolder2</span>(<span class="params">TextBox tb</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="built_in">string</span> ret = <span class="string">""</span>;</span><br><span class="line">    System.Windows.Forms.FolderBrowserDialog dialog = <span class="keyword">new</span> System.Windows.Forms.FolderBrowserDialog();</span><br><span class="line">    <span class="keyword">if</span> (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)</span><br><span class="line">    {</span><br><span class="line">        tb.Text = dialog.SelectedPath;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="转换代码"><a href="#转换代码" class="headerlink" title="转换代码"></a>转换代码</h1><figure class="highlight c#"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">transform_Click</span>(<span class="params"><span class="built_in">object</span> sender, EventArgs e</span>)</span></span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">using</span> (FileStream fs = <span class="keyword">new</span> FileStream(excel_folder.Text, FileMode.Open, FileAccess.Read))</span><br><span class="line">                {</span><br><span class="line">                    XSSFWorkbook workBook = <span class="keyword">new</span> XSSFWorkbook(fs);</span><br><span class="line">                    ISheet sheet = workBook.GetSheetAt(<span class="number">0</span>);<span class="comment">//读取Excel的第一个sheet</span></span><br><span class="line"></span><br><span class="line">                    FileStream fs1 = <span class="keyword">new</span> FileStream(dhFiler.Text + <span class="string">"\\LSTREC.TXT"</span>, FileMode.Create, FileAccess.Write);</span><br><span class="line">                    StreamWriter sw = <span class="keyword">new</span> StreamWriter(fs1, Encoding.GetEncoding(<span class="string">"UTF-8"</span>));<span class="comment">//新建写txt文件</span></span><br><span class="line"></span><br><span class="line">                    sw.WriteLine(<span class="string">"idLen;idStyle;idRec;abCat;time;name;date;place"</span>);</span><br><span class="line">                    <span class="built_in">string</span> idLen, idStyle, idRec, abCat, time, name, date, place, eventName;</span><br><span class="line">                    Hashtable idStyleTable = <span class="keyword">new</span> Hashtable();<span class="comment">//泳姿hash表</span></span><br><span class="line"></span><br><span class="line">                    FileStream fsStyle = <span class="keyword">new</span> FileStream(dhFiler.Text + <span class="string">"\\LSTSTYLE.TXT"</span>, FileMode.Open, FileAccess.Read);</span><br><span class="line">                    StreamReader sr1 = <span class="keyword">new</span> StreamReader(fsStyle);<span class="comment">//读取泳姿替换文件</span></span><br><span class="line"></span><br><span class="line">                    <span class="built_in">string</span> key;</span><br><span class="line">                    <span class="keyword">while</span> (sr1.Peek() &gt;= <span class="number">0</span>)</span><br><span class="line">                    {</span><br><span class="line">                        key = sr1.ReadLine().ToString();</span><br><span class="line">                        idStyleTable.Add(key.Split(<span class="string">";"</span>.ToCharArray())[<span class="number">1</span>].Replace(<span class="string">"\""</span>, <span class="string">""</span>), key.Split(<span class="string">";"</span>.ToCharArray())[<span class="number">0</span>].Replace(<span class="string">"\""</span>, <span class="string">""</span>));</span><br><span class="line">                    }</span><br><span class="line">                    Hashtable abCatTable = <span class="keyword">new</span> Hashtable();<span class="comment">//性别hash表</span></span><br><span class="line"></span><br><span class="line">                    FileStream fsAbCat = <span class="keyword">new</span> FileStream(dhFiler.Text + <span class="string">"\\LSTCAT.TXT"</span>, FileMode.Open, FileAccess.Read);</span><br><span class="line">                    StreamReader sr2 = <span class="keyword">new</span> StreamReader(fsAbCat);<span class="comment">//读取性别替换文件</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">while</span> (sr2.Peek() &gt;= <span class="number">0</span>)</span><br><span class="line">                    {</span><br><span class="line">                        key = sr2.ReadLine().ToString();</span><br><span class="line">                        abCatTable.Add(key.Split(<span class="string">";"</span>.ToCharArray())[<span class="number">0</span>].Replace(<span class="string">"\""</span>, <span class="string">""</span>), key.Split(<span class="string">";"</span>.ToCharArray())[<span class="number">1</span>].Replace(<span class="string">"\""</span>, <span class="string">""</span>));</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> (<span class="built_in">int</span> r = <span class="number">1</span>; r &lt; sheet.LastRowNum; r++)</span><br><span class="line">                    {</span><br><span class="line">                        <span class="keyword">if</span> (sheet.GetRow(r).GetCell(<span class="number">5</span>).ToString() == <span class="string">""</span>)</span><br><span class="line">                        {</span><br><span class="line">                            <span class="keyword">continue</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">else</span></span><br><span class="line">                        {</span><br><span class="line">                            eventName = sheet.GetRow(r).GetCell(<span class="number">4</span>).ToString().Replace(<span class="string">" "</span>, <span class="string">""</span>);<span class="comment">//读取Excel r行4列数据，并除去空格</span></span><br><span class="line"></span><br><span class="line">                            idStyle = idStyleTable[eventName.Substring(eventName.IndexOf(<span class="string">"米"</span>) + <span class="number">1</span>)].ToString();<span class="comment">//泳姿</span></span><br><span class="line">                            idLen = selectIdLen(eventName.Remove(eventName.IndexOf(<span class="string">"米"</span>), eventName.Length - eventName.IndexOf(<span class="string">"米"</span>)));<span class="comment">//游泳距离（50，100，200，400，800，1500）</span></span><br><span class="line">                            idRec = selectIdRec(sheet.GetRow(r).GetCell(<span class="number">2</span>).ToString().Trim());<span class="comment">//世界纪录，亚洲纪录。全国纪录</span></span><br><span class="line">                            <span class="keyword">try</span></span><br><span class="line">                            {</span><br><span class="line">                                abCat = abCatTable[sheet.GetRow(r).GetCell(<span class="number">1</span>).ToString().Trim()].ToString();<span class="comment">//性别</span></span><br><span class="line">                            }</span><br><span class="line">                            <span class="keyword">catch</span></span><br><span class="line">                            {</span><br><span class="line">                                abCat = <span class="string">""</span>;</span><br><span class="line">                            }</span><br><span class="line"></span><br><span class="line">                            time = sheet.GetRow(r).GetCell(<span class="number">5</span>).ToString().Trim();<span class="comment">//时间</span></span><br><span class="line">                            name = sheet.GetRow(r).GetCell(<span class="number">6</span>).ToString().Trim();<span class="comment">//姓名</span></span><br><span class="line">                            date = sheet.GetRow(r).GetCell(<span class="number">8</span>).ToString().Trim();<span class="comment">//日期</span></span><br><span class="line"></span><br><span class="line">                            place = sheet.GetRow(r).GetCell(<span class="number">1</span>).ToString().Trim() + eventName.Remove(eventName.IndexOf(<span class="string">"米"</span>), eventName.Length - eventName.IndexOf(<span class="string">"米"</span>)) + <span class="string">"米"</span> + eventName.Substring(eventName.IndexOf(<span class="string">"米"</span>) + <span class="number">1</span>);<span class="comment">//备注</span></span><br><span class="line">                            <span class="keyword">switch</span> (idRec)</span><br><span class="line">                            {</span><br><span class="line">                                <span class="keyword">case</span> <span class="string">"0"</span>: place = place + <span class="string">"wr"</span>; <span class="keyword">break</span>;<span class="comment">//备注</span></span><br><span class="line">                                <span class="keyword">case</span> <span class="string">"1"</span>: place = place + <span class="string">"ar"</span>; <span class="keyword">break</span>;<span class="comment">//备注</span></span><br><span class="line">                                <span class="keyword">case</span> <span class="string">"2"</span>: place = place + <span class="string">"nr"</span>; <span class="keyword">break</span>;<span class="comment">//备注</span></span><br><span class="line">                                <span class="literal">default</span>: <span class="keyword">break</span>;</span><br><span class="line">                            }</span><br><span class="line">                        }</span><br><span class="line">                        sw.WriteLine(idLen + <span class="string">";"</span> + idStyle + <span class="string">";"</span> + idRec + <span class="string">";"</span> + abCat + <span class="string">";"</span> + time + <span class="string">";"</span> + name + <span class="string">";"</span> + date + <span class="string">";"</span> + place);<span class="comment">//写1行txt数据</span></span><br><span class="line">                    }</span><br><span class="line">                    sw.Close();</span><br><span class="line">                    fs1.Close();</span><br><span class="line">                    MessageBox.Show(<span class="string">"转换成功"</span>);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">catch</span></span><br><span class="line">            {</span><br><span class="line">                MessageBox.Show(<span class="string">"请选择文件"</span>);</span><br><span class="line">            }</span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">//距离替换规则</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">selectIdLen</span>(<span class="params"><span class="built_in">string</span> mile</span>)</span></span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">switch</span> (mile)</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"50"</span>: mile = <span class="string">"0"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"100"</span>: mile = <span class="string">"1"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"200"</span>: mile = <span class="string">"2"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"400"</span>: mile = <span class="string">"3"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"800"</span>: mile = <span class="string">"4"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"1500"</span>: mile = <span class="string">"5"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"4X50"</span>: mile = <span class="string">"6"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"4X100"</span>: mile = <span class="string">"7"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"4X200"</span>: mile = <span class="string">"8"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="literal">default</span>: <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> mile;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">//记录替换规则</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">selectIdRec</span>(<span class="params"><span class="built_in">string</span> rec</span>)</span></span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">switch</span> (rec)</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"世界纪录"</span>: rec = <span class="string">"0"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"亚洲纪录"</span>: rec = <span class="string">"1"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">"全国纪录"</span>: rec = <span class="string">"2"</span>; <span class="keyword">break</span>;</span><br><span class="line">                <span class="literal">default</span>: <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> rec;</span><br><span class="line">        }</span><br></pre></td></tr></tbody></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -926,94 +1006,11 @@
   
   
 
-      
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://marshver.github.io/2022/07/01/%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png">
-      <meta itemprop="name" content="MarshVer">
-      <meta itemprop="description" content="个人博客">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MarshVer">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/01/%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">博客相关</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-07-01 15:27:42" itemprop="dateCreated datePublished" datetime="2022-07-01T15:27:42+08:00">2022-07-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-15 20:01:46" itemprop="dateModified" datetime="2023-08-15T20:01:46+08:00">2023-08-15</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 ≈</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>创建博客以及与博客相关的操作</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/07/01/%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3/">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -1059,7 +1056,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1114,12 +1111,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">36k</span>
+    <span title="站点总字数">41k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:01</span>
+    <span title="站点阅读时长">1:09</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
