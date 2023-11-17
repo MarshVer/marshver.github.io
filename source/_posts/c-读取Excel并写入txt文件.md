@@ -2,6 +2,7 @@
 title: c#读取Excel并按规则替换Excel数据写入txt文件
 date: 2023-11-07 17:44:04
 tags: 项目
+description: c#读取Excel并按规则替换Excel数据写入txt文件
 ---
 
 # 安装NPOI
