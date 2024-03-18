@@ -30,11 +30,11 @@ sudo su
 ```
 创建文件
 ```
-sudo touch
+touch
 ```
 创建文件夹
 ```
-sudo mkdir
+mkdir
 ```
 文件重命名
 ```
