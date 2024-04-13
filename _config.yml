@@ -110,7 +110,7 @@ deploy:
   type: git
   repository: 
       github: git@github.com:MarshVer/marshver.github.io.git
-  branch: main
+  branch: master
 
 # 图片懒加载
 lazyload:
@@ -145,7 +145,7 @@ filter_optimize:
     delivery: true
     # make specific css content inline into the html page
     #   - only support the full path
-    #   - default is ['css/main.css']
+    #   - default is ['css/master.css']
     inlines:
     excludes:
   js:
