@@ -50,3 +50,19 @@ private void transform_Click(object sender, EventArgs e)
     }
 }
 ```
+# 读取txt
+```c#
+FileStream fs = new FileStream(@"1.TXT", FileMode.CreateOrOpen, FileAccess.Read);
+StreamReader sr = new StreamReader(fs, Encoding.GetEncoding("UTF-8"));
+sr.ReadLine();
+sr.close();
+fs.close();
+```
+# 写入txt
+```c#
+FileStream fs = new FileStream(@"1.TXT", FileMode.Create, FileAccess.Write);
+StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding("UTF-8"));
+sw.WriteLine("1");
+sw.close();
+fs.close();
+```
