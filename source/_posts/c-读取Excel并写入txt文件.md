@@ -1,8 +1,8 @@
 ---
-title: c#读取Excel
+title: c#读取Excel和读写txt
 date: 2023-11-07 17:44:04
 tags: 项目
-description: c#读取Excel，按钮选择文件和文件夹
+description: c#读取Excel，按钮选择文件和文件夹以及读写txt
 ---
 
 # 安装NPOI
@@ -38,7 +38,7 @@ description: c#读取Excel，按钮选择文件和文件夹
             return ret;
         }
 ```
-# 转换代码
+# 读取Excel
 ```C#
 private void transform_Click(object sender, EventArgs e)
 {
