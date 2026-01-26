@@ -1,0 +1,10 @@
+name = "blog-admin"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# Configure these in Cloudflare dashboard or via `wrangler secret put` / `wrangler deploy --var`.
+# [vars]
+# OWNER = "MarshVer"
+# REPO = "your-repo"
+# BRANCH = "master"
+
