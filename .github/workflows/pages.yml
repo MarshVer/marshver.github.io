@@ -1,8 +1,8 @@
-name: Deploy GitHub Pages
+﻿name: Deploy GitHub Pages
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -36,6 +36,10 @@ jobs:
           VITE_ENABLE_ADMIN: "true"
           # Set this repository variable to your Worker URL, e.g. https://blog-admin.<your>.workers.dev
           VITE_ADMIN_API_BASE: ${{ vars.VITE_ADMIN_API_BASE }}
+      - name: SPA fallback for GitHub Pages
+        run: |
+          cp dist/index.html dist/404.html
+          touch dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
