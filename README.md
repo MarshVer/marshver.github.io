@@ -51,7 +51,7 @@ GitHub Pages 只能托管静态文件，网页本身不能直接写文件。
 如果你没装过：
 
 ```sh
-npm i -g wrangler
+npm install wrangler
 ```
 
 登录：
@@ -67,13 +67,13 @@ npx wrangler login
 
 ```sh
 # GitHub Token（上一步生成的 Fine-grained PAT）
-npx wrangler secret put GITHUB_TOKEN
+npx wrangler secret put GITHUB_TOKEN(运行命令等待终端提示输入GITHUB_TOKEN的值)
 
 # 你自己设置的强口令（管理密钥），用于保护写接口
-npx wrangler secret put ADMIN_KEY
+npx wrangler secret put ADMIN_KEY(运行命令等待终端提示输入ADMIN_KEY的值)
 
-# 部署（注意：BRANCH=main）
-npx wrangler deploy --name blog-admin --var OWNER=MarshVer --var REPO=marshver.github.io --var BRANCH=main
+# 部署
+npx wrangler deploy --name blog-admin
 ```
 
 部署完成后，wrangler 会输出 Worker URL，例如：
