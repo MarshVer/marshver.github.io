@@ -6,81 +6,160 @@
 - 点击标题进入文章详情页，渲染 Markdown 内容
 - UI 基于 Element Plus
 
-## 添加文章
+## 目录结构（你会用到的）
 
-在 `src/posts/` 新建 `*.md` 文件，建议使用 frontmatter：
+- `src/posts/`：文章（Markdown）源码
+- `src/views/AdminView.vue`：管理页（/admin）
+- `workers/`：Cloudflare Worker（用 GitHub API 写回仓库）
+- `.github/workflows/pages.yml`：GitHub Actions（自动 build 并部署到 GitHub Pages）
 
-```md
+## 部署到 GitHub Pages（main 分支）
+
+前提：你的仓库名是 `marshver.github.io`，默认分支是 `main`。
+
+### 0) 这套“在线管理文章”的工作方式
+
+GitHub Pages 只能托管静态文件，网页本身不能直接写文件。
+
+所以这里采用：
+
+1) 你在网页 `/admin` 编辑文章
+2) 前端把请求发给 Cloudflare Worker
+3) Worker 使用 GitHub API 把改动提交 commit 到仓库的 `src/posts/`
+4) GitHub Actions 监听 `main` 分支 push，自动 `npm run build` 并部署 Pages
+5) 部署完成后，站点内容更新（通常 1-2 分钟）
+
+重要说明：本项目使用 `vue-router` 的 history 模式。为避免 GitHub Pages 直接访问 `/posts/xxx` 返回 404，工作流会把 `dist/index.html` 复制为 `dist/404.html`（SPA fallback）。
+
 ---
-title: 我的标题
-date: 2026-01-26
----
 
-# 正文从这里开始
+## 1) 先部署 Cloudflare Worker（写回 GitHub）
+
+### 1.1 准备 GitHub Token（Fine-grained PAT）
+
+在 GitHub：Settings → Developer settings → Personal access tokens → Fine-grained tokens
+
+- Repository access：只选择 `marshver.github.io`
+- Permissions：
+  - Contents: Read and write
+- 建议设置过期时间（方便定期轮换）
+
+生成后复制保存（只会显示一次）。
+
+### 1.2 安装并登录 wrangler
+
+如果你没装过：
+
+```sh
+npm i -g wrangler
 ```
 
-## 运行
+登录：
+
+```sh
+cd workers
+wrangler login
+```
+
+### 1.3 配置 Worker 的 secrets / vars
+
+在 `workers/` 目录执行：
+
+```sh
+# GitHub Token（上一步生成的 Fine-grained PAT）
+wrangler secret put GITHUB_TOKEN
+
+# 你自己设置的强口令（管理密钥），用于保护写接口
+wrangler secret put ADMIN_KEY
+
+# 部署（注意：BRANCH=main）
+wrangler deploy --var OWNER=MarshVer --var REPO=marshver.github.io --var BRANCH=main
+```
+
+部署完成后，wrangler 会输出 Worker URL，例如：
+
+- `https://blog-admin.<your>.workers.dev`
+
+把这个 URL 记下来，下一步要用。
+
+---
+
+## 2) 配置 GitHub Pages（用 Actions 部署）
+
+### 2.1 开启 Pages 的 Actions 部署
+
+GitHub 仓库：Settings → Pages
+
+- Build and deployment → Source 选择 `GitHub Actions`
+
+### 2.2 配置 Actions 变量（非常关键）
+
+GitHub 仓库：Settings → Secrets and variables → Actions → Variables
+
+新增变量：
+
+- Name：`VITE_ADMIN_API_BASE`
+- Value：填你的 Worker URL（不带末尾 `/`），例如：
+  - `https://blog-admin.<your>.workers.dev`
+
+这个变量会在 Actions 构建时注入到前端：
+- 只有配置了 `VITE_ADMIN_API_BASE`，生产环境才会启用 `/admin` 并走远程 Worker。
+
+---
+
+## 3) 推送 main 分支，触发首次部署
+
+把代码 push 到 `main` 分支后：
+
+- GitHub → Actions 里会看到 `Deploy GitHub Pages` 工作流运行
+- 运行成功后，访问：
+  - `https://marshver.github.io/`
+
+如果你改动了 `src/posts/`，也会触发重新部署。
+
+---
+
+## 4) 使用在线管理页（/admin）
+
+1) 打开：`https://marshver.github.io/admin`
+2) 右侧点“密钥”，输入你在 Worker 设置的 `ADMIN_KEY`
+3) 现在你可以：
+   - 新建文章（会在 `src/posts/` 生成 `时间戳.md`）
+   - 编辑并保存（会提交到 GitHub）
+   - 删除（会提交到 GitHub）
+4) 保存/删除后：等待 GitHub Actions 部署完成，主页/归档/文章页才会看到更新
+
+提示：
+- 401 Unauthorized：密钥不对或没设置（重新点“密钥”输入）
+- CORS 报错：确认你是从 `https://marshver.github.io` 访问，或把自定义域名加入 Worker 的允许列表
+
+---
+
+## 5) 本地开发（可选）
+
+### 5.1 纯本地写文件模式（开发时）
 
 ```sh
 npm install
 npm run dev
 ```
 
-## 构建
+本地开发时 `/admin` 默认可用，并通过 Vite dev server 的本地接口写入 `src/posts/`。
 
-```sh
-npm run build
+### 5.2 本地连远程 Worker（可选）
+
+PowerShell：
+
+```powershell
+$env:VITE_ENABLE_ADMIN='true'
+$env:VITE_ADMIN_API_BASE='https://blog-admin.<your>.workers.dev'
+npm run dev
 ```
 
-## 在 GitHub Pages 上在线管理文章（写回 GitHub 仓库）
+---
 
-GitHub Pages 是静态托管，网页本身不能直接写文件。这里用 Cloudflare Workers 代你调用 GitHub API，把改动提交到仓库的 `src/posts/`。
+## 6) 安全建议（强烈建议看一眼）
 
-该模式适用于个人使用：
-- 前端：GitHub Pages（展示 + 管理界面）
-- 后端：Cloudflare Worker（持有 GitHub Token，负责提交 commit）
-- 部署：GitHub Actions（仓库有新 commit 后自动重新 build 并发布 Pages）
-
-说明：本项目使用 `vue-router` 的 history 模式。为兼容 GitHub Pages 直接访问 `/posts/xxx` 这类路由，工作流会把 `dist/index.html` 复制为 `dist/404.html`（SPA fallback）。
-
-### 1) 部署 Cloudflare Worker
-
-目录：`workers/`
-
-用 wrangler 部署（示例）：
-
-```sh
-cd workers
-wrangler login
-
-# 必填：GitHub Token（建议 Fine-grained PAT，仅授权此仓库 Contents: Read and write）
-wrangler secret put GITHUB_TOKEN
-
-# 必填：管理密钥（你自己设置的强口令，用于保护写接口）
-wrangler secret put ADMIN_KEY
-
-# 必填：仓库信息（你的默认分支是 main）
-wrangler deploy --var OWNER=MarshVer --var REPO=marshver.github.io --var BRANCH=main
-```
-
-部署完成后，你会得到一个 Worker URL，例如：`https://blog-admin.<your>.workers.dev`。
-
-### 2) 配置 GitHub Actions 自动部署 Pages
-
-本仓库已添加工作流：`.github/workflows/pages.yml`（push 到 `main` 自动构建并部署）。
-
-在 GitHub 仓库 Settings：
-
-- Pages → Build and deployment → Source 选择 `GitHub Actions`
-- Settings → Secrets and variables → Actions → Variables 新增：
-  - `VITE_ADMIN_API_BASE`：填你的 Worker URL（不带末尾 `/`）
-
-### 3) 使用在线管理页
-
-部署到 Pages 后，访问：
-
-- `https://marshver.github.io/admin`
-
-首次进入点击右侧“密钥”，输入你在 Worker 中设置的 `ADMIN_KEY`，然后就可以新建/保存/删除文章了（写入仓库的 `src/posts/`）。
-
-注意：写入仓库后，需要等待 GitHub Actions 重新构建并部署完成，站点内容才会更新（通常 1-2 分钟）。
+- 不要把 GitHub Token 写进前端代码；只放在 Worker 的 secret
+- `ADMIN_KEY` 请设置复杂一点；只在你自己的浏览器里输入
+- Token 建议设置过期时间，并定期轮换
