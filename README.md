@@ -23,11 +23,11 @@ GitHub Pages 只能托管静态文件，网页本身不能直接写文件。
 
 所以这里采用：
 
-1) 你在网页 `/admin` 编辑文章
-2) 前端把请求发给 Cloudflare Worker
-3) Worker 使用 GitHub API 把改动提交 commit 到仓库的 `src/posts/`
-4) GitHub Actions 监听 `main` 分支 push，自动 `npm run build` 并部署 Pages
-5) 部署完成后，站点内容更新（通常 1-2 分钟）
+1. 你在网页 `/admin` 编辑文章
+2. 前端把请求发给 Cloudflare Worker
+3. Worker 使用 GitHub API 把改动提交 commit 到仓库的 `src/posts/`
+4. GitHub Actions 监听 `main` 分支 push，自动 `npm run build` 并部署 Pages
+5. 部署完成后，站点内容更新（通常 1-2 分钟）
 
 重要说明：本项目使用 `vue-router` 的 history 模式。为避免 GitHub Pages 直接访问 `/posts/xxx` 返回 404，工作流会把 `dist/index.html` 复制为 `dist/404.html`（SPA fallback）。
 
@@ -58,7 +58,7 @@ npm i -g wrangler
 
 ```sh
 cd workers
-wrangler login
+npx wrangler login
 ```
 
 ### 1.3 配置 Worker 的 secrets / vars
@@ -67,13 +67,13 @@ wrangler login
 
 ```sh
 # GitHub Token（上一步生成的 Fine-grained PAT）
-wrangler secret put GITHUB_TOKEN
+npx wrangler secret put GITHUB_TOKEN
 
 # 你自己设置的强口令（管理密钥），用于保护写接口
-wrangler secret put ADMIN_KEY
+npx wrangler secret put ADMIN_KEY
 
 # 部署（注意：BRANCH=main）
-wrangler deploy --var OWNER=MarshVer --var REPO=marshver.github.io --var BRANCH=main
+npx wrangler deploy --name blog-admin --var OWNER=MarshVer --var REPO=marshver.github.io --var BRANCH=main
 ```
 
 部署完成后，wrangler 会输出 Worker URL，例如：
@@ -103,6 +103,7 @@ GitHub 仓库：Settings → Secrets and variables → Actions → Variables
   - `https://blog-admin.<your>.workers.dev`
 
 这个变量会在 Actions 构建时注入到前端：
+
 - 只有配置了 `VITE_ADMIN_API_BASE`，生产环境才会启用 `/admin` 并走远程 Worker。
 
 ---
@@ -121,15 +122,16 @@ GitHub 仓库：Settings → Secrets and variables → Actions → Variables
 
 ## 4) 使用在线管理页（/admin）
 
-1) 打开：`https://marshver.github.io/admin`
-2) 右侧点“密钥”，输入你在 Worker 设置的 `ADMIN_KEY`
-3) 现在你可以：
+1. 打开：`https://marshver.github.io/admin`
+2. 右侧点“密钥”，输入你在 Worker 设置的 `ADMIN_KEY`
+3. 现在你可以：
    - 新建文章（会在 `src/posts/` 生成 `时间戳.md`）
    - 编辑并保存（会提交到 GitHub）
    - 删除（会提交到 GitHub）
-4) 保存/删除后：等待 GitHub Actions 部署完成，主页/归档/文章页才会看到更新
+4. 保存/删除后：等待 GitHub Actions 部署完成，主页/归档/文章页才会看到更新
 
 提示：
+
 - 401 Unauthorized：密钥不对或没设置（重新点“密钥”输入）
 - CORS 报错：确认你是从 `https://marshver.github.io` 访问，或把自定义域名加入 Worker 的允许列表
 

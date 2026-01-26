@@ -1,5 +1,6 @@
 const ALLOWED_ORIGINS = new Set([
   'https://marshver.github.io',
+  'https://marshver.eu.org',
   // Local dev
   'http://localhost:5173',
   'http://127.0.0.1:5173',
