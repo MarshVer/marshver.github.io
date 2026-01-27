@@ -12,6 +12,18 @@ const POST_MODULES = import.meta.glob('../posts/*.md', {
   import: 'default',
 })
 
+function stripFrontmatter(raw) {
+  const s = String(raw || '')
+  if (!s.startsWith('---')) return s.trim()
+
+  // Frontmatter block: ---\n...\n---\n
+  const end = s.indexOf('\n---', 3)
+  if (end === -1) return s.trim()
+
+  const rest = s.slice(end + '\n---'.length)
+  return rest.replace(/^\r?\n/, '').trim()
+}
+
 export function getAllPosts() {
   return POSTS_META
 }
@@ -30,7 +42,7 @@ export async function loadPostContent(slug) {
   const loader = POST_MODULES[key]
   if (loader) {
     const raw = await loader()
-    return String(raw || '').trim()
+    return stripFrontmatter(raw)
   }
 
   // Dev-only fallback: supports newly created files before Vite's glob map updates.
@@ -38,7 +50,7 @@ export async function loadPostContent(slug) {
     const res = await fetch(`/__posts/${encodeURIComponent(s)}`)
     if (!res.ok) throw new Error('Failed to load post content.')
     const text = await res.text()
-    return String(text || '').trim()
+    return stripFrontmatter(text)
   }
 
   return ''
@@ -80,4 +92,3 @@ if (import.meta.hot) {
     postsRevision.value += 1
   })
 }
-
