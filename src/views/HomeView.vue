@@ -44,22 +44,6 @@ function goPage(nextPage) {
   router.replace({ name: 'home', query })
 }
 
-function getExcerpt(markdown, maxLen = 160) {
-  const s = String(markdown)
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`[^`]*`/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
-    .replace(/\[(.*?)\]\([^)]+\)/g, '$1')
-    .replace(/^#+\s+/gm, '')
-    .replace(/>\s?/g, '')
-    .replace(/[*_~]+/g, '')
-    .replace(/\r?\n+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-
-  if (!s) return ''
-  return s.length > maxLen ? `${s.slice(0, maxLen).trim()}...` : s
-}
 </script>
 
 <template>
@@ -79,7 +63,7 @@ function getExcerpt(markdown, maxLen = 160) {
           </div>
         </header>
 
-        <div class="post-excerpt">{{ getExcerpt(p.content) }}</div>
+        <div class="post-excerpt">{{ p.excerpt }}</div>
 
         <footer class="post-footer">
           <router-link class="post-more" :to="{ name: 'post', params: { slug: p.slug } }">

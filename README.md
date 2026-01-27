@@ -1,10 +1,11 @@
-﻿# 个人博客（Vue 3 + Vite）
+# 个人博客（Vue 3 + Vite）
 
 一个简单的个人博客项目：
 
-- 首页按日期分组展示文章标题
+- 首页展示文章列表（支持搜索/分页），显示摘要
+- 归档页按年份展示文章
 - 点击标题进入文章详情页，渲染 Markdown 内容
-- UI 基于 Element Plus
+- 支持在线管理文章（/admin）：编辑/保存/删除，远程模式写回 GitHub 仓库并触发 Pages 自动部署
 
 ## 目录结构（你会用到的）
 
@@ -12,6 +13,15 @@
 - `src/views/AdminView.vue`：管理页（/admin）
 - `workers/`：Cloudflare Worker（用 GitHub API 写回仓库）
 - `.github/workflows/pages.yml`：GitHub Actions（自动 build 并部署到 GitHub Pages）
+- `.github/workflows/posts-index.yml`：GitHub Actions（当 `src/posts/*.md` 变更时自动生成 `src/posts/index.json` 并提交回 main）
+
+补充说明：
+
+- 构建时会生成文章元数据列表（slug/title/date/excerpt），用于首页/归档/管理列表
+- 文章正文按 `slug` 动态加载（Vite code-splitting），并按年份合并 chunk（减少请求数）
+- 远程管理使用 `src/posts/index.json` 作为文章列表索引（避免 Worker 的 N+1 读取）；索引会由：
+  - 在线管理（Worker 写入时原子更新 md + index.json）
+  - 或 `posts-index.yml`（当你手动改 md 时自动更新 index.json）
 
 ## 部署到 GitHub Pages（main 分支）
 
@@ -51,7 +61,7 @@ GitHub Pages 只能托管静态文件，网页本身不能直接写文件。
 如果你没装过：
 
 ```sh
-npm install wrangler
+npm install
 ```
 
 登录：
@@ -146,7 +156,15 @@ npm install
 npm run dev
 ```
 
+本地开发默认端口：`http://localhost:1117/`。
+
 本地开发时 `/admin` 默认可用，并通过 Vite dev server 的本地接口写入 `src/posts/`。
+
+如果你是“手动编辑/新增 Markdown 文件”，建议顺手执行一次：
+
+```sh
+npm run gen:posts-index
+```
 
 ### 5.2 本地连远程 Worker（可选）
 

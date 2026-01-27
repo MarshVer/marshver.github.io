@@ -1,19 +1,54 @@
 import { ref } from 'vue'
-import { posts as VIRTUAL_POSTS } from 'virtual:blog-posts'
+import { posts as VIRTUAL_POSTS_META } from 'virtual:blog-posts-meta'
 
-let POSTS = Array.isArray(VIRTUAL_POSTS) ? VIRTUAL_POSTS : []
+let POSTS_META = Array.isArray(VIRTUAL_POSTS_META) ? VIRTUAL_POSTS_META : []
 
 // Consumers can depend on this to re-compute when posts change in dev (HMR updates).
 export const postsRevision = ref(0)
 
+// Vite splits each markdown file into its own module when used via glob + dynamic import.
+const POST_MODULES = import.meta.glob('../posts/*.md', {
+  query: '?raw',
+  import: 'default',
+})
+
 export function getAllPosts() {
-  return POSTS
+  return POSTS_META
 }
 
-export function getPostBySlug(slug) {
+export function getPostMetaBySlug(slug) {
   const s = String(slug || '').trim()
   if (!s) return null
-  return getAllPosts().find((p) => p.slug === s) || null
+  return POSTS_META.find((p) => p.slug === s) || null
+}
+
+export async function loadPostContent(slug) {
+  const s = String(slug || '').trim()
+  if (!s) return ''
+
+  const key = `../posts/${s}.md`
+  const loader = POST_MODULES[key]
+  if (loader) {
+    const raw = await loader()
+    return String(raw || '').trim()
+  }
+
+  // Dev-only fallback: supports newly created files before Vite's glob map updates.
+  if (import.meta.env.DEV) {
+    const res = await fetch(`/__posts/${encodeURIComponent(s)}`)
+    if (!res.ok) throw new Error('Failed to load post content.')
+    const text = await res.text()
+    return String(text || '').trim()
+  }
+
+  return ''
+}
+
+export async function getPostBySlug(slug) {
+  const meta = getPostMetaBySlug(slug)
+  if (!meta) return null
+  const content = await loadPostContent(meta.slug)
+  return { ...meta, content }
 }
 
 function compareDateDesc(a, b) {
@@ -40,8 +75,8 @@ export function groupPostsByDate(posts) {
 }
 
 if (import.meta.hot) {
-  import.meta.hot.accept('virtual:blog-posts', (mod) => {
-    POSTS = Array.isArray(mod?.posts) ? mod.posts : []
+  import.meta.hot.accept('virtual:blog-posts-meta', (mod) => {
+    POSTS_META = Array.isArray(mod?.posts) ? mod.posts : []
     postsRevision.value += 1
   })
 }

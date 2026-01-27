@@ -10,8 +10,8 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
   const postsDir = fileURLToPath(new URL('./src/posts', import.meta.url))
   const postsDirResolved = path.resolve(postsDir)
 
-  const VIRTUAL_ID = 'virtual:blog-posts'
-  const RESOLVED_VIRTUAL_ID = `\0${VIRTUAL_ID}`
+  const VIRTUAL_META_ID = 'virtual:blog-posts-meta'
+  const RESOLVED_VIRTUAL_META_ID = `\0${VIRTUAL_META_ID}`
 
   const RESERVED_WINDOWS_NAMES = new Set(
     [
@@ -51,7 +51,10 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
     // Avoid Windows forbidden characters in file names.
     s = s.replace(/[\\/:*?"<>|]/g, '-')
     // Keep it readable; avoid accidental newlines/tabs.
-    s = s.replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim()
+    s = s
+      .replace(/[\r\n\t]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
     // Windows doesn't allow trailing dots/spaces.
     s = s.replace(/[. ]+$/g, '')
 
@@ -62,7 +65,11 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
     }
 
     // Keep paths reasonable.
-    if (s.length > 120) s = s.slice(0, 120).trim().replace(/[. ]+$/g, '')
+    if (s.length > 120)
+      s = s
+        .slice(0, 120)
+        .trim()
+        .replace(/[. ]+$/g, '')
     return s
   }
 
@@ -98,6 +105,23 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
   function extractTitleFromMarkdown(md, fallback) {
     const m = String(md).match(/^#\s+(.+)\s*$/m)
     return (m?.[1] || fallback || '').trim()
+  }
+
+  function buildExcerpt(markdown, maxLen = 160) {
+    const s = String(markdown || '')
+      .replace(/```[\s\S]*?```/g, ' ')
+      .replace(/`[^`]*`/g, ' ')
+      .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
+      .replace(/\[(.*?)\]\([^)]+\)/g, '$1')
+      .replace(/^#+\s+/gm, '')
+      .replace(/>\s?/g, '')
+      .replace(/[*_~]+/g, '')
+      .replace(/\r?\n+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    if (!s) return ''
+    return s.length > maxLen ? `${s.slice(0, maxLen).trim()}...` : s
   }
 
   function parseFrontmatter(raw) {
@@ -164,9 +188,7 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
       entries = []
     }
 
-    const mdFiles = entries
-      .filter((e) => e.isFile() && /\.md$/i.test(e.name))
-      .map((e) => e.name)
+    const mdFiles = entries.filter((e) => e.isFile() && /\.md$/i.test(e.name)).map((e) => e.name)
 
     const posts = []
     for (const file of mdFiles) {
@@ -181,13 +203,16 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
       const slug = fileNameToSlug(file)
       const parsed = parseFrontmatter(raw)
       const date = normalizeDate(parsed.data?.date)
-      const title = String(parsed.data?.title || extractTitleFromMarkdown(parsed.content, slug)).trim()
+      const title = String(
+        parsed.data?.title || extractTitleFromMarkdown(parsed.content, slug),
+      ).trim()
+      const content = String(parsed.content || '').trim()
 
       posts.push({
         slug,
         title: title || slug,
         date,
-        content: String(parsed.content || '').trim(),
+        excerpt: buildExcerpt(content),
       })
     }
 
@@ -216,7 +241,9 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
 
   function buildMarkdownFile({ title, date, content }) {
     const t = String(title || '').trim()
-    const body = String(content || '').replace(/\r\n/g, '\n').trimEnd()
+    const body = String(content || '')
+      .replace(/\r\n/g, '\n')
+      .trimEnd()
     const d = String(date || '').trim()
 
     return [
@@ -241,12 +268,12 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
     name: 'blog-posts',
 
     resolveId(id) {
-      if (id === VIRTUAL_ID) return RESOLVED_VIRTUAL_ID
+      if (id === VIRTUAL_META_ID) return RESOLVED_VIRTUAL_META_ID
       return null
     },
 
     async load(id) {
-      if (id !== RESOLVED_VIRTUAL_ID) return null
+      if (id !== RESOLVED_VIRTUAL_META_ID) return null
       const posts = await readAllPostsFromFs()
       return `export const posts = ${JSON.stringify(posts)};\nexport default posts;\n`
     },
@@ -258,7 +285,7 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
       if (!fp.startsWith(dir)) return
       if (!/\.md$/i.test(filePath)) return
 
-      const mod = ctx.server.moduleGraph.getModuleById(RESOLVED_VIRTUAL_ID)
+      const mod = ctx.server.moduleGraph.getModuleById(RESOLVED_VIRTUAL_META_ID)
       if (!mod) return
 
       ctx.server.moduleGraph.invalidateModule(mod)
@@ -266,6 +293,29 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
     },
 
     configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = String(req.url || '')
+        if (!url.startsWith('/__posts/')) return next()
+        if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed.' })
+
+        try {
+          const slug = decodeURIComponent(url.slice('/__posts/'.length)).trim()
+          if (!isSafeSlug(slug)) return json(res, 400, { error: 'Invalid slug.' })
+
+          const filePath = resolvePostPath(slug)
+          if (!filePath) return json(res, 400, { error: 'Invalid path.' })
+
+          const raw = await fs.readFile(filePath, 'utf8')
+          const parsed = parseFrontmatter(raw)
+          res.statusCode = 200
+          res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+          res.setHeader('Cache-Control', 'no-store')
+          res.end(String(parsed.content || ''))
+        } catch (err) {
+          return json(res, 500, { error: err?.message || String(err) })
+        }
+      })
+
       if (!enableAdmin) return
 
       server.middlewares.use(async (req, res, next) => {
@@ -338,7 +388,7 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
 }
 
 // https://vite.dev/config/
-export default defineConfig(({ command }) => {
+export default defineConfig(async ({ command }) => {
   const enableAdmin = command === 'serve' && process.env.NODE_ENV !== 'production'
   const plugins = [vue(), blogPostsPlugin({ enableAdmin })]
 
@@ -347,8 +397,43 @@ export default defineConfig(({ command }) => {
     plugins.unshift(VueDevTools())
   }
 
+  // Used by manualChunks for post code-splitting.
+  const postYearBySlug = new Map()
+  try {
+    const raw = await fs.readFile(path.resolve('src/posts/index.json'), 'utf8')
+    const parsed = JSON.parse(raw)
+    const posts = Array.isArray(parsed?.posts) ? parsed.posts : []
+    for (const p of posts) {
+      const slug = String(p?.slug || '').trim()
+      const date = String(p?.date || '').trim()
+      const m = date.match(/^(\d{4})/)
+      const year = m?.[1] || 'unknown'
+      if (slug) postYearBySlug.set(slug, year)
+    }
+  } catch {
+    // Ignore; manualChunks will fall back to default chunking.
+  }
+
   return {
     plugins,
+    server: {
+      port: 1117,
+      strictPort: true,
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            const normalized = String(id || '').replace(/\\/g, '/')
+            const m = normalized.match(/\/src\/posts\/(.+)\.md\b/i)
+            if (!m) return
+            const slug = m[1]
+            const year = postYearBySlug.get(slug) || 'misc'
+            return `posts-${year}`
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),

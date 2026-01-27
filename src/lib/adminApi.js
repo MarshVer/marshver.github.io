@@ -28,7 +28,7 @@ export async function listPosts() {
 }
 
 export async function getPost(slug) {
-  if (!ADMIN_REMOTE) return getPostBySlug(slug)
+  if (!ADMIN_REMOTE) return await getPostBySlug(slug)
   const data = await httpJson(`${ADMIN_API_BASE}/api/posts/${encodeURIComponent(String(slug || ''))}`)
   return data?.post || null
 }
@@ -54,4 +54,3 @@ export async function deletePost(slug) {
   if (!ADMIN_REMOTE) return httpJson('/__admin/delete', { method: 'POST', body: payload })
   return httpJson(`${ADMIN_API_BASE}/api/admin/delete`, { method: 'POST', body: payload, auth: true })
 }
-

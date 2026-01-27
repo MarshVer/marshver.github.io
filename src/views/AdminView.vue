@@ -1,13 +1,13 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import MarkdownIt from 'markdown-it'
-import { getPostBySlug, postsRevision } from '@/lib/posts'
+import { getPostMetaBySlug, loadPostContent, postsRevision } from '@/lib/posts'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import AdminKeyDialog from '@/components/AdminKeyDialog.vue'
 import { ADMIN_REMOTE } from '@/lib/adminConfig'
 import { adminKey, adminPostsRevision, bumpAdminPosts, setAdminKey } from '@/lib/adminState'
 import { deletePost as apiDeletePost, getPost as apiGetPost, savePost as apiSavePost } from '@/lib/adminApi'
+import { renderMarkdown } from '@/lib/markdown'
 
 const route = useRoute()
 const router = useRouter()
@@ -24,12 +24,45 @@ const remotePost = ref(null)
 const loadingPost = ref(false)
 const loadError = ref('')
 
-const localPost = computed(() => {
+const localMeta = computed(() => {
   postsRevision.value
-  return selectedSlug.value ? getPostBySlug(selectedSlug.value) : null
+  return selectedSlug.value ? getPostMetaBySlug(selectedSlug.value) : null
 })
 
-const post = computed(() => (isRemote ? remotePost.value : localPost.value))
+const localContent = ref('')
+const localLoading = ref(false)
+const localError = ref('')
+
+async function refreshLocalContent() {
+  if (isRemote) return
+  const m = localMeta.value
+  if (!m) {
+    localContent.value = ''
+    localError.value = ''
+    localLoading.value = false
+    return
+  }
+
+  localLoading.value = true
+  localError.value = ''
+  localContent.value = ''
+  try {
+    localContent.value = await loadPostContent(m.slug)
+  } catch (err) {
+    localError.value = err?.message || String(err)
+    localContent.value = ''
+  } finally {
+    localLoading.value = false
+  }
+}
+
+watch([selectedSlug, postsRevision], refreshLocalContent, { immediate: true })
+
+const post = computed(() => {
+  if (isRemote) return remotePost.value
+  if (!localMeta.value) return null
+  return { ...localMeta.value, content: localContent.value }
+})
 
 async function refreshPost() {
   if (!isRemote) return
@@ -128,14 +161,7 @@ function openPost() {
   window.open(router.resolve({ name: 'post', params: { slug: selectedSlug.value } }).href, '_blank')
 }
 
-const md = new MarkdownIt({
-  html: false,
-  linkify: true,
-  typographer: true,
-  breaks: true,
-})
-
-const previewHtml = computed(() => md.render(content.value || ''))
+const previewHtml = computed(() => renderMarkdown(content.value || ''))
 </script>
 
 <template>
@@ -145,12 +171,12 @@ const previewHtml = computed(() => md.render(content.value || ''))
       <div class="admin-empty__desc">在左侧选择文章，或点击“新建”创建一篇新文章。</div>
     </div>
 
-    <div v-else class="post-block admin-editor">
-      <div class="admin-editor__bar">
-        <div class="admin-editor__left">
-          <div class="admin-editor__title" :title="selectedSlug">
-            {{ title || selectedSlug }}
-          </div>
+      <div v-else class="post-block admin-editor">
+        <div class="admin-editor__bar">
+          <div class="admin-editor__left">
+            <div class="admin-editor__title" :title="selectedSlug">
+              {{ title || selectedSlug }}
+            </div>
           <div class="admin-editor__hint">
             更新时间：{{ savedDate || '未保存' }}（保存时自动更新到秒）
           </div>
@@ -161,6 +187,8 @@ const previewHtml = computed(() => md.render(content.value || ''))
           <div v-if="isRemote && !adminKey" class="admin-editor__hint">请先设置管理密钥。</div>
           <div v-if="isRemote && loadingPost" class="admin-editor__hint">加载中...</div>
           <div v-if="isRemote && loadError" class="admin-editor__hint">{{ loadError }}</div>
+          <div v-if="!isRemote && localLoading" class="admin-editor__hint">加载中...</div>
+          <div v-if="!isRemote && localError" class="admin-editor__hint">{{ localError }}</div>
         </div>
 
         <div class="admin-editor__actions">

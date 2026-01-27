@@ -116,59 +116,6 @@ a:hover {
   flex-direction: column;
 }
 
-.site-header {
-  background: var(--next-content-bg-alpha);
-  border-bottom: 1px solid var(--next-border);
-}
-
-.site-header__inner {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.brand {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.brand__title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--next-heading);
-  white-space: nowrap;
-}
-
-.brand__subtitle {
-  font-size: 12px;
-  color: var(--next-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.menu {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-shrink: 0;
-}
-
-.menu__item {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--next-text);
-  padding: 6px 0;
-}
-
-.menu__item.is-active {
-  color: var(--next-accent);
-}
-
 .site-main {
   padding: 26px 0;
 }
@@ -762,14 +709,6 @@ a:hover {
 }
 
 @media (max-width: 640px) {
-  .site-header__inner {
-    height: 56px;
-  }
-
-  .brand__title {
-    font-size: 18px;
-  }
-
   .post-block {
     padding: 18px 16px;
   }

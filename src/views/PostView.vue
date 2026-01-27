@@ -1,16 +1,44 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import MarkdownIt from 'markdown-it'
-import { getAllPosts, getPostBySlug, postsRevision } from '@/lib/posts'
+import { getAllPosts, getPostMetaBySlug, loadPostContent, postsRevision } from '@/lib/posts'
+import { renderMarkdown } from '@/lib/markdown'
 
 const route = useRoute()
 
 const slug = computed(() => String(route.params.slug || ''))
-const post = computed(() => {
+const postMeta = computed(() => {
   postsRevision.value
-  return getPostBySlug(slug.value)
+  return getPostMetaBySlug(slug.value)
 })
+
+const content = ref('')
+const loading = ref(false)
+const loadError = ref('')
+
+async function refreshContent() {
+  const s = slug.value
+  if (!s || !postMeta.value) {
+    content.value = ''
+    loadError.value = ''
+    loading.value = false
+    return
+  }
+
+  loading.value = true
+  loadError.value = ''
+  content.value = ''
+  try {
+    content.value = await loadPostContent(s)
+  } catch (err) {
+    loadError.value = err?.message || String(err)
+    content.value = ''
+  } finally {
+    loading.value = false
+  }
+}
+
+watch([slug, postsRevision], refreshContent, { immediate: true })
 
 const allPosts = computed(() => {
   postsRevision.value
@@ -25,19 +53,12 @@ const nextPost = computed(() =>
     : null,
 )
 
-const md = new MarkdownIt({
-  html: false,
-  linkify: true,
-  typographer: true,
-  breaks: true,
-})
-
-const html = computed(() => (post.value ? md.render(post.value.content) : ''))
+const html = computed(() => (postMeta.value ? renderMarkdown(content.value || '') : ''))
 </script>
 
 <template>
   <div>
-    <div v-if="!post" class="post-block empty-block">
+    <div v-if="!postMeta" class="post-block empty-block">
       <h1 class="post-title">文章不存在</h1>
       <div class="post-excerpt">请检查链接，或返回首页查看文章列表。</div>
       <router-link class="post-more" to="/">返回首页 »</router-link>
@@ -45,11 +66,14 @@ const html = computed(() => (post.value ? md.render(post.value.content) : ''))
 
     <article v-else class="post-block post-single">
       <header>
-        <h1 class="post-title">{{ post.title }}</h1>
+        <h1 class="post-title">{{ postMeta.title }}</h1>
         <div class="post-meta">
-          <time :datetime="post.date">{{ post.date }}</time>
+          <time :datetime="postMeta.date">{{ postMeta.date }}</time>
         </div>
       </header>
+
+      <div v-if="loading" class="post-excerpt">加载中...</div>
+      <div v-else-if="loadError" class="post-excerpt">{{ loadError }}</div>
 
       <div class="markdown" v-html="html" />
 

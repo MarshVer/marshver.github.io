@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import avatarUrl from '@/assets/头像.png'
 import { getAllPosts, postsRevision } from '@/lib/posts'
@@ -9,7 +9,6 @@ import { ADMIN_ENABLED } from '@/lib/adminConfig'
 const route = useRoute()
 const router = useRouter()
 
-const isDev = import.meta.env.DEV
 const adminEnabled = ADMIN_ENABLED
 
 const activeName = computed(() => String(route.name || ''))
@@ -55,6 +54,38 @@ function applySearch(value) {
 
   router.push({ name: 'home', query: q ? { q } : {} })
 }
+
+const isComposing = ref(false)
+let debounceTimer = null
+
+function onCompositionStart() {
+  isComposing.value = true
+}
+
+function onCompositionEnd() {
+  isComposing.value = false
+  scheduleSearch()
+}
+
+function scheduleSearch() {
+  if (!isSearchable.value) return
+  if (isComposing.value) return
+  if (debounceTimer) window.clearTimeout(debounceTimer)
+  debounceTimer = window.setTimeout(() => {
+    debounceTimer = null
+    applySearch(searchText.value)
+  }, 250)
+}
+
+function flushSearch() {
+  if (debounceTimer) window.clearTimeout(debounceTimer)
+  debounceTimer = null
+  applySearch(searchText.value)
+}
+
+onBeforeUnmount(() => {
+  if (debounceTimer) window.clearTimeout(debounceTimer)
+})
 </script>
 
 <template>
@@ -75,8 +106,10 @@ function applySearch(value) {
                   type="search"
                   placeholder="搜索标题"
                   aria-label="Search posts by title"
-                  @input="isSearchable && applySearch(searchText)"
-                  @keydown.enter.prevent="applySearch(searchText)"
+                  @compositionstart="onCompositionStart"
+                  @compositionend="onCompositionEnd"
+                  @input="scheduleSearch()"
+                  @keydown.enter.prevent="flushSearch()"
                 />
 
                 <nav class="side-nav" aria-label="Site links">

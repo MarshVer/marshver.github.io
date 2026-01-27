@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f1f1f" />
+      <stop offset="1" stop-color="#2c2c2c" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect x="72" y="72" width="1056" height="486" rx="28" fill="rgba(255,255,255,0.06)" />
+  <rect x="72" y="72" width="1056" height="486" rx="28" fill="none" stroke="rgba(255,255,255,0.12)" />
+
+  <text x="120" y="250" font-size="68" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" font-weight="800" fill="#e6edf3">
+    MarshVer 的个人博客
+  </text>
+  <text x="120" y="330" font-size="32" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" fill="#c9d1d9">
+    技术笔记 · 折腾 · 日常
+  </text>
+
+  <text x="120" y="510" font-size="24" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace" fill="#49b1f5">
+    marshver.github.io
+  </text>
+</svg>
+

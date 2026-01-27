@@ -2,9 +2,11 @@ const ALLOWED_ORIGINS = new Set([
   'https://marshver.github.io',
   'https://marshver.eu.org',
   // Local dev
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
+  'http://localhost:1117',
+  'http://127.0.0.1:1117',
 ])
+
+const POSTS_INDEX_PATH = 'src/posts/index.json'
 
 function corsHeaders(origin) {
   const h = new Headers()
@@ -23,6 +25,63 @@ function json(data, status = 200, headers = undefined) {
   h.set('Content-Type', 'application/json; charset=utf-8')
   h.set('Cache-Control', 'no-store')
   return new Response(JSON.stringify(data ?? {}), { status, headers: h })
+}
+
+function jsonCacheable(data, status = 200, headers = undefined, cacheSeconds = 60) {
+  const h = new Headers(headers)
+  h.set('Content-Type', 'application/json; charset=utf-8')
+  const ttl = Math.max(0, Number(cacheSeconds) || 0)
+  // Prefer edge caching (Cache API / CDN). Avoid browser caching so admin refreshes are not "stuck" locally.
+  h.set('Cache-Control', `public, max-age=0, s-maxage=${ttl}`)
+  return new Response(JSON.stringify(data ?? {}), { status, headers: h })
+}
+
+function stableJson(value) {
+  return `${JSON.stringify(value ?? null, null, 2)}\n`
+}
+
+function getCacheOrigin(origin) {
+  const o = String(origin || '')
+  return ALLOWED_ORIGINS.has(o) ? o : ''
+}
+
+function buildCacheKey(requestUrl, env, pathname, origin, extraParams = undefined) {
+  const u = new URL(requestUrl)
+  u.pathname = pathname
+  u.search = ''
+  u.searchParams.set('__cache', '1')
+  u.searchParams.set('b', String(env?.BRANCH || ''))
+  const o = getCacheOrigin(origin)
+  if (o) u.searchParams.set('o', o)
+  if (extraParams) {
+    for (const [k, v] of Object.entries(extraParams)) {
+      if (v === undefined || v === null || v === '') continue
+      u.searchParams.set(k, String(v))
+    }
+  }
+  return new Request(u.toString(), { method: 'GET' })
+}
+
+async function purgeReadCaches(requestUrl, env, pathname, slugs = []) {
+  const cache = caches?.default
+  if (!cache) return
+
+  const origins = ['', ...Array.from(ALLOWED_ORIGINS)]
+  const tasks = []
+
+  // List cache (and any generic key variants).
+  for (const origin of origins) {
+    tasks.push(cache.delete(buildCacheKey(requestUrl, env, pathname, origin)))
+  }
+
+  // Per-post caches.
+  for (const slug of slugs) {
+    for (const origin of origins) {
+      tasks.push(cache.delete(buildCacheKey(requestUrl, env, `/api/posts/${encodeURIComponent(slug)}`, origin)))
+    }
+  }
+
+  await Promise.allSettled(tasks)
 }
 
 function pad2(n) {
@@ -123,6 +182,18 @@ function compareDateDesc(a, b) {
   return String(b).localeCompare(String(a))
 }
 
+function normalizePostMeta(p) {
+  const slug = String(p?.slug || '').trim()
+  if (!slug) return null
+  const title = String(p?.title || slug).trim() || slug
+  const date = normalizeDate(p?.date)
+  return { slug, title, date }
+}
+
+function sortPostMeta(posts) {
+  return (posts || []).slice().sort((a, b) => compareDateDesc(a.date, b.date) || a.title.localeCompare(b.title))
+}
+
 function buildMarkdownFile({ title, date, content }) {
   const t = String(title || '').trim()
   const body = String(content || '')
@@ -208,6 +279,11 @@ function toPostObject(slug, rawMd) {
   }
 }
 
+function toPostMeta(slug, rawMd) {
+  const p = toPostObject(slug, rawMd)
+  return { slug: p.slug, title: p.title, date: p.date }
+}
+
 async function getFile(env, repoPath) {
   const { res, data } = await ghJson(
     env,
@@ -215,6 +291,79 @@ async function getFile(env, repoPath) {
     `/repos/${env.OWNER}/${env.REPO}/contents/${repoPath}?ref=${encodeURIComponent(env.BRANCH)}`,
   )
   return { res, data }
+}
+
+async function readPostsIndex(env) {
+  const { res, data } = await getFile(env, POSTS_INDEX_PATH)
+  if (res.status === 404) return { posts: [], missing: true }
+  if (!res.ok) throw new Error(data?.message || `GitHub read failed: ${res.status}`)
+
+  const raw = decodeBase64Utf8(data?.content || '')
+  let parsed
+  try {
+    parsed = JSON.parse(raw)
+  } catch {
+    throw new Error('Invalid posts index JSON.')
+  }
+
+  const list = Array.isArray(parsed) ? parsed : parsed?.posts
+  const posts = sortPostMeta((Array.isArray(list) ? list : []).map(normalizePostMeta).filter(Boolean))
+  return { posts, missing: false }
+}
+
+async function rebuildPostsIndexFromRepo(env) {
+  const { res, data } = await ghJson(
+    env,
+    'GET',
+    `/repos/${env.OWNER}/${env.REPO}/contents/src/posts?ref=${encodeURIComponent(env.BRANCH)}`,
+  )
+  if (!res.ok) throw new Error(data?.message || `GitHub list failed: ${res.status}`)
+
+  const files = Array.isArray(data)
+    ? data.filter((it) => it?.type === 'file' && /\.md$/i.test(String(it?.name || '')))
+    : []
+
+  const items = await Promise.all(
+    files.map(async (f) => {
+      const repoPath = String(f.path || '')
+      const slug = String(f.name || '').replace(/\.md$/i, '')
+      const file = await getFile(env, repoPath)
+      if (!file.res.ok) throw new Error(`Failed to load ${repoPath}`)
+      const raw = decodeBase64Utf8(file.data?.content || '')
+      return toPostMeta(slug, raw)
+    }),
+  )
+
+  return sortPostMeta(items.map(normalizePostMeta).filter(Boolean))
+}
+
+function applyIndexUpdates(currentPosts, { removeSlugs = [], upserts = [] } = {}) {
+  const removeSet = new Set((removeSlugs || []).map((s) => String(s || '').trim()).filter(Boolean))
+  let posts = (currentPosts || []).filter((p) => !removeSet.has(p.slug))
+
+  for (const item of upserts || []) {
+    const slug = String(item?.slug || '').trim()
+    const rawMd = String(item?.rawMd || '')
+    if (!slug || !rawMd) continue
+    const meta = normalizePostMeta(toPostMeta(slug, rawMd))
+    if (!meta) continue
+    const i = posts.findIndex((p) => p.slug === meta.slug)
+    if (i >= 0) posts[i] = meta
+    else posts.push(meta)
+  }
+
+  return sortPostMeta(posts)
+}
+
+async function getPostsIndexOrRebuild(env) {
+  let index
+  try {
+    index = await readPostsIndex(env)
+  } catch {
+    index = { posts: [], missing: true }
+  }
+  if (!index.missing) return index.posts
+  return await rebuildPostsIndexFromRepo(env)
 }
 
 async function ensureUniqueSlug(env, baseSlug, ignoreSlug) {
@@ -236,44 +385,110 @@ async function ensureUniqueSlug(env, baseSlug, ignoreSlug) {
   }
 }
 
-async function putFile(env, repoPath, contentText, message, sha) {
-  const body = {
-    message,
-    content: encodeBase64Utf8(contentText),
-    branch: env.BRANCH,
-  }
-  if (sha) body.sha = sha
-
+async function getHeadCommitSha(env) {
   const { res, data } = await ghJson(
     env,
-    'PUT',
-    `/repos/${env.OWNER}/${env.REPO}/contents/${repoPath}`,
-    body,
+    'GET',
+    `/repos/${env.OWNER}/${env.REPO}/git/ref/heads/${encodeURIComponent(env.BRANCH)}`,
   )
-  if (!res.ok) throw new Error(data?.message || `GitHub PUT failed: ${res.status}`)
-  return data
+  if (!res.ok) throw new Error(data?.message || `GitHub ref failed: ${res.status}`)
+  return String(data?.object?.sha || '')
 }
 
-async function deleteFile(env, repoPath, message, sha) {
+async function getCommitTreeSha(env, commitSha) {
   const { res, data } = await ghJson(
     env,
-    'DELETE',
-    `/repos/${env.OWNER}/${env.REPO}/contents/${repoPath}`,
-    {
-      message,
-      sha,
-      branch: env.BRANCH,
-    },
+    'GET',
+    `/repos/${env.OWNER}/${env.REPO}/git/commits/${encodeURIComponent(commitSha)}`,
   )
-  if (!res.ok) throw new Error(data?.message || `GitHub DELETE failed: ${res.status}`)
-  return data
+  if (!res.ok) throw new Error(data?.message || `GitHub commit failed: ${res.status}`)
+  return String(data?.tree?.sha || '')
+}
+
+async function createBlob(env, contentText) {
+  const { res, data } = await ghJson(env, 'POST', `/repos/${env.OWNER}/${env.REPO}/git/blobs`, {
+    content: encodeBase64Utf8(String(contentText ?? '')),
+    encoding: 'base64',
+  })
+  if (!res.ok) throw new Error(data?.message || `GitHub blob failed: ${res.status}`)
+  return String(data?.sha || '')
+}
+
+async function createTree(env, baseTreeSha, treeItems) {
+  const { res, data } = await ghJson(env, 'POST', `/repos/${env.OWNER}/${env.REPO}/git/trees`, {
+    base_tree: baseTreeSha,
+    tree: treeItems,
+  })
+  if (!res.ok) throw new Error(data?.message || `GitHub tree failed: ${res.status}`)
+  return String(data?.sha || '')
+}
+
+async function createCommit(env, message, treeSha, parentCommitSha) {
+  const { res, data } = await ghJson(env, 'POST', `/repos/${env.OWNER}/${env.REPO}/git/commits`, {
+    message,
+    tree: treeSha,
+    parents: [parentCommitSha],
+  })
+  if (!res.ok) throw new Error(data?.message || `GitHub commit create failed: ${res.status}`)
+  return String(data?.sha || '')
+}
+
+async function updateRef(env, commitSha) {
+  const { res, data } = await ghJson(
+    env,
+    'PATCH',
+    `/repos/${env.OWNER}/${env.REPO}/git/refs/heads/${encodeURIComponent(env.BRANCH)}`,
+    { sha: commitSha, force: false },
+  )
+  if (!res.ok) throw new Error(data?.message || `GitHub ref update failed: ${res.status}`)
+}
+
+async function commitFiles(env, message, changes) {
+  const list = Array.isArray(changes) ? changes : []
+  if (list.length === 0) return
+
+  let lastErr
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const headCommitSha = await getHeadCommitSha(env)
+      const baseTreeSha = await getCommitTreeSha(env, headCommitSha)
+
+      const tree = []
+      for (const ch of list) {
+        const p = String(ch?.path || '').replace(/^\/+/, '')
+        if (!p) continue
+
+        if (ch?.delete) {
+          tree.push({ path: p, mode: '100644', type: 'blob', sha: null })
+          continue
+        }
+
+        const blobSha = await createBlob(env, String(ch?.content ?? ''))
+        tree.push({ path: p, mode: '100644', type: 'blob', sha: blobSha })
+      }
+
+      const treeSha = await createTree(env, baseTreeSha, tree)
+      const commitSha = await createCommit(env, message, treeSha, headCommitSha)
+      await updateRef(env, commitSha)
+      return
+    } catch (err) {
+      lastErr = err
+      const msg = String(err?.message || '')
+      // Best-effort retry on concurrent updates (non-fast-forward).
+      if (attempt === 0 && /non-fast-forward|Reference update failed|422/.test(msg)) continue
+      break
+    }
+  }
+
+  throw lastErr || new Error('Commit failed.')
 }
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
     const origin = request.headers.get('Origin') || ''
-    const cors = corsHeaders(origin)
+    const corsOrigin = getCacheOrigin(origin)
+    const cors = corsHeaders(corsOrigin)
 
     if (request.method === 'OPTIONS') return new Response('', { status: 204, headers: cors })
 
@@ -284,38 +499,34 @@ export default {
 
       // Public read APIs
       if (request.method === 'GET' && url.pathname === '/api/posts') {
-        const { res, data } = await ghJson(
-          env,
-          'GET',
-          `/repos/${env.OWNER}/${env.REPO}/contents/src/posts?ref=${encodeURIComponent(env.BRANCH)}`,
-        )
-        if (!res.ok)
-          return json({ error: data?.message || 'GitHub list failed.' }, res.status, cors)
+        const cache = caches?.default
+        if (cache) {
+          const key = buildCacheKey(request.url, env, '/api/posts', corsOrigin)
+          const cached = await cache.match(key)
+          if (cached) return cached
+        }
 
-        const files = Array.isArray(data)
-          ? data.filter((it) => it?.type === 'file' && /\.md$/i.test(String(it?.name || '')))
-          : []
+        const index = await readPostsIndex(env)
+        if (index.missing) return json({ error: 'Posts index missing.' }, 500, cors)
 
-        const items = await Promise.all(
-          files.map(async (f) => {
-            const repoPath = String(f.path || '')
-            const slug = String(f.name || '').replace(/\.md$/i, '')
-            const file = await getFile(env, repoPath)
-            if (!file.res.ok) throw new Error(`Failed to load ${repoPath}`)
-            const raw = decodeBase64Utf8(file.data?.content || '')
-            const p = toPostObject(slug, raw)
-            // List endpoint returns metadata only (content fetched via /api/posts/:slug)
-            return { slug: p.slug, title: p.title, date: p.date }
-          }),
-        )
-
-        items.sort((a, b) => compareDateDesc(a.date, b.date) || a.title.localeCompare(b.title))
-        return json({ posts: items }, 200, cors)
+        const response = jsonCacheable({ posts: index.posts }, 200, cors, 60)
+        if (cache) {
+          const key = buildCacheKey(request.url, env, '/api/posts', corsOrigin)
+          await cache.put(key, response.clone())
+        }
+        return response
       }
 
       if (request.method === 'GET' && url.pathname.startsWith('/api/posts/')) {
         const slug = decodeURIComponent(url.pathname.slice('/api/posts/'.length))
         if (!isSafeSlug(slug)) return json({ error: 'Invalid slug.' }, 400, cors)
+
+        const cache = caches?.default
+        if (cache) {
+          const key = buildCacheKey(request.url, env, `/api/posts/${encodeURIComponent(slug)}`, corsOrigin)
+          const cached = await cache.match(key)
+          if (cached) return cached
+        }
 
         const repoPath = `src/posts/${slug}.md`
         const { res, data } = await getFile(env, repoPath)
@@ -325,7 +536,12 @@ export default {
 
         const raw = decodeBase64Utf8(data?.content || '')
         const p = toPostObject(slug, raw)
-        return json({ post: p }, 200, cors)
+        const response = jsonCacheable({ post: p }, 200, cors, 300)
+        if (cache) {
+          const key = buildCacheKey(request.url, env, `/api/posts/${encodeURIComponent(slug)}`, corsOrigin)
+          await cache.put(key, response.clone())
+        }
+        return response
       }
 
       // Admin write APIs
@@ -337,8 +553,16 @@ export default {
         const stamp = String(Date.now())
         const slug = await ensureUniqueSlug(env, stamp)
         const now = formatDateTime(new Date())
-        const md = buildMarkdownFile({ title: '未命名', date: now, content: '' })
-        await putFile(env, `src/posts/${slug}.md`, md, `admin: create ${slug}`)
+        const rawMd = buildMarkdownFile({ title: '未命名', date: now, content: '' })
+        const currentIndex = await getPostsIndexOrRebuild(env)
+        const nextIndex = applyIndexUpdates(currentIndex, { upserts: [{ slug, rawMd }] })
+        const indexJson = stableJson({ posts: nextIndex })
+
+        await commitFiles(env, `admin: create ${slug}`, [
+          { path: `src/posts/${slug}.md`, content: rawMd },
+          { path: POSTS_INDEX_PATH, content: indexJson },
+        ])
+        await purgeReadCaches(request.url, env, '/api/posts')
         return json({ slug, date: now }, 200, cors)
       }
 
@@ -354,26 +578,34 @@ export default {
         const nextSlug = await ensureUniqueSlug(env, desired, slug)
 
         const now = formatDateTime(new Date())
-        const md = buildMarkdownFile({ title: title || nextSlug, date: now, content })
+        const rawMd = buildMarkdownFile({ title: title || nextSlug, date: now, content })
 
         if (nextSlug === slug) {
-          const repoPath = `src/posts/${slug}.md`
-          const cur = await getFile(env, repoPath)
-          const sha = cur.res.ok ? String(cur.data?.sha || '') : ''
-          await putFile(env, repoPath, md, `admin: save ${slug}`, sha || undefined)
+          const currentIndex = await getPostsIndexOrRebuild(env)
+          const nextIndex = applyIndexUpdates(currentIndex, { upserts: [{ slug, rawMd }] })
+          const indexJson = stableJson({ posts: nextIndex })
+
+          await commitFiles(env, `admin: save ${slug}`, [
+            { path: `src/posts/${slug}.md`, content: rawMd },
+            { path: POSTS_INDEX_PATH, content: indexJson },
+          ])
+          await purgeReadCaches(request.url, env, '/api/posts', [slug])
           return json({ slug, date: now }, 200, cors)
         }
 
-        // Rename: write new file then delete old file (2 commits).
-        await putFile(env, `src/posts/${nextSlug}.md`, md, `admin: rename ${slug} -> ${nextSlug}`)
+        const currentIndex = await getPostsIndexOrRebuild(env)
+        const nextIndex = applyIndexUpdates(currentIndex, {
+          removeSlugs: [slug],
+          upserts: [{ slug: nextSlug, rawMd }],
+        })
+        const indexJson = stableJson({ posts: nextIndex })
 
-        const oldRepoPath = `src/posts/${slug}.md`
-        const old = await getFile(env, oldRepoPath)
-        if (old.res.ok) {
-          const sha = String(old.data?.sha || '')
-          if (sha) await deleteFile(env, oldRepoPath, `admin: delete ${slug}`, sha)
-        }
-
+        await commitFiles(env, `admin: rename ${slug} -> ${nextSlug}`, [
+          { path: `src/posts/${nextSlug}.md`, content: rawMd },
+          { path: `src/posts/${slug}.md`, delete: true },
+          { path: POSTS_INDEX_PATH, content: indexJson },
+        ])
+        await purgeReadCaches(request.url, env, '/api/posts', [slug, nextSlug])
         return json({ slug: nextSlug, date: now }, 200, cors)
       }
 
@@ -382,15 +614,15 @@ export default {
         const slug = String(body?.slug || '').trim()
         if (!isSafeSlug(slug)) return json({ error: 'Invalid slug.' }, 400, cors)
 
-        const repoPath = `src/posts/${slug}.md`
-        const cur = await getFile(env, repoPath)
-        if (cur.res.status === 404) return json({ ok: true }, 200, cors)
-        if (!cur.res.ok)
-          return json({ error: cur.data?.message || 'GitHub read failed.' }, cur.res.status, cors)
+        const currentIndex = await getPostsIndexOrRebuild(env)
+        const nextIndex = applyIndexUpdates(currentIndex, { removeSlugs: [slug] })
+        const indexJson = stableJson({ posts: nextIndex })
 
-        const sha = String(cur.data?.sha || '')
-        if (!sha) return json({ error: 'Missing sha.' }, 500, cors)
-        await deleteFile(env, repoPath, `admin: delete ${slug}`, sha)
+        await commitFiles(env, `admin: delete ${slug}`, [
+          { path: `src/posts/${slug}.md`, delete: true },
+          { path: POSTS_INDEX_PATH, content: indexJson },
+        ])
+        await purgeReadCaches(request.url, env, '/api/posts', [slug])
         return json({ ok: true }, 200, cors)
       }
 
