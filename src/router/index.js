@@ -38,6 +38,11 @@ export function createAppRouter() {
       name: 'archives',
       component: () => import('../views/ArchiveView.vue'),
     },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: () => import('../views/TagsView.vue'),
+    },
   ]
 
   if (enableAdmin) {
@@ -73,6 +78,7 @@ export function createAppRouter() {
       let desc = SITE_DESC
 
       if (to.name === 'archives') title = `归档 - ${SITE_TITLE}`
+      else if (to.name === 'tags') title = `标签 - ${SITE_TITLE}`
       else if (to.name === 'admin') title = `管理 - ${SITE_TITLE}`
       else if (to.name === 'post') {
         const slugParam = Array.isArray(to.params?.slug) ? to.params.slug[0] : to.params?.slug

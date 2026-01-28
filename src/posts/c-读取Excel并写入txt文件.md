@@ -2,6 +2,7 @@
 title: c#读取Excel和读写txt
 date: 2023-11-07 17:44:04
 tags: 项目
+categories: 开发
 description: c#读取Excel，按钮选择文件和文件夹以及读写txt
 ---
 

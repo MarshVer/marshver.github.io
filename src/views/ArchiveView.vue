@@ -1,12 +1,16 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ensurePostsIndex, getAllPosts, postsRevision, prefetchPost } from '@/lib/posts'
+import { ensureSearchIndex, searchPosts } from '@/lib/search'
 
 const route = useRoute()
 
 const loading = ref(false)
 const loadError = ref('')
+const searching = ref(false)
+const searchError = ref('')
+const searchResults = ref([])
 
 const keyword = computed(() =>
   String(route.query.q || '')
@@ -32,10 +36,33 @@ onMounted(async () => {
 })
 
 const filteredPosts = computed(() => {
-  const k = keyword.value
-  if (!k) return allPosts.value
-  return allPosts.value.filter((p) => p.title.toLowerCase().includes(k))
+  return keyword.value ? searchResults.value : allPosts.value
 })
+
+watch(
+  keyword,
+  async (k) => {
+    const q = String(k || '').trim()
+    searchError.value = ''
+    searchResults.value = []
+    if (!q) return
+
+    searching.value = true
+    try {
+      await ensureSearchIndex()
+      searchResults.value = searchPosts(q)
+    } catch (err) {
+      searchError.value = err?.message || String(err)
+      const qLower = q.toLowerCase()
+      searchResults.value = allPosts.value.filter((p) =>
+        String(p?.title || '').toLowerCase().includes(qLower),
+      )
+    } finally {
+      searching.value = false
+    }
+  },
+  { immediate: true },
+)
 
 function getYear(date) {
   const m = String(date || '').match(/^(\d{4})/)
@@ -65,6 +92,8 @@ const groups = computed(() => {
   <div class="post-block archive">
     <div v-if="loading" class="empty-block">加载中...</div>
     <div v-else-if="loadError" class="empty-block">{{ loadError }}</div>
+    <div v-else-if="keyword && searching" class="empty-block">搜索中...</div>
+    <div v-else-if="keyword && searchError" class="empty-block">{{ searchError }}</div>
     <div v-else-if="groups.length === 0" class="empty-block">暂无文章</div>
 
     <div v-else class="archive-timeline">
@@ -80,7 +109,8 @@ const groups = computed(() => {
               @mouseenter="prefetchPost(p.slug)"
               @focus="prefetchPost(p.slug)"
             >
-              {{ p.title }}
+              <span v-if="p.titleHtml" v-html="p.titleHtml" />
+              <span v-else>{{ p.title }}</span>
             </router-link>
           </div>
         </div>

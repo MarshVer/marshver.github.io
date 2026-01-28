@@ -141,6 +141,32 @@ function parseFrontmatter(raw) {
   const fmBlock = s.slice(3, end).replace(/^\r?\n/, '')
   const rest = s.slice(end + '\n---'.length)
 
+  function parseFrontmatterValue(rawValue) {
+    let value = String(rawValue ?? '').trim()
+    if (!value) return ''
+
+    if (
+      (value.startsWith('[') && value.endsWith(']')) ||
+      (value.startsWith('{') && value.endsWith('}'))
+    ) {
+      try {
+        return JSON.parse(value)
+      } catch {
+        // fall through
+      }
+    }
+
+    if (value.startsWith('"') && value.endsWith('"')) {
+      try {
+        return JSON.parse(value)
+      } catch {
+        return value.slice(1, -1)
+      }
+    }
+
+    return value.replace(/^['"]/, '').replace(/['"]$/, '')
+  }
+
   const data = {}
   for (const line of fmBlock.split(/\r?\n/)) {
     const trimmed = line.trim()
@@ -148,20 +174,22 @@ function parseFrontmatter(raw) {
     const m = trimmed.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/)
     if (!m) continue
     const key = m[1]
-    let value = m[2].trim()
-    if (value.startsWith('"') && value.endsWith('"')) {
-      try {
-        value = JSON.parse(value)
-      } catch {
-        value = value.slice(1, -1)
-      }
-    } else {
-      value = value.replace(/^['"]/, '').replace(/['"]$/, '')
-    }
-    data[key] = value
+    data[key] = parseFrontmatterValue(m[2])
   }
 
   return { data, content: rest.replace(/^\r?\n/, '') }
+}
+
+function normalizeStringArray(value) {
+  if (!value) return []
+  if (Array.isArray(value))
+    return value.map((v) => String(v || '').trim()).filter(Boolean)
+  const s = String(value || '').trim()
+  if (!s) return []
+  return s
+    .split(/[,，]/g)
+    .map((v) => v.trim())
+    .filter(Boolean)
 }
 
 function normalizeDate(value) {
@@ -187,7 +215,9 @@ function normalizePostMeta(p) {
   if (!slug) return null
   const title = String(p?.title || slug).trim() || slug
   const date = normalizeDate(p?.date)
-  return { slug, title, date }
+  const tags = normalizeStringArray(p?.tags ?? p?.tag)
+  const categories = normalizeStringArray(p?.categories ?? p?.category)
+  return { slug, title, date, tags, categories }
 }
 
 function sortPostMeta(posts) {
@@ -271,17 +301,21 @@ function toPostObject(slug, rawMd) {
   const parsed = parseFrontmatter(rawMd)
   const date = normalizeDate(parsed.data?.date)
   const title = String(parsed.data?.title || extractTitleFromMarkdown(parsed.content, slug)).trim()
+  const tags = normalizeStringArray(parsed.data?.tags ?? parsed.data?.tag)
+  const categories = normalizeStringArray(parsed.data?.categories ?? parsed.data?.category)
   return {
     slug,
     title: title || slug,
     date,
+    tags,
+    categories,
     content: String(parsed.content || '').trim(),
   }
 }
 
 function toPostMeta(slug, rawMd) {
   const p = toPostObject(slug, rawMd)
-  return { slug: p.slug, title: p.title, date: p.date }
+  return { slug: p.slug, title: p.title, date: p.date, tags: p.tags, categories: p.categories }
 }
 
 async function getFile(env, repoPath) {

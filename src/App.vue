@@ -6,14 +6,11 @@ import AdminSidebar from '@/components/AdminSidebar.vue'
 import { ADMIN_ENABLED } from '@/lib/adminConfig'
 import avatarFallbackUrl from '@/assets/avatar.png'
 
-const avatarUrl = 'https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png'
-const avatarSrc = ref(avatarUrl)
-let avatarDidFallback = false
+// Prefer local assets for reliability (no third-party image host dependency).
+const avatarSrc = ref(avatarFallbackUrl)
 
 function onAvatarError() {
-  // Avoid infinite loops if the fallback asset is also missing/broken.
-  if (avatarDidFallback) return
-  avatarDidFallback = true
+  if (avatarSrc.value === avatarFallbackUrl) return
   avatarSrc.value = avatarFallbackUrl
 }
 
@@ -25,8 +22,9 @@ const adminEnabled = ADMIN_ENABLED
 const activeName = computed(() => String(route.name || ''))
 const isHome = computed(() => activeName.value === 'home')
 const isArchives = computed(() => activeName.value === 'archives')
+const isTags = computed(() => activeName.value === 'tags')
 const isAdmin = computed(() => activeName.value === 'admin')
-const isSearchable = computed(() => isHome.value || isArchives.value || isAdmin.value)
+const isSearchable = computed(() => isHome.value || isArchives.value || isTags.value || isAdmin.value)
 
 const routeQueryQ = computed(() => {
   const q = route.query.q
@@ -48,6 +46,16 @@ const menuQuery = computed(() => {
 const archivesCount = computed(() => {
   postsRevision.value
   return getAllPosts().length
+})
+
+const tagsCount = computed(() => {
+  postsRevision.value
+  const set = new Set()
+  for (const p of getAllPosts()) {
+    const tags = Array.isArray(p?.tags) ? p.tags : []
+    for (const t of tags) set.add(String(t || '').trim())
+  }
+  return set.size
 })
 
 function applySearch(value) {
@@ -156,6 +164,24 @@ onMounted(() => {
                     <span class="side-link__text">归档</span>
                     <span class="side-link__badge" aria-label="Archives count">
                       {{ archivesCount }}
+                    </span>
+                  </router-link>
+
+                  <router-link
+                    class="side-link"
+                    :class="{ 'is-active': isTags }"
+                    :to="{ name: 'tags', query: menuQuery }"
+                  >
+                    <span class="side-link__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path
+                          d="M20.59 13.41 12 22l-8.59-8.59A2 2 0 0 1 3 12V4a2 2 0 0 1 2-2h8a2 2 0 0 1 1.41.59l6.18 6.18a2 2 0 0 1 0 2.83ZM7.5 7A1.5 1.5 0 1 0 7.5 10 1.5 1.5 0 0 0 7.5 7Z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="side-link__text">标签</span>
+                    <span class="side-link__badge" aria-label="Tags count">
+                      {{ tagsCount }}
                     </span>
                   </router-link>
 

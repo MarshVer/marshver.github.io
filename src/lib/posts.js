@@ -34,7 +34,20 @@ function normalizePostMeta(p) {
   const title = String(p?.title || '').trim() || slug
   const date = String(p?.date || '').trim() || '未设置日期'
   const excerpt = String(p?.excerpt || '').trim()
-  return { slug, title, date, excerpt }
+
+  const normalizeArray = (value) => {
+    if (!value) return []
+    if (Array.isArray(value)) return value.map((v) => String(v || '').trim()).filter(Boolean)
+    return String(value || '')
+      .split(/[,，]/g)
+      .map((v) => v.trim())
+      .filter(Boolean)
+  }
+
+  const tags = normalizeArray(p?.tags ?? p?.tag)
+  const categories = normalizeArray(p?.categories ?? p?.category)
+
+  return { slug, title, date, excerpt, tags, categories }
 }
 
 function setPostsMeta(posts) {
@@ -54,7 +67,20 @@ function setPostCache(post) {
   const date = String(post?.date || '').trim() || '未设置日期'
   const excerpt = String(post?.excerpt || '').trim()
   const html = String(post?.html || '')
-  POST_CACHE.set(slug, { slug, title, date, excerpt, html })
+
+  const normalizeArray = (value) => {
+    if (!value) return []
+    if (Array.isArray(value)) return value.map((v) => String(v || '').trim()).filter(Boolean)
+    return String(value || '')
+      .split(/[,，]/g)
+      .map((v) => v.trim())
+      .filter(Boolean)
+  }
+
+  const tags = normalizeArray(post?.tags ?? post?.tag)
+  const categories = normalizeArray(post?.categories ?? post?.category)
+
+  POST_CACHE.set(slug, { slug, title, date, excerpt, tags, categories, html })
 }
 
 function readInitialState() {
@@ -84,6 +110,8 @@ function readInitialState() {
           title: meta?.title,
           date: meta?.date,
           excerpt: meta?.excerpt,
+          tags: meta?.tags,
+          categories: meta?.categories,
           html: el.innerHTML,
         })
       }

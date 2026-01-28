@@ -2,6 +2,7 @@
 title: NoTebookFancontrol使用
 date: 2023-02-20 13:25:22
 tags: 搞机
+categories: 工具
 description: 笔记本风扇控制软件
 ---
 

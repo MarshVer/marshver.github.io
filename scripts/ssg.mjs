@@ -26,6 +26,21 @@ function escapeRe(s) {
   return String(s ?? '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
+function htmlToText(html) {
+  return String(html ?? '')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 function setAttr(tag, attr, value) {
   const val = escapeHtml(value)
   const re = new RegExp(`\\b${escapeRe(attr)}=["'][^"']*["']`, 'i')
@@ -246,6 +261,26 @@ async function main() {
     await writeFileEnsured(out, `${JSON.stringify({ buildId: id, post }, null, 2)}\n`)
   }
 
+  // Build-time search index (no third-party deps). Used by Home/Archives search UI.
+  {
+    const docs = posts.map((p) => {
+      const full = postsBySlug.get(p.slug)
+      const text = htmlToText(full?.html || '').slice(0, 8000)
+      return {
+        slug: p.slug,
+        title: p.title,
+        date: p.date,
+        excerpt: p.excerpt,
+        tags: p.tags || [],
+        categories: p.categories || [],
+        text,
+      }
+    })
+
+    const out = path.join(DIST_DIR, 'data', 'search.json')
+    await writeFileEnsured(out, `${JSON.stringify({ buildId: id, docs }, null, 2)}\n`)
+  }
+
   const SITE_TITLE = 'MarshVer的个人博客'
   const SITE_DESC = 'MarshVer 的个人博客，记录技术笔记、折腾与日常。'
 
@@ -295,6 +330,20 @@ async function main() {
     meta: {
       pathname: '/archives/',
       title: `归档 - ${SITE_TITLE}`,
+      description: SITE_DESC,
+      ogType: 'website',
+    },
+  })
+
+  // Tags
+  await renderPage({
+    url: '/tags',
+    outFile: path.join(DIST_DIR, 'tags', 'index.html'),
+    ssrState: { posts },
+    clientState: { posts },
+    meta: {
+      pathname: '/tags/',
+      title: `标签 - ${SITE_TITLE}`,
       description: SITE_DESC,
       ogType: 'website',
     },
@@ -377,6 +426,7 @@ async function main() {
     const urls = [
       { loc: '/', lastmod: '' },
       { loc: '/archives/', lastmod: '' },
+      { loc: '/tags/', lastmod: '' },
       ...posts.map((p) => ({
         loc: `/posts/${encodeURIComponent(String(p.slug || '').trim())}/`,
         lastmod: p.date,

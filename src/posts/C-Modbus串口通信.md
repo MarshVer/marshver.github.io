@@ -2,6 +2,7 @@
 title: C#Modbus串口通信
 date: 2023-06-10 11:04:19
 tags: 项目
+categories: 开发
 description: C#Modbus串口通信，即按照Modbus协议请求从站读或写，然后从站将发回响应报文，从中截取需要的数据即可。
 ---
 
