@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ensurePostsIndex, getAllPosts, postsRevision } from '@/lib/posts'
 import AdminSidebar from '@/components/AdminSidebar.vue'
 import { ADMIN_ENABLED } from '@/lib/adminConfig'
-import avatarFallbackUrl from '@/assets/avatar.png'
+import avatarFallbackUrl from '@/assets/头像.png'
 
 // Prefer local assets for reliability (no third-party image host dependency).
 const avatarSrc = ref(avatarFallbackUrl)
