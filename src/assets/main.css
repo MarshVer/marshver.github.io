@@ -719,6 +719,33 @@ a:hover {
   word-break: break-word;
 }
 
+.markdown .header-anchor {
+  position: absolute;
+  left: -1.1em;
+  top: 0.15em;
+  padding: 0 0.2em;
+  opacity: 0;
+  color: var(--next-muted);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.markdown h1:hover .header-anchor,
+.markdown h2:hover .header-anchor,
+.markdown h3:hover .header-anchor,
+.markdown h4:hover .header-anchor,
+.markdown .header-anchor:focus {
+  opacity: 1;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  position: relative;
+  scroll-margin-top: 18px;
+}
+
 .markdown h1,
 .markdown h2,
 .markdown h3,
@@ -777,6 +804,34 @@ a:hover {
   padding: 0;
   border: 0;
   background: transparent;
+}
+
+.markdown pre code .tok-comment {
+  color: #8b949e;
+}
+
+.markdown pre code .tok-str {
+  color: #a5d6ff;
+}
+
+.markdown pre code .tok-key {
+  color: #7ee787;
+}
+
+.markdown pre code .tok-num {
+  color: #ffa657;
+}
+
+.markdown pre code .tok-kw {
+  color: #d2a8ff;
+}
+
+.markdown pre code .tok-var {
+  color: #79c0ff;
+}
+
+.markdown pre code .tok-flag {
+  color: #ff7b72;
 }
 
 .markdown pre,

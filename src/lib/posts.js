@@ -5,6 +5,7 @@ const POSTS_INDEX_URL = '/data/posts.json'
 const POST_URL_PREFIX = '/data/posts/'
 
 let POSTS_META = []
+let POSTS_HAS_EXCERPT = false
 const POST_CACHE = new Map()
 const POST_PROMISES = new Map()
 
@@ -37,7 +38,11 @@ function normalizePostMeta(p) {
 }
 
 function setPostsMeta(posts) {
-  POSTS_META = (Array.isArray(posts) ? posts : []).map(normalizePostMeta).filter(Boolean)
+  const raw = Array.isArray(posts) ? posts : []
+  // We treat the index as "full" only when every item includes an `excerpt` field.
+  // (In SSG, post pages may inline a slim index without excerpts to reduce HTML size.)
+  POSTS_HAS_EXCERPT = raw.length > 0 && raw.every((p) => Object.prototype.hasOwnProperty.call(p || {}, 'excerpt'))
+  POSTS_META = raw.map(normalizePostMeta).filter(Boolean)
   postsLoaded.value = true
   postsRevision.value += 1
 }
@@ -118,7 +123,7 @@ export function getCachedPost(slug) {
 }
 
 export async function ensurePostsIndex() {
-  if (postsLoaded.value) return POSTS_META
+  if (postsLoaded.value && POSTS_HAS_EXCERPT) return POSTS_META
   if (postsIndexPromise) return postsIndexPromise
 
   postsIndexPromise = (async () => {

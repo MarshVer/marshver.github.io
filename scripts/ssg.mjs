@@ -98,7 +98,15 @@ function toAbsoluteUrl(siteOrigin, pathname) {
 
 function applyPageMeta(
   templateHtml,
-  { siteOrigin, pathname, title, description, ogType = 'website', ogImagePath = '/og.svg' },
+  {
+    siteOrigin,
+    pathname,
+    title,
+    description,
+    ogType = 'website',
+    ogImagePath = '/og.png',
+    robots = '',
+  },
 ) {
   const absUrl = toAbsoluteUrl(siteOrigin, pathname)
   const absOgImage = toAbsoluteUrl(siteOrigin, ogImagePath)
@@ -108,6 +116,7 @@ function applyPageMeta(
   html = upsertLinkCanonical(html, absUrl)
 
   html = upsertMetaByName(html, 'description', description)
+  if (robots) html = upsertMetaByName(html, 'robots', robots)
 
   html = upsertMetaByProperty(html, 'og:type', ogType)
   html = upsertMetaByProperty(html, 'og:title', title)
@@ -165,6 +174,49 @@ function buildId() {
   return String(Date.now())
 }
 
+function toIsoDate(value) {
+  const s = String(value || '').trim()
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})/)
+  return m?.[1] || ''
+}
+
+function escapeXml(s) {
+  return escapeHtml(s)
+}
+
+function buildSitemapXml(siteOrigin, urls) {
+  const lines = []
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>')
+  lines.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+
+  for (const u of urls || []) {
+    const loc = String(u?.loc || '').trim()
+    if (!loc) continue
+    const abs = toAbsoluteUrl(siteOrigin, loc)
+    const lastmod = toIsoDate(u?.lastmod)
+
+    lines.push('  <url>')
+    lines.push(`    <loc>${escapeXml(abs)}</loc>`)
+    if (lastmod) lines.push(`    <lastmod>${escapeXml(lastmod)}</lastmod>`)
+    lines.push('  </url>')
+  }
+
+  lines.push('</urlset>')
+  return `${lines.join('\n')}\n`
+}
+
+function buildRobotsTxt(siteOrigin, { disallow = [] } = {}) {
+  const lines = []
+  lines.push('User-agent: *')
+  lines.push('Allow: /')
+  for (const p of disallow || []) {
+    const v = String(p || '').trim()
+    if (v) lines.push(`Disallow: ${v}`)
+  }
+  lines.push(`Sitemap: ${toAbsoluteUrl(siteOrigin, '/sitemap.xml')}`)
+  return `${lines.join('\n')}\n`
+}
+
 async function main() {
   const siteOrigin = await inferSiteOrigin()
   const id = buildId()
@@ -179,6 +231,11 @@ async function main() {
   const { render } = await import(pathToFileURL(ssrEntry).href)
 
   const { posts, postsBySlug } = await loadPostsFromDir(POSTS_DIR)
+  const slimPosts = posts.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    date: p.date,
+  }))
 
   // 1) Emit decoupled data files.
   const postsIndexOut = path.join(DIST_DIR, 'data', 'posts.json')
@@ -233,8 +290,8 @@ async function main() {
   await renderPage({
     url: '/archives',
     outFile: path.join(DIST_DIR, 'archives', 'index.html'),
-    ssrState: { posts },
-    clientState: { posts },
+    ssrState: { posts: slimPosts },
+    clientState: { posts: slimPosts },
     meta: {
       pathname: '/archives/',
       title: `归档 - ${SITE_TITLE}`,
@@ -250,12 +307,18 @@ async function main() {
     const full = postsBySlug.get(slug)
     if (!full) continue
 
+    // Keep the inlined index slim for post pages, but include the current post excerpt
+    // so client-side meta updates don't downgrade the description.
+    const postsForPostPage = slimPosts.map((it) =>
+      it.slug === slug ? { ...it, excerpt: String(full.excerpt || '') } : it,
+    )
+
     await renderPage({
       url: `/posts/${encodeURIComponent(slug)}`,
       outFile: path.join(DIST_DIR, 'posts', slug, 'index.html'),
-      ssrState: { posts, post: full },
+      ssrState: { posts: postsForPostPage, post: full },
       // Don't serialize `post.html` (can be huge). Client reuses server DOM on hydration.
-      clientState: { posts },
+      clientState: { posts: postsForPostPage },
       meta: {
         pathname: `/posts/${encodeURIComponent(slug)}/`,
         title: `${full.title} - ${SITE_TITLE}`,
@@ -281,13 +344,56 @@ async function main() {
       title: SITE_TITLE,
       description: SITE_DESC,
       ogType: 'website',
+      robots: 'noindex, nofollow',
     })
 
     await writeFileEnsured(path.join(DIST_DIR, '404.html'), html)
   }
 
+  // Admin shell: make `/admin` return 200 (avoid relying on `404.html` SPA fallback).
+  {
+    let html = templateHtml
+    html = html.replace('<!--ssr-outlet-->', '')
+    html = html.replace('<!--preload-links-->', '')
+
+    const shellState = {}
+    const stateSnippet = `    <script>\n      window.__BUILD_ID__ = ${safeJsonForInlineScript(id)}\n      window.__INITIAL_STATE__ = ${safeJsonForInlineScript(shellState)}\n    </script>\n`
+    html = html.replace('<!--initial-state-->', stateSnippet)
+
+    html = applyPageMeta(html, {
+      siteOrigin,
+      pathname: '/admin/',
+      title: `管理 - ${SITE_TITLE}`,
+      description: '站点管理后台。',
+      ogType: 'website',
+      robots: 'noindex, nofollow',
+    })
+
+    await writeFileEnsured(path.join(DIST_DIR, 'admin', 'index.html'), html)
+  }
+
+  // SEO: sitemap.xml + robots.txt
+  {
+    const urls = [
+      { loc: '/', lastmod: '' },
+      { loc: '/archives/', lastmod: '' },
+      ...posts.map((p) => ({
+        loc: `/posts/${encodeURIComponent(String(p.slug || '').trim())}/`,
+        lastmod: p.date,
+      })),
+    ]
+
+    await writeFileEnsured(path.join(DIST_DIR, 'sitemap.xml'), buildSitemapXml(siteOrigin, urls))
+    await writeFileEnsured(
+      path.join(DIST_DIR, 'robots.txt'),
+      buildRobotsTxt(siteOrigin, { disallow: ['/admin'] }),
+    )
+  }
+
   // eslint-disable-next-line no-console
-  console.log(`ssg: wrote ${posts.length + 3} pages + data (buildId=${id}, siteOrigin=${siteOrigin})`)
+  console.log(
+    `ssg: wrote ${posts.length + 4} pages + data + seo (buildId=${id}, siteOrigin=${siteOrigin})`,
+  )
 }
 
 await main()
