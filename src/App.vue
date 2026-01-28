@@ -1,10 +1,21 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import avatarUrl from '@/assets/头像.png'
-import { getAllPosts, postsRevision } from '@/lib/posts'
+import { ensurePostsIndex, getAllPosts, postsRevision } from '@/lib/posts'
 import AdminSidebar from '@/components/AdminSidebar.vue'
 import { ADMIN_ENABLED } from '@/lib/adminConfig'
+import avatarFallbackUrl from '@/assets/avatar.png'
+
+const avatarUrl = 'https://s2.loli.net/2022/08/03/gTEIJebhf812WaZ.png'
+const avatarSrc = ref(avatarUrl)
+let avatarDidFallback = false
+
+function onAvatarError() {
+  // Avoid infinite loops if the fallback asset is also missing/broken.
+  if (avatarDidFallback) return
+  avatarDidFallback = true
+  avatarSrc.value = avatarFallbackUrl
+}
 
 const route = useRoute()
 const router = useRouter()
@@ -86,6 +97,11 @@ function flushSearch() {
 onBeforeUnmount(() => {
   if (debounceTimer) window.clearTimeout(debounceTimer)
 })
+
+onMounted(() => {
+  // Keep sidebar counts and route meta stable even when the page is loaded via SPA fallback.
+  ensurePostsIndex().catch(() => {})
+})
 </script>
 
 <template>
@@ -165,7 +181,12 @@ onBeforeUnmount(() => {
 
               <section v-else class="widget">
                 <div class="author">
-                  <img class="author__avatar" :src="avatarUrl" alt="MarshVer" />
+                  <img
+                    class="author__avatar"
+                    :src="avatarSrc"
+                    alt="MarshVer"
+                    @error="onAvatarError"
+                  />
                   <div class="author__name">MarshVer</div>
                   <div class="author__desc">个人博客</div>
 

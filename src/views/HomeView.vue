@@ -1,10 +1,13 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getAllPosts, postsRevision } from '@/lib/posts'
+import { ensurePostsIndex, getAllPosts, postsRevision, prefetchPost } from '@/lib/posts'
 
 const route = useRoute()
 const router = useRouter()
+
+const loading = ref(false)
+const loadError = ref('')
 
 const keyword = computed(() =>
   String(route.query.q || '')
@@ -20,6 +23,28 @@ const posts = computed(() => {
   if (!k) return allPosts.value
   return allPosts.value.filter((p) => p.title.toLowerCase().includes(k))
 })
+
+onMounted(async () => {
+  if (getAllPosts().length) return
+  loading.value = true
+  loadError.value = ''
+  try {
+    await ensurePostsIndex()
+  } catch (err) {
+    loadError.value = err?.message || String(err)
+  } finally {
+    loading.value = false
+  }
+})
+
+let postViewPrefetched = false
+function prefetchPostRoute(slug) {
+  prefetchPost(slug)
+  if (postViewPrefetched) return
+  postViewPrefetched = true
+  // Hint the browser early so navigation feels instant.
+  import('./PostView.vue').catch(() => {})
+}
 
 const PAGE_SIZE = 10
 const page = computed(() => {
@@ -48,15 +73,21 @@ function goPage(nextPage) {
 
 <template>
   <div class="home">
-    <div v-if="posts.length === 0" class="post-block empty-block">暂无文章</div>
+    <div v-if="loading" class="post-block empty-block">加载中...</div>
+    <div v-else-if="loadError" class="post-block empty-block">{{ loadError }}</div>
+    <div v-else-if="posts.length === 0" class="post-block empty-block">暂无文章</div>
 
     <template v-else>
       <article v-for="p in pagedPosts" :key="p.slug" class="post-block">
         <header>
           <h2 class="post-title">
-            <router-link :to="{ name: 'post', params: { slug: p.slug } }">{{
-              p.title
-            }}</router-link>
+            <router-link
+              :to="{ name: 'post', params: { slug: p.slug } }"
+              @mouseenter="prefetchPostRoute(p.slug)"
+              @focus="prefetchPostRoute(p.slug)"
+            >
+              {{ p.title }}
+            </router-link>
           </h2>
           <div class="post-meta">
             <time :datetime="p.date">{{ p.date }}</time>

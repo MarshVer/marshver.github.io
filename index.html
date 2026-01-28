@@ -2,9 +2,11 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./src/assets/avatar.png" />
-    <link rel="shortcut icon" type="image/png" href="./src/assets/avatar.png" />
-    <link rel="apple-touch-icon" href="./src/assets/avatar.png" />
+    <link rel="dns-prefetch" href="//s2.loli.net" />
+    <link rel="preconnect" href="https://s2.loli.net" crossorigin />
+    <link rel="icon" type="image/png" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png" />
+    <link rel="shortcut icon" type="image/png" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png" />
+    <link rel="apple-touch-icon" href="https://s2.loli.net/2022/08/03/faI9itgrycnkWCF.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MarshVer的个人博客</title>
     <meta
@@ -29,9 +31,12 @@
       content="MarshVer 的个人博客，记录技术笔记、折腾与日常。"
     />
     <meta name="twitter:image" content="/og.svg" />
+
+    <!--preload-links-->
+    <!--initial-state-->
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <div id="app"><!--ssr-outlet--></div>
+    <script type="module" src="/src/entry-client.js"></script>
   </body>
 </html>

@@ -1,8 +1,14 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { getAllPosts, getPostMetaBySlug, loadPostContent, postsRevision } from '@/lib/posts'
-import { renderMarkdown } from '@/lib/markdown'
+import {
+  ensurePost,
+  ensurePostsIndex,
+  getAllPosts,
+  getCachedPost,
+  getPostMetaBySlug,
+  postsRevision,
+} from '@/lib/posts'
 
 const route = useRoute()
 
@@ -12,14 +18,25 @@ const postMeta = computed(() => {
   return getPostMetaBySlug(slug.value)
 })
 
-const content = ref('')
+const post = ref(null)
 const loading = ref(false)
 const loadError = ref('')
 
-async function refreshContent() {
+async function refreshPost() {
   const s = slug.value
-  if (!s || !postMeta.value) {
-    content.value = ''
+  if (!s) {
+    post.value = null
+    loadError.value = ''
+    loading.value = false
+    return
+  }
+
+  // Ensure the index is available (for title/prev-next), but don't block content rendering.
+  ensurePostsIndex().catch(() => {})
+
+  const cached = getCachedPost(s)
+  if (cached) {
+    post.value = cached
     loadError.value = ''
     loading.value = false
     return
@@ -27,18 +44,19 @@ async function refreshContent() {
 
   loading.value = true
   loadError.value = ''
-  content.value = ''
+  post.value = null
   try {
-    content.value = await loadPostContent(s)
+    post.value = await ensurePost(s)
+    if (!post.value) loadError.value = '文章不存在'
   } catch (err) {
     loadError.value = err?.message || String(err)
-    content.value = ''
+    post.value = null
   } finally {
     loading.value = false
   }
 }
 
-watch([slug, postsRevision], refreshContent, { immediate: true })
+watch(slug, refreshPost, { immediate: true })
 
 const allPosts = computed(() => {
   postsRevision.value
@@ -53,12 +71,13 @@ const nextPost = computed(() =>
     : null,
 )
 
-const html = computed(() => (postMeta.value ? renderMarkdown(content.value || '') : ''))
+const effectiveMeta = computed(() => postMeta.value || post.value)
+const html = computed(() => (post.value ? String(post.value.html || '') : ''))
 </script>
 
 <template>
   <div>
-    <div v-if="!postMeta" class="post-block empty-block">
+    <div v-if="!effectiveMeta" class="post-block empty-block">
       <h1 class="post-title">文章不存在</h1>
       <div class="post-excerpt">请检查链接，或返回首页查看文章列表。</div>
       <router-link class="post-more" to="/">返回首页 »</router-link>
@@ -66,9 +85,9 @@ const html = computed(() => (postMeta.value ? renderMarkdown(content.value || ''
 
     <article v-else class="post-block post-single">
       <header>
-        <h1 class="post-title">{{ postMeta.title }}</h1>
+        <h1 class="post-title">{{ effectiveMeta.title }}</h1>
         <div class="post-meta">
-          <time :datetime="postMeta.date">{{ postMeta.date }}</time>
+          <time :datetime="effectiveMeta.date">{{ effectiveMeta.date }}</time>
         </div>
       </header>
 

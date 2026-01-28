@@ -7,6 +7,10 @@ function defaultLinkOpen(tokens, idx, options, env, self) {
   return self.renderToken(tokens, idx, options)
 }
 
+function defaultImage(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options)
+}
+
 export function createMarkdownRenderer() {
   const md = new MarkdownIt({
     html: false,
@@ -39,6 +43,14 @@ export function createMarkdownRenderer() {
     return baseLinkOpen(tokens, idx, options, env, self)
   }
 
+  const baseImage = md.renderer.rules.image || defaultImage
+  md.renderer.rules.image = (tokens, idx, options, env, self) => {
+    const token = tokens[idx]
+    token.attrSet('loading', 'lazy')
+    token.attrSet('decoding', 'async')
+    return baseImage(tokens, idx, options, env, self)
+  }
+
   return md
 }
 
@@ -47,4 +59,3 @@ const DEFAULT_MD = createMarkdownRenderer()
 export function renderMarkdown(markdown) {
   return DEFAULT_MD.render(String(markdown || ''))
 }
-

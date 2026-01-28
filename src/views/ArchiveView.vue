@@ -1,9 +1,12 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getAllPosts, postsRevision } from '@/lib/posts'
+import { ensurePostsIndex, getAllPosts, postsRevision, prefetchPost } from '@/lib/posts'
 
 const route = useRoute()
+
+const loading = ref(false)
+const loadError = ref('')
 
 const keyword = computed(() =>
   String(route.query.q || '')
@@ -13,6 +16,19 @@ const keyword = computed(() =>
 const allPosts = computed(() => {
   postsRevision.value
   return getAllPosts()
+})
+
+onMounted(async () => {
+  if (getAllPosts().length) return
+  loading.value = true
+  loadError.value = ''
+  try {
+    await ensurePostsIndex()
+  } catch (err) {
+    loadError.value = err?.message || String(err)
+  } finally {
+    loading.value = false
+  }
 })
 
 const filteredPosts = computed(() => {
@@ -47,7 +63,9 @@ const groups = computed(() => {
 
 <template>
   <div class="post-block archive">
-    <div v-if="groups.length === 0" class="empty-block">暂无文章</div>
+    <div v-if="loading" class="empty-block">加载中...</div>
+    <div v-else-if="loadError" class="empty-block">{{ loadError }}</div>
+    <div v-else-if="groups.length === 0" class="empty-block">暂无文章</div>
 
     <div v-else class="archive-timeline">
       <section v-for="g in groups" :key="g.year" class="archive-year">
@@ -56,7 +74,12 @@ const groups = computed(() => {
         <div class="archive-items">
           <div v-for="p in g.posts" :key="p.slug" class="archive-item">
             <span class="archive-date">{{ p.date }}</span>
-            <router-link class="archive-link" :to="{ name: 'post', params: { slug: p.slug } }">
+            <router-link
+              class="archive-link"
+              :to="{ name: 'post', params: { slug: p.slug } }"
+              @mouseenter="prefetchPost(p.slug)"
+              @focus="prefetchPost(p.slug)"
+            >
               {{ p.title }}
             </router-link>
           </div>

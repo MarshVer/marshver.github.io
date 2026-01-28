@@ -35,6 +35,7 @@ function onKeyDown(e) {
 watch(
   () => props.open,
   (v) => {
+    if (typeof window === 'undefined') return
     if (v) window.addEventListener('keydown', onKeyDown)
     else window.removeEventListener('keydown', onKeyDown)
   },
@@ -42,6 +43,7 @@ watch(
 )
 
 onBeforeUnmount(() => {
+  if (typeof window === 'undefined') return
   window.removeEventListener('keydown', onKeyDown)
 })
 </script>
@@ -87,8 +89,6 @@ onBeforeUnmount(() => {
   border: 1px solid var(--next-border);
   border-radius: var(--next-radius);
   box-shadow: var(--next-shadow);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
   padding: 16px;
 }
 
@@ -133,4 +133,3 @@ onBeforeUnmount(() => {
   border-color: #8a3b3b;
 }
 </style>
-

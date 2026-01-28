@@ -2,7 +2,8 @@
   /* NexT-inspired palette */
   --next-bg: #282828;
   --next-content-bg: #333333;
-  --next-content-bg-alpha: rgba(51, 51, 51, 0.05);
+  /* Kept for existing component styles; now a solid color (no glass effect). */
+  --next-content-bg-alpha: var(--next-content-bg);
   --next-text: #c9d1d9;
   --next-heading: #e6edf3;
   --next-muted: #8b949e;
@@ -78,16 +79,6 @@ html {
   background-clip: padding-box;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: url('./bg.jpg') no-repeat center / cover;
-  opacity: 0.3;
-  z-index: 0;
-  pointer-events: none;
-}
-
 a {
   color: var(--next-accent);
   text-decoration: none;
@@ -147,12 +138,10 @@ a:hover {
 
 .post-block,
 .widget {
-  background: var(--next-content-bg-alpha);
+  background: var(--next-content-bg);
   border: 1px solid var(--next-border);
   border-radius: var(--next-radius);
   box-shadow: var(--next-shadow);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
 }
 
 .post-block {

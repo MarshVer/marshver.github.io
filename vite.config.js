@@ -6,12 +6,16 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import VueDevTools from 'vite-plugin-vue-devtools'
 
+import { createMarkdownRenderer } from './scripts/posts-data.mjs'
+
 function blogPostsPlugin({ enableAdmin = false } = {}) {
   const postsDir = fileURLToPath(new URL('./src/posts', import.meta.url))
   const postsDirResolved = path.resolve(postsDir)
 
   const VIRTUAL_META_ID = 'virtual:blog-posts-meta'
   const RESOLVED_VIRTUAL_META_ID = `\0${VIRTUAL_META_ID}`
+
+  const markdown = createMarkdownRenderer()
 
   const RESERVED_WINDOWS_NAMES = new Set(
     [
@@ -293,6 +297,44 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
     },
 
     configureServer(server) {
+      // Dev-only JSON endpoints so the client can fetch posts meta/content without bundling markdown.
+      server.middlewares.use(async (req, res, next) => {
+        const u = new URL(String(req.url || ''), 'http://localhost')
+        if (req.method !== 'GET') return next()
+
+        if (u.pathname === '/data/posts.json') {
+          try {
+            const posts = await readAllPostsFromFs()
+            return json(res, 200, { posts })
+          } catch (err) {
+            return json(res, 500, { error: err?.message || String(err) })
+          }
+        }
+
+        const m = u.pathname.match(/^\/data\/posts\/(.+)\.json$/)
+        if (!m) return next()
+
+        try {
+          const slug = decodeURIComponent(m[1]).trim()
+          if (!isSafeSlug(slug)) return json(res, 400, { error: 'Invalid slug.' })
+
+          const filePath = resolvePostPath(slug)
+          if (!filePath) return json(res, 400, { error: 'Invalid path.' })
+
+          const raw = await fs.readFile(filePath, 'utf8')
+          const parsed = parseFrontmatter(raw)
+          const date = normalizeDate(parsed.data?.date)
+          const title = String(parsed.data?.title || extractTitleFromMarkdown(parsed.content, slug)).trim() || slug
+          const content = String(parsed.content || '').trim()
+          const excerpt = buildExcerpt(content)
+          const html = markdown.render(content)
+
+          return json(res, 200, { post: { slug, title, date, excerpt, html } })
+        } catch (err) {
+          return json(res, 500, { error: err?.message || String(err) })
+        }
+      })
+
       server.middlewares.use(async (req, res, next) => {
         const url = String(req.url || '')
         if (!url.startsWith('/__posts/')) return next()
