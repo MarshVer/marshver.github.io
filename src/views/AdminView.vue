@@ -5,7 +5,7 @@ import { getPostMetaBySlug, loadPostContent, postsRevision } from '@/lib/posts'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import AdminKeyDialog from '@/components/AdminKeyDialog.vue'
 import { ADMIN_REMOTE } from '@/lib/adminConfig'
-import { adminKey, adminPostsRevision, bumpAdminPosts, setAdminKey } from '@/lib/adminState'
+import { adminKey, adminKeyRemember, adminPostsRevision, bumpAdminPosts, setAdminKey } from '@/lib/adminState'
 import { deletePost as apiDeletePost, getPost as apiGetPost, savePost as apiSavePost } from '@/lib/adminApi'
 
 const route = useRoute()
@@ -300,7 +300,12 @@ onBeforeUnmount(() => {
       @confirm="doDelete"
     />
 
-    <AdminKeyDialog v-model:open="keyDialogOpen" :value="adminKey" @save="setAdminKey" />
+    <AdminKeyDialog
+      v-model:open="keyDialogOpen"
+      :value="adminKey"
+      :remember="adminKeyRemember"
+      @save="setAdminKey"
+    />
   </div>
 </template>
 
@@ -457,8 +462,9 @@ onBeforeUnmount(() => {
   line-height: 1.6;
 }
 
-.field__input:focus,
-.field__textarea:focus {
+.field__input:focus-visible,
+.field__textarea:focus-visible {
+  outline: none;
   border-color: #666666;
   box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.35);
 }

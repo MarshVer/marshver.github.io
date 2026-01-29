@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ensurePostsIndex, getAllPosts, postsRevision, prefetchPost } from '@/lib/posts'
 import { ensureSearchIndex, searchPosts } from '@/lib/search'
+import { toTimeDatetime } from '@/lib/datetime'
 
 const route = useRoute()
 const router = useRouter()
@@ -118,7 +119,7 @@ function goPage(nextPage) {
             </router-link>
           </h2>
           <div class="post-meta">
-            <time :datetime="p.date">{{ p.date }}</time>
+            <time :datetime="toTimeDatetime(p.date)">{{ p.date }}</time>
           </div>
         </header>
 

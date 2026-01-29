@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import crypto from 'node:crypto'
 import { pathToFileURL } from 'node:url'
 
 import { loadPostsFromDir } from './posts-data.mjs'
@@ -259,6 +260,45 @@ function escapeXml(s) {
   return escapeHtml(s)
 }
 
+function sha256Base64(text) {
+  return crypto.createHash('sha256').update(String(text || ''), 'utf8').digest('base64')
+}
+
+function upsertMetaHttpEquiv(html, httpEquiv, content) {
+  const equiv = String(httpEquiv || '').trim()
+  if (!equiv) return html
+  const re = new RegExp(`<meta\\b[^>]*\\bhttp-equiv=["']${escapeRe(equiv)}["'][^>]*>`, 'i')
+  if (re.test(html)) return html.replace(re, (tag) => setAttr(tag, 'content', content))
+  return html.replace(
+    /<\/head>/i,
+    `    <meta http-equiv="${escapeHtml(equiv)}" content="${escapeHtml(content)}" />\n  </head>`,
+  )
+}
+
+function buildContentSecurityPolicy({ scriptHashes = [] } = {}) {
+  const hashes = (scriptHashes || [])
+    .map((h) => String(h || '').trim())
+    .filter(Boolean)
+    .map((h) => `'sha256-${h}'`)
+
+  // Keep it strict for scripts (no unsafe-inline/eval) and reasonably compatible elsewhere.
+  const parts = []
+  parts.push(`default-src 'self'`)
+  parts.push(`base-uri 'self'`)
+  parts.push(`object-src 'none'`)
+  parts.push(`script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''}`)
+  parts.push(`style-src 'self'`)
+  parts.push(`img-src 'self' data: https:`)
+  parts.push(`connect-src 'self' https:`)
+  parts.push(`font-src 'self' data:`)
+  parts.push(`manifest-src 'self'`)
+  parts.push(`frame-src 'none'`)
+  parts.push(`form-action 'self'`)
+  parts.push('upgrade-insecure-requests')
+  parts.push('block-all-mixed-content')
+  return `${parts.join('; ')};`
+}
+
 function buildRssXml(siteOrigin, { title, description, items }) {
   const now = new Date()
   const buildDate = now.toUTCString()
@@ -430,10 +470,21 @@ async function main() {
     const preloadLinks = renderPreloadLinks(modules, manifest)
     html = html.replace('<!--preload-links-->', preloadLinks)
 
-    const stateSnippet = `    <script>\n      window.__BUILD_ID__ = ${safeJsonForInlineScript(id)}\n      window.__INITIAL_STATE__ = ${safeJsonForInlineScript(clientState)}\n    </script>\n`
+    const stateSnippet =
+      `    <meta name="build-id" content="${escapeHtml(id)}" />\n` +
+      `    <template id="__INITIAL_STATE__">${safeJsonForInlineScript(clientState)}</template>\n`
     html = html.replace('<!--initial-state-->', stateSnippet)
 
     html = applyPageMeta(html, { siteOrigin, ...meta })
+
+    // CSP: keep scripts strict (no unsafe-inline). Allow JSON-LD inline blocks via hash (posts pages).
+    const scriptHashes = []
+    if (meta?.jsonLd) scriptHashes.push(sha256Base64(safeJsonForInlineScript(meta.jsonLd)))
+    html = upsertMetaHttpEquiv(
+      html,
+      'Content-Security-Policy',
+      buildContentSecurityPolicy({ scriptHashes }),
+    )
 
     await writeFileEnsured(outFile, html)
   }
@@ -543,7 +594,9 @@ async function main() {
     html = html.replace('<!--preload-links-->', '')
 
     const shellState = {}
-    const stateSnippet = `    <script>\n      window.__BUILD_ID__ = ${safeJsonForInlineScript(id)}\n      window.__INITIAL_STATE__ = ${safeJsonForInlineScript(shellState)}\n    </script>\n`
+    const stateSnippet =
+      `    <meta name="build-id" content="${escapeHtml(id)}" />\n` +
+      `    <template id="__INITIAL_STATE__">${safeJsonForInlineScript(shellState)}</template>\n`
     html = html.replace('<!--initial-state-->', stateSnippet)
 
     html = applyPageMeta(html, {
@@ -556,6 +609,12 @@ async function main() {
       robots: 'noindex, nofollow',
     })
 
+    html = upsertMetaHttpEquiv(
+      html,
+      'Content-Security-Policy',
+      buildContentSecurityPolicy({ scriptHashes: [] }),
+    )
+
     await writeFileEnsured(path.join(DIST_DIR, '404.html'), html)
   }
 
@@ -566,7 +625,9 @@ async function main() {
     html = html.replace('<!--preload-links-->', '')
 
     const shellState = {}
-    const stateSnippet = `    <script>\n      window.__BUILD_ID__ = ${safeJsonForInlineScript(id)}\n      window.__INITIAL_STATE__ = ${safeJsonForInlineScript(shellState)}\n    </script>\n`
+    const stateSnippet =
+      `    <meta name="build-id" content="${escapeHtml(id)}" />\n` +
+      `    <template id="__INITIAL_STATE__">${safeJsonForInlineScript(shellState)}</template>\n`
     html = html.replace('<!--initial-state-->', stateSnippet)
 
     html = applyPageMeta(html, {
@@ -578,6 +639,12 @@ async function main() {
       ogType: 'website',
       robots: 'noindex, nofollow',
     })
+
+    html = upsertMetaHttpEquiv(
+      html,
+      'Content-Security-Policy',
+      buildContentSecurityPolicy({ scriptHashes: [] }),
+    )
 
     await writeFileEnsured(path.join(DIST_DIR, 'admin', 'index.html'), html)
   }

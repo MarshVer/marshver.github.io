@@ -5,7 +5,7 @@ import { getAllPosts, postsRevision } from '@/lib/posts'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import AdminKeyDialog from '@/components/AdminKeyDialog.vue'
 import { ADMIN_REMOTE } from '@/lib/adminConfig'
-import { adminKey, adminPostsRevision, bumpAdminPosts, setAdminKey } from '@/lib/adminState'
+import { adminKey, adminKeyRemember, adminPostsRevision, bumpAdminPosts, setAdminKey } from '@/lib/adminState'
 import { createPost as apiCreatePost, deletePost as apiDeletePost, listPosts } from '@/lib/adminApi'
 
 const route = useRoute()
@@ -169,7 +169,12 @@ async function doRemove() {
       @confirm="doRemove"
     />
 
-    <AdminKeyDialog v-model:open="keyDialogOpen" :value="adminKey" @save="setAdminKey" />
+    <AdminKeyDialog
+      v-model:open="keyDialogOpen"
+      :value="adminKey"
+      :remember="adminKeyRemember"
+      @save="setAdminKey"
+    />
   </section>
 </template>
 

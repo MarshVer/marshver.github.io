@@ -91,6 +91,11 @@ a:hover {
   text-decoration: underline;
 }
 
+:focus-visible {
+  outline: 2px solid rgba(73, 177, 245, 0.9);
+  outline-offset: 2px;
+}
+
 mark {
   background: rgba(73, 177, 245, 0.22);
   color: inherit;
@@ -492,7 +497,8 @@ mark {
   opacity: 1;
 }
 
-.search-input:focus {
+.search-input:focus-visible {
+  outline: none;
   border-color: #666666;
   box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.35);
 }
@@ -656,25 +662,99 @@ mark {
   left: 0;
   top: 0;
   height: 3px;
-  width: 0;
-  background: var(--next-accent);
+  width: 100%;
   z-index: 60;
+  pointer-events: none;
+
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+}
+
+.reading-progress::-webkit-progress-bar {
+  background: transparent;
+}
+
+.reading-progress::-webkit-progress-value {
+  background: var(--next-accent);
   box-shadow: 0 0 0 1px rgba(73, 177, 245, 0.18);
 }
 
-.post-toc {
-  margin-top: 16px;
+.reading-progress::-moz-progress-bar {
+  background: var(--next-accent);
+  box-shadow: 0 0 0 1px rgba(73, 177, 245, 0.18);
+}
+
+.post-toc-inline,
+.post-toc-float {
   padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid var(--next-border);
   background: rgba(255, 255, 255, 0.02);
 }
 
-.post-toc__summary {
+.post-toc__title {
+  color: var(--next-heading);
+  font-weight: 900;
+  user-select: none;
+}
+
+.post-toc-inline {
+  margin-top: 16px;
+}
+
+.post-toc-inline__summary {
   cursor: pointer;
   color: var(--next-heading);
   font-weight: 900;
   user-select: none;
+}
+
+.post-toc-sidebar {
+  display: none;
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+}
+
+.post-toc-float {
+  /* Only show when the viewport has enough unused space on the far right. */
+  display: none;
+  position: fixed;
+  top: 18px;
+  /* Center in the right gutter with comfortable gaps from both the content and the viewport edge. */
+  /* Keep TOC readable but not too wide vs. the main article text. */
+  --post-toc-width: clamp(200px, 22vw, 260px);
+  --post-toc-gutter: calc((100vw - var(--next-container-max)) / 2);
+  left: calc(
+    (100vw + var(--next-container-max)) / 2 +
+      clamp(32px, calc((var(--post-toc-gutter) - var(--post-toc-width)) / 2), 120px)
+  );
+  width: var(--post-toc-width);
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+  z-index: 40;
+  box-shadow: var(--next-shadow);
+}
+
+@media (min-width: 961px) {
+  .post-toc-inline {
+    display: none;
+  }
+
+  .post-toc-sidebar {
+    display: block;
+  }
+}
+
+@media (min-width: 1860px) {
+  .post-toc-sidebar {
+    display: none;
+  }
+
+  .post-toc-float {
+    display: block;
+  }
 }
 
 .post-toc__list {
@@ -691,12 +771,28 @@ mark {
   font-size: 13px;
   opacity: 0.9;
   text-decoration: none;
+  word-break: break-word;
+  display: block;
+  padding: 4px 6px;
+  margin-left: -6px;
+  border-radius: 8px;
 }
 
 .post-toc__item:hover {
   opacity: 1;
   color: var(--next-heading);
+  background: rgba(255, 255, 255, 0.04);
   text-decoration: none;
+}
+
+.post-toc__item.is-active {
+  opacity: 1;
+  color: var(--next-accent);
+  background: rgba(73, 177, 245, 0.14);
+}
+
+.post-toc__item--lvl2 {
+  padding-left: 6px;
 }
 
 .post-toc__item--lvl3 {
@@ -800,6 +896,17 @@ mark {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 /* Markdown typography */
 .markdown {
   line-height: 1.95;
@@ -822,7 +929,7 @@ mark {
 .markdown h2:hover .header-anchor,
 .markdown h3:hover .header-anchor,
 .markdown h4:hover .header-anchor,
-.markdown .header-anchor:focus {
+.markdown .header-anchor:focus-visible {
   opacity: 1;
 }
 

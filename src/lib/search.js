@@ -6,9 +6,13 @@ const SEARCH_INDEX_URL = '/data/search.json'
 let SEARCH_DOCS = []
 let searchIndexPromise = null
 
+let BUILD_ID = null
 function getBuildId() {
-  if (typeof window === 'undefined') return ''
-  return String(window.__BUILD_ID__ || '')
+  if (BUILD_ID !== null) return BUILD_ID
+  if (typeof document === 'undefined') return ''
+  const el = document.querySelector('meta[name="build-id"]')
+  BUILD_ID = String(el?.getAttribute('content') || '').trim()
+  return BUILD_ID
 }
 
 function withBuildId(url) {
@@ -170,4 +174,3 @@ export function searchPosts(query, { limit = 200 } = {}) {
   results.sort((a, b) => b.score - a.score || String(b.date).localeCompare(String(a.date)))
   return results.slice(0, Math.max(1, Number(limit) || 200))
 }
-

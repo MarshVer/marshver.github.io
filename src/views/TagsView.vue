@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ensurePostsIndex, getAllPosts, postsRevision } from '@/lib/posts'
+import { toTimeDatetime } from '@/lib/datetime'
 
 const route = useRoute()
 const router = useRouter()
@@ -180,7 +181,7 @@ onMounted(async () => {
             {{ p.title }}
           </router-link>
           <div class="tag-post__meta">
-            <time :datetime="p.date">{{ p.date }}</time>
+            <time :datetime="toTimeDatetime(p.date)">{{ p.date }}</time>
           </div>
           <div v-if="p.excerpt" class="tag-post__excerpt">{{ p.excerpt }}</div>
         </article>
@@ -282,4 +283,3 @@ onMounted(async () => {
   line-height: 1.85;
 }
 </style>
-

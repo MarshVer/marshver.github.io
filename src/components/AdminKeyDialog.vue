@@ -4,6 +4,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 const props = defineProps({
   open: { type: Boolean, default: false },
   value: { type: String, default: '' },
+  remember: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:open', 'save'])
@@ -14,11 +15,14 @@ const show = computed({
 })
 
 const input = ref(String(props.value || ''))
+const remember = ref(Boolean(props.remember))
 
 watch(
   () => props.open,
   (v) => {
-    if (v) input.value = String(props.value || '')
+    if (!v) return
+    input.value = String(props.value || '')
+    remember.value = Boolean(props.remember)
   },
 )
 
@@ -27,7 +31,7 @@ function close() {
 }
 
 function onSave() {
-  emit('save', String(input.value || '').trim())
+  emit('save', String(input.value || '').trim(), Boolean(remember.value))
   show.value = false
 }
 
@@ -59,13 +63,18 @@ onBeforeUnmount(() => {
       <div class="confirm-dialog" role="dialog" aria-modal="true" aria-label="设置管理密钥">
         <div class="confirm-dialog__title">设置管理密钥</div>
         <div class="confirm-dialog__message">
-          该密钥只保存在你的浏览器中，用于调用 Cloudflare Worker 写入 GitHub 仓库。
+          默认仅在当前会话有效（关闭浏览器后失效）；可选择“记住”以保存到 localStorage。
         </div>
 
         <label class="key-field">
           <span class="key-field__label">ADMIN_KEY</span>
           <input v-model="input" class="key-field__input" type="password" autocomplete="off" />
           <span class="key-field__hint">Ctrl/⌘ + Enter 保存</span>
+        </label>
+
+        <label class="remember-row">
+          <input v-model="remember" class="remember-row__check" type="checkbox" />
+          <span class="remember-row__text">记住密钥（保存到本机 localStorage）</span>
         </label>
 
         <div class="confirm-dialog__actions">
@@ -132,7 +141,8 @@ onBeforeUnmount(() => {
   outline: none;
 }
 
-.key-field__input:focus {
+.key-field__input:focus-visible {
+  outline: none;
   border-color: #666666;
   box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.35);
 }
@@ -140,6 +150,24 @@ onBeforeUnmount(() => {
 .key-field__hint {
   font-size: 12px;
   color: var(--next-muted);
+}
+
+.remember-row {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--next-text);
+  font-size: 13px;
+}
+
+.remember-row__check {
+  width: 16px;
+  height: 16px;
+}
+
+.remember-row__text {
+  color: var(--next-text);
 }
 
 .confirm-dialog__actions {

@@ -14,10 +14,14 @@ export const postsLoaded = ref(false)
 
 let postsIndexPromise = null
 
+let BUILD_ID = null
 function getBuildId() {
   // Set by the SSG output to help avoid stale browser caching for JSON files.
-  if (typeof window === 'undefined') return ''
-  return String(window.__BUILD_ID__ || '')
+  if (BUILD_ID !== null) return BUILD_ID
+  if (typeof document === 'undefined') return ''
+  const el = document.querySelector('meta[name="build-id"]')
+  BUILD_ID = String(el?.getAttribute('content') || '').trim()
+  return BUILD_ID
 }
 
 function withBuildId(url) {
@@ -84,10 +88,18 @@ function setPostCache(post) {
 }
 
 function readInitialState() {
-  if (typeof window === 'undefined') return null
-  const s = window.__INITIAL_STATE__
-  if (!s || typeof s !== 'object') return null
-  return s
+  if (typeof document === 'undefined') return null
+  const el = document.getElementById('__INITIAL_STATE__')
+  if (!el) return null
+  const raw = String(el.textContent || '').trim()
+  if (!raw) return null
+  try {
+    const s = JSON.parse(raw)
+    if (!s || typeof s !== 'object') return null
+    return s
+  } catch {
+    return null
+  }
 }
 
 // Hydrate from SSG output as early as possible so Vue can hydrate without mismatches.

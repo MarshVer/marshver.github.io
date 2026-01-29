@@ -15,7 +15,7 @@ function corsHeaders(origin) {
     h.set('Vary', 'Origin')
   }
   h.set('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-  h.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  h.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cf-Turnstile-Token, X-Turnstile-Token')
   h.set('Access-Control-Max-Age', '86400')
   return h
 }
@@ -34,6 +34,131 @@ function jsonCacheable(data, status = 200, headers = undefined, cacheSeconds = 6
   // Prefer edge caching (Cache API / CDN). Avoid browser caching so admin refreshes are not "stuck" locally.
   h.set('Cache-Control', `public, max-age=0, s-maxage=${ttl}`)
   return new Response(JSON.stringify(data ?? {}), { status, headers: h })
+}
+
+function getClientIp(request) {
+  const cfip = String(request.headers.get('CF-Connecting-IP') || '').trim()
+  if (cfip) return cfip
+  const xff = String(request.headers.get('X-Forwarded-For') || '').trim()
+  if (xff) return xff.split(',')[0].trim()
+  return 'unknown'
+}
+
+function parseCsvSet(raw) {
+  const s = String(raw || '').trim()
+  if (!s) return new Set()
+  return new Set(
+    s
+      .split(/[,\n\r\t ]+/g)
+      .map((x) => x.trim())
+      .filter(Boolean),
+  )
+}
+
+function requireAccess(request, env) {
+  // Optional hardening: when configured, require Cloudflare Access to be in front of this Worker.
+  // This checks the email header injected by Access; it is only trustworthy when Access is enabled.
+  const allow = parseCsvSet(env?.ACCESS_EMAIL_ALLOWLIST || env?.ACCESS_EMAILS || '')
+  if (allow.size === 0) return true
+  const email = String(request.headers.get('Cf-Access-Authenticated-User-Email') || '')
+    .trim()
+    .toLowerCase()
+  if (!email) return false
+  for (const v of allow) {
+    if (String(v || '').trim().toLowerCase() === email) return true
+  }
+  return false
+}
+
+async function verifyTurnstile(request, env, ip) {
+  // Optional hardening: when configured, require a Turnstile token for write endpoints.
+  // Frontend should send it via `Cf-Turnstile-Token` (or `X-Turnstile-Token`) header.
+  const secret = String(env?.TURNSTILE_SECRET || '').trim()
+  if (!secret) return { ok: true }
+
+  const token = String(
+    request.headers.get('Cf-Turnstile-Token') ||
+      request.headers.get('X-Turnstile-Token') ||
+      '',
+  ).trim()
+  if (!token) return { ok: false, error: 'Turnstile token missing.' }
+
+  const form = new URLSearchParams()
+  form.set('secret', secret)
+  form.set('response', token)
+  const rip = String(ip || '').trim()
+  if (rip && rip !== 'unknown') form.set('remoteip', rip)
+
+  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    body: form,
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!data?.success) return { ok: false, error: 'Turnstile verification failed.' }
+  return { ok: true }
+}
+
+function buildRlKey(requestUrl, env, kind, ip) {
+  const u = new URL(requestUrl)
+  u.pathname = `/_rl/${encodeURIComponent(String(kind || 'x'))}`
+  u.search = ''
+  u.searchParams.set('ip', String(ip || ''))
+  u.searchParams.set('b', String(env?.BRANCH || ''))
+  return new Request(u.toString(), { method: 'GET' })
+}
+
+async function cacheGetJson(cache, keyRequest) {
+  const res = await cache.match(keyRequest)
+  if (!res) return null
+  return await res.json().catch(() => null)
+}
+
+async function cachePutJson(cache, keyRequest, data, ttlSeconds) {
+  const ttl = Math.max(0, Number(ttlSeconds) || 0)
+  const h = new Headers()
+  h.set('Content-Type', 'application/json; charset=utf-8')
+  h.set('Cache-Control', `public, max-age=${ttl}`)
+  await cache.put(keyRequest, new Response(JSON.stringify(data ?? {}), { headers: h }))
+}
+
+async function checkFixedWindowLimit(cache, keyRequest, { limit, windowSeconds }) {
+  const now = Date.now()
+  const win = Math.max(1, Number(windowSeconds) || 60) * 1000
+  const max = Math.max(1, Number(limit) || 1)
+
+  const cur = (await cacheGetJson(cache, keyRequest)) || {}
+  let resetAt = Number(cur.resetAt) || 0
+  let count = Number(cur.count) || 0
+
+  if (!resetAt || now >= resetAt) {
+    resetAt = now + win
+    count = 0
+  }
+
+  count += 1
+  const allowed = count <= max
+
+  // Keep a small buffer so edge caches don't expire early.
+  await cachePutJson(cache, keyRequest, { count, resetAt }, Math.ceil(win / 1000) + 5)
+
+  const retryAfter = allowed ? 0 : Math.max(1, Math.ceil((resetAt - now) / 1000))
+  return { allowed, retryAfter }
+}
+
+async function getBan(cache, keyRequest) {
+  const now = Date.now()
+  const v = (await cacheGetJson(cache, keyRequest)) || null
+  const until = Number(v?.until) || 0
+  if (until && now < until) return { banned: true, retryAfter: Math.max(1, Math.ceil((until - now) / 1000)) }
+  return { banned: false, retryAfter: 0 }
+}
+
+async function setBan(cache, keyRequest, banSeconds) {
+  const now = Date.now()
+  const secs = Math.max(1, Number(banSeconds) || 60)
+  const until = now + secs * 1000
+  await cachePutJson(cache, keyRequest, { until }, secs + 5)
+  return { banned: true, retryAfter: secs }
 }
 
 function stableJson(value) {
@@ -523,6 +648,8 @@ export default {
     const origin = request.headers.get('Origin') || ''
     const corsOrigin = getCacheOrigin(origin)
     const cors = corsHeaders(corsOrigin)
+    const ip = getClientIp(request)
+    const cache = caches?.default
 
     if (request.method === 'OPTIONS') return new Response('', { status: 204, headers: cors })
 
@@ -531,9 +658,75 @@ export default {
         return json({ error: 'Worker env vars missing.' }, 500, cors)
       }
 
+      // Admin hardening: rate limit + failure backoff/ban + optional Cloudflare Access allowlist.
+      if (url.pathname.startsWith('/api/admin/')) {
+        if (cache) {
+          const banKey = buildRlKey(request.url, env, 'ban', ip)
+          const ban = await getBan(cache, banKey)
+          if (ban.banned) {
+            const h = new Headers(cors)
+            h.set('Retry-After', String(ban.retryAfter))
+            return json({ error: 'Too many attempts. Try again later.' }, 429, h)
+          }
+
+          const adminMax = Math.max(1, Number(env?.ADMIN_RL_MAX) || 30)
+          const adminWindow = Math.max(1, Number(env?.ADMIN_RL_WINDOW) || 60)
+          const rlKey = buildRlKey(request.url, env, 'admin', ip)
+          const rl = await checkFixedWindowLimit(cache, rlKey, {
+            limit: adminMax,
+            windowSeconds: adminWindow,
+          })
+          if (!rl.allowed) {
+            const h = new Headers(cors)
+            h.set('Retry-After', String(rl.retryAfter))
+            return json({ error: 'Rate limited. Try again later.' }, 429, h)
+          }
+        }
+
+        if (!requireAccess(request, env)) {
+          return json({ error: 'Forbidden.' }, 403, cors)
+        }
+
+        if (request.method === 'POST') {
+          const turnstile = await verifyTurnstile(request, env, ip)
+          if (!turnstile.ok) {
+            return json({ error: turnstile.error || 'Forbidden.' }, 403, cors)
+          }
+        }
+
+        if (!requireAdmin(request, env)) {
+          if (cache) {
+            const failMax = Math.max(1, Number(env?.ADMIN_FAIL_MAX) || 5)
+            const failWindow = Math.max(1, Number(env?.ADMIN_FAIL_WINDOW) || 600)
+            const banSeconds = Math.max(1, Number(env?.ADMIN_BAN_SECONDS) || 900)
+
+            const failKey = buildRlKey(request.url, env, 'fail', ip)
+            const fail = await checkFixedWindowLimit(cache, failKey, {
+              limit: failMax,
+              windowSeconds: failWindow,
+            })
+
+            if (!fail.allowed) {
+              const banKey = buildRlKey(request.url, env, 'ban', ip)
+              const ban = await setBan(cache, banKey, banSeconds)
+              const h = new Headers(cors)
+              h.set('Retry-After', String(ban.retryAfter))
+              return json({ error: 'Too many failed attempts. Try again later.' }, 429, h)
+            }
+          }
+
+          return json({ error: 'Unauthorized.' }, 401, cors)
+        }
+
+        // Successful auth: clear failure counters so accidental typos don't lock you out.
+        if (cache) {
+          await cache.delete(buildRlKey(request.url, env, 'fail', ip))
+          await cache.delete(buildRlKey(request.url, env, 'ban', ip))
+        }
+      }
+
       // Public read APIs
       if (request.method === 'GET' && url.pathname === '/api/posts') {
-        const cache = caches?.default
         if (cache) {
           const key = buildCacheKey(request.url, env, '/api/posts', corsOrigin)
           const cached = await cache.match(key)
@@ -555,7 +748,6 @@ export default {
         const slug = decodeURIComponent(url.pathname.slice('/api/posts/'.length))
         if (!isSafeSlug(slug)) return json({ error: 'Invalid slug.' }, 400, cors)
 
-        const cache = caches?.default
         if (cache) {
           const key = buildCacheKey(request.url, env, `/api/posts/${encodeURIComponent(slug)}`, corsOrigin)
           const cached = await cache.match(key)
@@ -576,11 +768,6 @@ export default {
           await cache.put(key, response.clone())
         }
         return response
-      }
-
-      // Admin write APIs
-      if (url.pathname.startsWith('/api/admin/')) {
-        if (!requireAdmin(request, env)) return json({ error: 'Unauthorized.' }, 401, cors)
       }
 
       if (request.method === 'POST' && url.pathname === '/api/admin/create') {
