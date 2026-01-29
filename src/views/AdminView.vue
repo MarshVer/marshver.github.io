@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getPostMetaBySlug, loadPostContent, postsRevision } from '@/lib/posts'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
@@ -7,7 +7,6 @@ import AdminKeyDialog from '@/components/AdminKeyDialog.vue'
 import { ADMIN_REMOTE } from '@/lib/adminConfig'
 import { adminKey, adminPostsRevision, bumpAdminPosts, setAdminKey } from '@/lib/adminState'
 import { deletePost as apiDeletePost, getPost as apiGetPost, savePost as apiSavePost } from '@/lib/adminApi'
-import { renderMarkdown } from '@/lib/markdown'
 
 const route = useRoute()
 const router = useRouter()
@@ -161,7 +160,58 @@ function openPost() {
   window.open(router.resolve({ name: 'post', params: { slug: selectedSlug.value } }).href, '_blank')
 }
 
-const previewHtml = computed(() => renderMarkdown(content.value || ''))
+const previewHtml = ref('')
+let previewTimer = null
+let previewSeq = 0
+
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+}
+
+async function refreshPreviewNow() {
+  // Admin preview only runs in the browser.
+  if (typeof window === 'undefined') return
+
+  const seq = (previewSeq += 1)
+  const src = String(content.value || '')
+  if (!src.trim()) {
+    previewHtml.value = ''
+    return
+  }
+
+  try {
+    // Keep `markdown-it` out of the initial bundle.
+    const { renderMarkdown } = await import('@/lib/markdown')
+    const html = await renderMarkdown(src)
+    if (seq !== previewSeq) return
+    previewHtml.value = html
+  } catch (err) {
+    if (seq !== previewSeq) return
+    previewHtml.value = `<pre>${escapeHtml(err?.message || err || 'Failed to render markdown.')}</pre>`
+  }
+}
+
+function schedulePreview() {
+  if (typeof window === 'undefined') return
+  if (previewTimer) window.clearTimeout(previewTimer)
+  previewTimer = window.setTimeout(() => {
+    previewTimer = null
+    refreshPreviewNow()
+  }, 120)
+}
+
+watch(content, schedulePreview, { immediate: true })
+
+onBeforeUnmount(() => {
+  if (typeof window === 'undefined') return
+  if (previewTimer) window.clearTimeout(previewTimer)
+  previewTimer = null
+})
 </script>
 
 <template>

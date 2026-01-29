@@ -1,4 +1,5 @@
-import MarkdownIt from 'markdown-it'
+// Lazily import `markdown-it` so it doesn't inflate the initial client bundle.
+// This module is currently only used by the admin editor preview.
 
 const SITE_ORIGIN_RE = /^https?:\/\//i
 const UNSAFE_PROTOCOL_RE = /^(?:javascript|data|vbscript):/i
@@ -186,8 +187,12 @@ function defaultImage(tokens, idx, options, env, self) {
   return self.renderToken(tokens, idx, options)
 }
 
-export function createMarkdownRenderer() {
-  const md = new MarkdownIt({
+export async function createMarkdownRenderer() {
+  return await getDefaultRenderer()
+}
+
+function createMarkdownRendererSync(MarkdownItCtor) {
+  const md = new MarkdownItCtor({
     html: false,
     // Keep auto-linking, but tighten validation to avoid false-positives in mixed-language text.
     linkify: true,
@@ -281,8 +286,26 @@ export function createMarkdownRenderer() {
   return md
 }
 
-const DEFAULT_MD = createMarkdownRenderer()
+let DEFAULT_MD_PROMISE = null
 
-export function renderMarkdown(markdown) {
-  return DEFAULT_MD.render(String(markdown || ''))
+async function getDefaultRenderer() {
+  if (DEFAULT_MD_PROMISE) return await DEFAULT_MD_PROMISE
+
+  DEFAULT_MD_PROMISE = (async () => {
+    const mod = await import('markdown-it')
+    const MarkdownItCtor = mod?.default || mod
+    return createMarkdownRendererSync(MarkdownItCtor)
+  })()
+
+  return await DEFAULT_MD_PROMISE
+}
+
+// Back-compat alias.
+export async function createMarkdownRendererAsync() {
+  return await getDefaultRenderer()
+}
+
+export async function renderMarkdown(markdown) {
+  const md = await getDefaultRenderer()
+  return md.render(String(markdown || ''))
 }

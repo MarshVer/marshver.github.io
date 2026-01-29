@@ -78,6 +78,18 @@ function upsertLinkCanonical(html, href) {
   )
 }
 
+function upsertLinkAlternate(html, { type, title, href }) {
+  const t = String(type || '').trim()
+  if (!t) return html
+  const re = new RegExp(
+    `<link\\b[^>]*\\brel=["']alternate["'][^>]*\\btype=["']${escapeRe(t)}["'][^>]*>`,
+    'i',
+  )
+  const tag = `<link rel="alternate" type="${escapeHtml(t)}" title="${escapeHtml(title)}" href="${escapeHtml(href)}" />`
+  if (re.test(html)) return html.replace(re, tag)
+  return html.replace(/<\/head>/i, `    ${tag}\n  </head>`)
+}
+
 function setTitle(html, title) {
   const re = /<title>[\s\S]*?<\/title>/i
   const next = `<title>${escapeHtml(title)}</title>`
@@ -118,8 +130,11 @@ function applyPageMeta(
     pathname,
     title,
     description,
+    siteName = '',
     ogType = 'website',
     ogImagePath = '/og.png',
+    articlePublishedTime = '',
+    jsonLd = null,
     robots = '',
   },
 ) {
@@ -130,18 +145,35 @@ function applyPageMeta(
   html = setTitle(html, title)
   html = upsertLinkCanonical(html, absUrl)
 
+  html = upsertLinkAlternate(html, {
+    type: 'application/rss+xml',
+    title: 'RSS',
+    href: toAbsoluteUrl(siteOrigin, '/rss.xml'),
+  })
+  html = upsertLinkAlternate(html, {
+    type: 'application/atom+xml',
+    title: 'Atom',
+    href: toAbsoluteUrl(siteOrigin, '/atom.xml'),
+  })
+
   html = upsertMetaByName(html, 'description', description)
   if (robots) html = upsertMetaByName(html, 'robots', robots)
 
   html = upsertMetaByProperty(html, 'og:type', ogType)
+  if (siteName) html = upsertMetaByProperty(html, 'og:site_name', siteName)
   html = upsertMetaByProperty(html, 'og:title', title)
   html = upsertMetaByProperty(html, 'og:description', description)
   html = upsertMetaByProperty(html, 'og:url', absUrl)
   html = upsertMetaByProperty(html, 'og:image', absOgImage)
+  if (ogType === 'article' && articlePublishedTime) {
+    html = upsertMetaByProperty(html, 'article:published_time', articlePublishedTime)
+  }
 
   html = upsertMetaByName(html, 'twitter:title', title)
   html = upsertMetaByName(html, 'twitter:description', description)
   html = upsertMetaByName(html, 'twitter:image', absOgImage)
+
+  html = upsertJsonLd(html, jsonLd)
 
   return html
 }
@@ -154,6 +186,15 @@ function safeJsonForInlineScript(value) {
     .replaceAll('&', '\\u0026')
     .replaceAll('\u2028', '\\u2028')
     .replaceAll('\u2029', '\\u2029')
+}
+
+function upsertJsonLd(html, jsonLd) {
+  if (!jsonLd) return html
+  const json = safeJsonForInlineScript(jsonLd)
+  const tag = `<script type="application/ld+json">${json}</script>`
+  const re = /<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/i
+  if (re.test(html)) return html.replace(re, tag)
+  return html.replace(/<\/head>/i, `    ${tag}\n  </head>`)
 }
 
 function renderPreloadLinks(modules, manifest) {
@@ -195,8 +236,97 @@ function toIsoDate(value) {
   return m?.[1] || ''
 }
 
+function toIsoDateTime(value) {
+  const s = String(value || '').trim()
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2}:\d{2}))?/)
+  if (!m) return ''
+  const dt = `${m[1]}T${m[2] || '00:00:00'}`
+  const d = new Date(dt)
+  if (!Number.isFinite(d.getTime())) return ''
+  return d.toISOString()
+}
+
+function toRfc2822Date(value) {
+  const iso = toIsoDateTime(value)
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (!Number.isFinite(d.getTime())) return ''
+  // RFC 2822-ish (same shape as RFC 1123) and accepted by RSS readers.
+  return d.toUTCString()
+}
+
 function escapeXml(s) {
   return escapeHtml(s)
+}
+
+function buildRssXml(siteOrigin, { title, description, items }) {
+  const now = new Date()
+  const buildDate = now.toUTCString()
+
+  const entryXml = (items || [])
+    .map((it) => {
+      const link = toAbsoluteUrl(siteOrigin, it.link)
+      const pubDate = toRfc2822Date(it.date) || buildDate
+      return [
+        '  <item>',
+        `    <title>${escapeXml(it.title)}</title>`,
+        `    <link>${escapeXml(link)}</link>`,
+        `    <guid isPermaLink="true">${escapeXml(link)}</guid>`,
+        `    <pubDate>${escapeXml(pubDate)}</pubDate>`,
+        `    <description>${escapeXml(it.description || '')}</description>`,
+        '  </item>',
+      ].join('\n')
+    })
+    .join('\n')
+
+  const lines = []
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>')
+  lines.push('<rss version="2.0">')
+  lines.push('<channel>')
+  lines.push(`  <title>${escapeXml(title)}</title>`)
+  lines.push(`  <link>${escapeXml(siteOrigin)}</link>`)
+  lines.push(`  <description>${escapeXml(description)}</description>`)
+  lines.push(`  <lastBuildDate>${escapeXml(buildDate)}</lastBuildDate>`)
+  if (entryXml) lines.push(entryXml)
+  lines.push('</channel>')
+  lines.push('</rss>')
+  return `${lines.join('\n')}\n`
+}
+
+function buildAtomXml(siteOrigin, { title, subtitle, items }) {
+  const now = new Date()
+  const updated = toIsoDateTime(items?.[0]?.date) || now.toISOString()
+
+  const entryXml = (items || [])
+    .map((it) => {
+      const link = toAbsoluteUrl(siteOrigin, it.link)
+      const iso = toIsoDateTime(it.date) || updated
+      return [
+        '  <entry>',
+        `    <title>${escapeXml(it.title)}</title>`,
+        `    <link href="${escapeXml(link)}" />`,
+        `    <id>${escapeXml(link)}</id>`,
+        `    <updated>${escapeXml(iso)}</updated>`,
+        `    <summary>${escapeXml(it.description || '')}</summary>`,
+        '  </entry>',
+      ].join('\n')
+    })
+    .join('\n')
+
+  const lines = []
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>')
+  lines.push('<feed xmlns="http://www.w3.org/2005/Atom">')
+  lines.push(`  <title>${escapeXml(title)}</title>`)
+  lines.push(`  <subtitle>${escapeXml(subtitle)}</subtitle>`)
+  lines.push(`  <link href="${escapeXml(siteOrigin)}" />`)
+  lines.push(
+    `  <link rel="self" href="${escapeXml(toAbsoluteUrl(siteOrigin, '/atom.xml'))}" />`,
+  )
+  lines.push(`  <id>${escapeXml(siteOrigin)}</id>`)
+  lines.push(`  <updated>${escapeXml(updated)}</updated>`)
+  if (entryXml) lines.push(entryXml)
+  lines.push('</feed>')
+  return `${lines.join('\n')}\n`
 }
 
 function buildSitemapXml(siteOrigin, urls) {
@@ -283,6 +413,7 @@ async function main() {
 
   const SITE_TITLE = 'MarshVer的个人博客'
   const SITE_DESC = 'MarshVer 的个人博客，记录技术笔记、折腾与日常。'
+  const AUTHOR_NAME = 'MarshVer'
 
   async function renderPage({
     url,
@@ -317,6 +448,7 @@ async function main() {
       pathname: '/',
       title: SITE_TITLE,
       description: SITE_DESC,
+      siteName: SITE_TITLE,
       ogType: 'website',
     },
   })
@@ -331,6 +463,7 @@ async function main() {
       pathname: '/archives/',
       title: `归档 - ${SITE_TITLE}`,
       description: SITE_DESC,
+      siteName: SITE_TITLE,
       ogType: 'website',
     },
   })
@@ -345,6 +478,7 @@ async function main() {
       pathname: '/tags/',
       title: `标签 - ${SITE_TITLE}`,
       description: SITE_DESC,
+      siteName: SITE_TITLE,
       ogType: 'website',
     },
   })
@@ -372,7 +506,32 @@ async function main() {
         pathname: `/posts/${encodeURIComponent(slug)}/`,
         title: `${full.title} - ${SITE_TITLE}`,
         description: full.excerpt || SITE_DESC,
+        siteName: SITE_TITLE,
         ogType: 'article',
+        articlePublishedTime: toIsoDateTime(full.date),
+        jsonLd: {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: String(full.title || ''),
+          description: String(full.excerpt || SITE_DESC),
+          datePublished: toIsoDateTime(full.date) || undefined,
+          dateModified: toIsoDateTime(full.date) || undefined,
+          inLanguage: 'zh-CN',
+          author: { '@type': 'Person', name: AUTHOR_NAME },
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': toAbsoluteUrl(siteOrigin, `/posts/${encodeURIComponent(slug)}/`),
+          },
+          url: toAbsoluteUrl(siteOrigin, `/posts/${encodeURIComponent(slug)}/`),
+          image: [toAbsoluteUrl(siteOrigin, '/og.png')],
+          keywords: Array.from(
+            new Set(
+              [...(full.tags || []), ...(full.categories || [])]
+                .map((x) => String(x || '').trim())
+                .filter(Boolean),
+            ),
+          ),
+        },
       },
     })
   }
@@ -392,6 +551,7 @@ async function main() {
       pathname: '/',
       title: SITE_TITLE,
       description: SITE_DESC,
+      siteName: SITE_TITLE,
       ogType: 'website',
       robots: 'noindex, nofollow',
     })
@@ -414,6 +574,7 @@ async function main() {
       pathname: '/admin/',
       title: `管理 - ${SITE_TITLE}`,
       description: '站点管理后台。',
+      siteName: SITE_TITLE,
       ogType: 'website',
       robots: 'noindex, nofollow',
     })
@@ -437,6 +598,25 @@ async function main() {
     await writeFileEnsured(
       path.join(DIST_DIR, 'robots.txt'),
       buildRobotsTxt(siteOrigin, { disallow: ['/admin'] }),
+    )
+  }
+
+  // SEO: RSS / Atom feeds
+  {
+    const items = posts.map((p) => ({
+      title: String(p.title || p.slug || ''),
+      link: `/posts/${encodeURIComponent(String(p.slug || '').trim())}/`,
+      date: p.date,
+      description: String(p.excerpt || ''),
+    }))
+
+    await writeFileEnsured(
+      path.join(DIST_DIR, 'rss.xml'),
+      buildRssXml(siteOrigin, { title: SITE_TITLE, description: SITE_DESC, items }),
+    )
+    await writeFileEnsured(
+      path.join(DIST_DIR, 'atom.xml'),
+      buildAtomXml(siteOrigin, { title: SITE_TITLE, subtitle: SITE_DESC, items }),
     )
   }
 

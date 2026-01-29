@@ -1,13 +1,15 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ensurePostsIndex, getAllPosts, postsRevision } from '@/lib/posts'
-import AdminSidebar from '@/components/AdminSidebar.vue'
 import { ADMIN_ENABLED } from '@/lib/adminConfig'
 import avatarFallbackUrl from '@/assets/头像.png'
 
 // Prefer local assets for reliability (no third-party image host dependency).
 const avatarSrc = ref(avatarFallbackUrl)
+
+// Admin UI is only needed when visiting `/admin`; keep it out of the initial bundle.
+const AdminSidebar = defineAsyncComponent(() => import('@/components/AdminSidebar.vue'))
 
 function onAvatarError() {
   if (avatarSrc.value === avatarFallbackUrl) return
