@@ -3,18 +3,9 @@ import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch 
 import { useRoute, useRouter } from 'vue-router'
 import { ensurePostsIndex, getAllPosts, postsRevision } from '@/lib/posts'
 import { ADMIN_ENABLED } from '@/lib/adminConfig'
-import avatarFallbackUrl from '@/assets/头像.png'
-
-// Prefer local assets for reliability (no third-party image host dependency).
-const avatarSrc = ref(avatarFallbackUrl)
 
 // Admin UI is only needed when visiting `/admin`; keep it out of the initial bundle.
 const AdminSidebar = defineAsyncComponent(() => import('@/components/AdminSidebar.vue'))
-
-function onAvatarError() {
-  if (avatarSrc.value === avatarFallbackUrl) return
-  avatarSrc.value = avatarFallbackUrl
-}
 
 const route = useRoute()
 const router = useRouter()
@@ -209,12 +200,7 @@ onMounted(() => {
 
               <section v-else class="widget">
                 <div class="author">
-                  <img
-                    class="author__avatar"
-                    :src="avatarSrc"
-                    alt="MarshVer"
-                    @error="onAvatarError"
-                  />
+                  <div class="author__avatar author__avatar--text" aria-label="朱泽">朱泽</div>
                   <div class="author__name">MarshVer</div>
                   <div class="author__desc">个人博客</div>
 
