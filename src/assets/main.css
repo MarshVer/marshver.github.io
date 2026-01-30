@@ -711,20 +711,14 @@ mark {
   user-select: none;
 }
 
-.post-toc-sidebar {
-  display: none;
-  max-height: calc(100vh - 36px);
-  overflow: auto;
-}
-
 .post-toc-float {
   /* Only show when the viewport has enough unused space on the far right. */
   display: none;
   position: fixed;
   top: 18px;
   /* Center in the right gutter with comfortable gaps from both the content and the viewport edge. */
-  /* Keep TOC readable but not too wide vs. the main article text. */
-  --post-toc-width: clamp(200px, 22vw, 260px);
+  /* Keep TOC readable but not too wide; fit into the right gutter area. */
+  --post-toc-width: min(260px, calc(var(--post-toc-gutter) - 64px));
   --post-toc-gutter: calc((100vw - var(--next-container-max)) / 2);
   left: calc(
     (100vw + var(--next-container-max)) / 2 +
@@ -737,18 +731,8 @@ mark {
   box-shadow: var(--next-shadow);
 }
 
-@media (min-width: 961px) {
+@media (min-width: 1680px) {
   .post-toc-inline {
-    display: none;
-  }
-
-  .post-toc-sidebar {
-    display: block;
-  }
-}
-
-@media (min-width: 1860px) {
-  .post-toc-sidebar {
     display: none;
   }
 

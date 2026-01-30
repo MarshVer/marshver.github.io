@@ -205,9 +205,6 @@ onMounted(() => {
                 </nav>
               </section>
 
-              <!-- Post page TOC teleports into this slot (keeps it out of the article preview area). -->
-              <div id="post-toc-slot"></div>
-
               <AdminSidebar v-if="adminEnabled && isAdmin" />
 
               <section v-else class="widget">

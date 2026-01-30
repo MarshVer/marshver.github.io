@@ -133,7 +133,9 @@ function computeActiveTocId() {
     }
   }
 
-  if (!bestId) bestId = String(headings[0].id || '')
+  // If we haven't scrolled past the first heading yet, don't highlight anything.
+  // (User expectation: only start activating after passing the first visible heading area.)
+  if (!bestId) return ''
   return bestId
 }
 
@@ -271,26 +273,6 @@ function backToTop() {
         </router-link>
       </nav>
     </article>
-
-    <!-- Default desktop placement: TOC goes to the right sidebar area (not inside the article preview). -->
-    <teleport v-if="tocItems.length" to="#post-toc-slot">
-      <section class="widget post-toc-sidebar" aria-label="Table of contents">
-        <div class="post-toc__title">目录</div>
-        <nav class="post-toc__list">
-          <a
-            v-for="it in tocItems"
-            :key="it.id"
-            class="post-toc__item"
-            :class="[`post-toc__item--lvl${it.level}`, { 'is-active': it.id === activeTocId }]"
-            :href="`#${it.id}`"
-            :aria-current="it.id === activeTocId ? 'location' : undefined"
-            @click.prevent="scrollToHeading(it.id)"
-          >
-            {{ it.text }}
-          </a>
-        </nav>
-      </section>
-    </teleport>
 
     <aside v-if="tocItems.length" class="post-toc-float" aria-label="Table of contents">
       <div class="post-toc__title">目录</div>
