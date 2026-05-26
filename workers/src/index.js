@@ -349,22 +349,39 @@ function sortPostMeta(posts) {
   return (posts || []).slice().sort((a, b) => compareDateDesc(a.date, b.date) || a.title.localeCompare(b.title))
 }
 
-function buildMarkdownFile({ title, date, content }) {
+function normalizeFrontmatterList(value) {
+  if (Array.isArray(value)) return value.map((v) => String(v || '').trim()).filter(Boolean)
+  const s = String(value || '').trim()
+  if (!s) return []
+  return s
+    .split(/[,，]/g)
+    .map((v) => v.trim())
+    .filter(Boolean)
+}
+
+function buildMarkdownFile({ title, date, tags, categories, content }) {
   const t = String(title || '').trim()
   const body = String(content || '')
     .replace(/\r\n/g, '\n')
     .trimEnd()
   const d = String(date || '').trim()
+  const tagList = normalizeFrontmatterList(tags)
+  const categoryList = normalizeFrontmatterList(categories)
 
-  return [
+  const fm = [
     '---',
     `title: ${JSON.stringify(t || '未命名')}`,
     `date: ${JSON.stringify(d || formatDateTime(new Date()))}`,
+  ]
+  if (tagList.length) fm.push(`tags: ${JSON.stringify(tagList)}`)
+  if (categoryList.length) fm.push(`categories: ${JSON.stringify(categoryList)}`)
+  fm.push(
     '---',
     '',
     body || '# 未命名\n\n在这里写点什么...\n',
     '',
-  ].join('\n')
+  )
+  return fm.join('\n')
 }
 
 function encodeBase64Utf8(text) {
@@ -793,13 +810,15 @@ export default {
         if (!isSafeSlug(slug)) return json({ error: 'Invalid slug.' }, 400, cors)
 
         const title = String(body?.title || '').trim()
+        const tags = body?.tags
+        const categories = body?.categories
         const content = String(body?.content || '')
 
         const desired = slugFromTitle(title) || slug
         const nextSlug = await ensureUniqueSlug(env, desired, slug)
 
         const now = formatDateTime(new Date())
-        const rawMd = buildMarkdownFile({ title: title || nextSlug, date: now, content })
+        const rawMd = buildMarkdownFile({ title: title || nextSlug, date: now, tags, categories, content })
 
         if (nextSlug === slug) {
           const currentIndex = await getPostsIndexOrRebuild(env)

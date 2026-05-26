@@ -87,6 +87,8 @@ watch(selectedSlug, refreshPost, { immediate: true })
 watch(adminPostsRevision, refreshPost)
 
 const title = ref('')
+const tags = ref('')
+const categories = ref('')
 const content = ref('')
 const dirty = ref(false)
 const savedDate = ref('')
@@ -96,6 +98,8 @@ watch(
   post,
   (p) => {
     title.value = p?.title || ''
+    tags.value = Array.isArray(p?.tags) ? p.tags.join(', ') : ''
+    categories.value = Array.isArray(p?.categories) ? p.categories.join(', ') : ''
     savedDate.value = p?.date === '未设置日期' ? '' : p?.date || ''
     content.value = p?.content || ''
     dirty.value = false
@@ -121,6 +125,8 @@ async function onSave() {
     const payload = {
       slug: selectedSlug.value,
       title: title.value,
+      tags: tags.value,
+      categories: categories.value,
       content: content.value,
     }
 
@@ -264,29 +270,51 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="admin-editor__grid">
-        <div class="admin-panel">
-          <div class="admin-fields">
-            <label class="field">
-              <span class="field__label">标题</span>
-              <input v-model="title" class="field__input" type="text" @input="dirty = true" />
-            </label>
-          </div>
-
-          <label class="field field--textarea">
-            <span class="field__label">内容</span>
-            <textarea
-              v-model="content"
-              class="field__textarea"
-              rows="18"
-              spellcheck="false"
+        <div class="admin-fields">
+          <label class="field">
+            <span class="field__label">标题</span>
+            <input v-model="title" class="field__input" type="text" @input="dirty = true" />
+          </label>
+          <label class="field">
+            <span class="field__label">标签</span>
+            <input
+              v-model="tags"
+              class="field__input"
+              type="text"
+              placeholder="多个标签用逗号分隔"
+              @input="dirty = true"
+            />
+          </label>
+          <label class="field">
+            <span class="field__label">分类</span>
+            <input
+              v-model="categories"
+              class="field__input"
+              type="text"
+              placeholder="多个分类用逗号分隔"
               @input="dirty = true"
             />
           </label>
         </div>
 
-        <div class="admin-preview">
-          <div class="admin-preview__title">预览</div>
-          <div class="markdown" v-html="previewHtml" />
+        <div class="admin-editor__workspace">
+          <div class="admin-panel">
+            <label class="field field--textarea">
+              <span class="field__label">内容</span>
+              <textarea
+                v-model="content"
+                class="field__textarea"
+                rows="18"
+                spellcheck="false"
+                @input="dirty = true"
+              />
+            </label>
+          </div>
+
+          <div class="admin-preview">
+            <div class="admin-preview__title">预览</div>
+            <div class="markdown" v-html="previewHtml" />
+          </div>
         </div>
       </div>
     </div>
@@ -331,8 +359,7 @@ onBeforeUnmount(() => {
 
 .admin-editor {
   padding: 16px;
-  /* Keep the preview column stable so wide content doesn't affect the editor column. */
-  --admin-preview-width: 520px;
+  --admin-preview-width: minmax(300px, 42%);
 }
 
 .admin-editor__bar {
@@ -342,6 +369,10 @@ onBeforeUnmount(() => {
   gap: 12px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--next-border);
+}
+
+.admin-editor__left {
+  min-width: 0;
 }
 
 .admin-editor__title {
@@ -361,6 +392,8 @@ onBeforeUnmount(() => {
 
 .admin-editor__actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 10px;
   flex-shrink: 0;
 }
@@ -393,10 +426,15 @@ onBeforeUnmount(() => {
 
 .admin-editor__grid {
   display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding-top: 14px;
+}
+
+.admin-editor__workspace {
+  display: grid;
   grid-template-columns: minmax(0, 1fr) var(--admin-preview-width);
   gap: 16px;
-  padding-top: 14px;
-  /* Make both columns match the tallest one (usually the preview). */
   align-items: stretch;
 }
 
@@ -407,7 +445,6 @@ onBeforeUnmount(() => {
 }
 
 .admin-panel {
-  /* Let the textarea grow to match the preview's height. */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -415,6 +452,7 @@ onBeforeUnmount(() => {
 
 .field--textarea {
   flex: 1 1 auto;
+  margin-top: 0;
   min-height: 0;
 }
 
@@ -431,7 +469,8 @@ onBeforeUnmount(() => {
 
 .admin-fields {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(160px, 1fr) minmax(160px, 1fr);
+  gap: 12px;
 }
 
 .field {
@@ -469,13 +508,19 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.35);
 }
 
-.field--textarea {
-  margin-top: 14px;
+@media (max-width: 1180px) {
+  .admin-editor__workspace {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 960px) {
-  .admin-editor__grid {
-    grid-template-columns: 1fr;
+  .admin-editor__bar {
+    flex-direction: column;
+  }
+
+  .admin-editor__actions {
+    justify-content: flex-start;
   }
 
   .admin-fields {

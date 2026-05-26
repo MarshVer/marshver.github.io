@@ -371,34 +371,32 @@ mark {
 }
 
 .author {
-  text-align: center;
+  display: grid;
+  gap: 14px;
 }
 
-.author__avatar {
-  width: 84px;
-  height: 84px;
-  border-radius: 50%;
-  display: block;
-  margin: 0 auto 10px;
-  user-select: none;
-  object-fit: cover;
-  border: 2px solid var(--next-border);
-  background: rgba(255, 255, 255, 0.04);
+.author__identity {
+  position: relative;
+  padding: 2px 0 14px;
+  border-bottom: 1px solid var(--next-border);
 }
 
-.author__avatar--text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  font-weight: 800;
-  color: #e53935;
-  letter-spacing: 2px;
+.author__identity::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 42px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--next-accent);
 }
 
 .author__name {
-  font-weight: 800;
   color: var(--next-heading);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
 }
 
 .author__desc {
@@ -409,9 +407,8 @@ mark {
 }
 
 .author-actions {
-  margin-top: 14px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .action-btn {
@@ -421,8 +418,9 @@ mark {
   justify-content: center;
   gap: 8px;
 
-  padding: 9px 10px;
-  border-radius: 10px;
+  min-width: 0;
+  padding: 9px 8px;
+  border-radius: 8px;
   border: 1px solid var(--next-border);
   background: rgba(255, 255, 255, 0.03);
 
@@ -811,6 +809,7 @@ mark {
   font-weight: 900;
   cursor: pointer;
   box-shadow: var(--next-shadow);
+  z-index: 50;
 }
 
 .back-to-top:hover {

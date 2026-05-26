@@ -38,10 +38,12 @@ export async function createPost() {
   return httpJson(`${ADMIN_API_BASE}/api/admin/create`, { method: 'POST', body: {}, auth: true })
 }
 
-export async function savePost({ slug, title, content }) {
+export async function savePost({ slug, title, tags, categories, content }) {
   const payload = {
     slug: String(slug || '').trim(),
     title: String(title || ''),
+    tags: String(tags || ''),
+    categories: String(categories || ''),
     content: String(content || ''),
   }
 

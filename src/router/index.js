@@ -3,7 +3,7 @@ import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
 import { ADMIN_ENABLED } from '@/lib/adminConfig'
-import { getPostMetaBySlug } from '@/lib/posts'
+import { ensurePost, ensurePostsIndex, getPostMetaBySlug } from '@/lib/posts'
 
 const SITE_TITLE = 'MarshVer的个人博客'
 const SITE_DESC = 'MarshVer 的个人博客，记录技术笔记、折腾与日常。'
@@ -73,7 +73,10 @@ export function createAppRouter() {
 
   // Client-only meta updates for SPA navigation. In SSG/SSR, HTML meta is generated at build time.
   if (typeof document !== 'undefined') {
-    router.afterEach((to) => {
+    let metaSeq = 0
+
+    router.afterEach(async (to) => {
+      const seq = (metaSeq += 1)
       let title = SITE_TITLE
       let desc = SITE_DESC
 
@@ -83,7 +86,27 @@ export function createAppRouter() {
       else if (to.name === 'post') {
         const slugParam = Array.isArray(to.params?.slug) ? to.params.slug[0] : to.params?.slug
         const slug = String(slugParam || '').trim()
-        const meta = getPostMetaBySlug(slug)
+        let meta = getPostMetaBySlug(slug)
+        if (!meta) {
+          try {
+            const post = await ensurePost(slug)
+            meta = post || null
+          } catch {
+            meta = null
+          }
+        }
+
+        if (!meta) {
+          try {
+            await ensurePostsIndex()
+            meta = getPostMetaBySlug(slug)
+          } catch {
+            meta = null
+          }
+        }
+
+        if (seq !== metaSeq) return
+
         if (meta?.title) {
           title = `${meta.title} - ${SITE_TITLE}`
           desc = String(meta.excerpt || '').trim() || SITE_DESC
@@ -92,6 +115,8 @@ export function createAppRouter() {
           desc = '文章不存在，请检查链接。'
         }
       } else if (to.name === 'not-found') title = `404 - ${SITE_TITLE}`
+
+      if (seq !== metaSeq) return
 
       document.title = title
 
@@ -107,4 +132,3 @@ export function createAppRouter() {
 
   return router
 }
-

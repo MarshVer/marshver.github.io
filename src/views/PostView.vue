@@ -7,6 +7,7 @@ import {
   getAllPosts,
   getCachedPost,
   getPostMetaBySlug,
+  postsLoaded,
   postsRevision,
 } from '@/lib/posts'
 import { toTimeDatetime } from '@/lib/datetime'
@@ -74,6 +75,7 @@ const nextPost = computed(() =>
 
 const effectiveMeta = computed(() => postMeta.value || post.value)
 const html = computed(() => (post.value ? String(post.value.html || '') : ''))
+const initialLoading = computed(() => slug.value && !effectiveMeta.value && (loading.value || !postsLoaded.value))
 
 function decodeHtmlEntities(s) {
   return String(s || '')
@@ -161,7 +163,6 @@ function scrollToHeading(id) {
 }
 
 const progress = ref(0)
-const showBackToTop = ref(false)
 let onScroll = null
 
 onMounted(() => {
@@ -173,7 +174,6 @@ onMounted(() => {
     const scrollHeight = Math.max(0, (doc.scrollHeight || 0) - (doc.clientHeight || 0))
     const p = scrollHeight ? (scrollTop / scrollHeight) * 100 : 0
     progress.value = Math.max(0, Math.min(100, p))
-    showBackToTop.value = scrollTop > 700
   }
 
   onScroll = () => update()
@@ -204,22 +204,18 @@ watch(html, () => {
   // Content changes after route navigation; wait for DOM to paint, then recompute active heading.
   scheduleTocUpdate()
 })
-
-function backToTop() {
-  if (typeof window === 'undefined') return
-  const reduce =
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
-}
 </script>
 
 <template>
   <div>
     <progress class="reading-progress" :value="progress" max="100" aria-hidden="true" />
 
-    <div v-if="!effectiveMeta" class="post-block empty-block">
+    <div v-if="initialLoading" class="post-block empty-block">
+      <h1 class="post-title">加载中...</h1>
+      <div class="post-excerpt">正在加载文章内容。</div>
+    </div>
+
+    <div v-else-if="!effectiveMeta" class="post-block empty-block">
       <h1 class="post-title">文章不存在</h1>
       <div class="post-excerpt">请检查链接，或返回首页查看文章列表。</div>
       <router-link class="post-more" to="/">返回首页 »</router-link>
@@ -291,14 +287,5 @@ function backToTop() {
       </nav>
     </aside>
 
-    <button
-      v-if="showBackToTop"
-      class="back-to-top"
-      type="button"
-      aria-label="Back to top"
-      @click="backToTop"
-    >
-      ↑
-    </button>
   </div>
 </template>

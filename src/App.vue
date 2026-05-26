@@ -68,7 +68,9 @@ function applySearch(value) {
 }
 
 const isComposing = ref(false)
+const showBackToTop = ref(false)
 let debounceTimer = null
+let scrollHandler = null
 
 function onCompositionStart() {
   isComposing.value = true
@@ -97,12 +99,33 @@ function flushSearch() {
 
 onBeforeUnmount(() => {
   if (debounceTimer) window.clearTimeout(debounceTimer)
+  if (scrollHandler && typeof window !== 'undefined') {
+    window.removeEventListener('scroll', scrollHandler)
+    window.removeEventListener('resize', scrollHandler)
+  }
+  scrollHandler = null
 })
 
 onMounted(() => {
   // Keep sidebar counts and route meta stable even when the page is loaded via SPA fallback.
   ensurePostsIndex().catch(() => {})
+
+  scrollHandler = () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
+    showBackToTop.value = scrollTop > 700
+  }
+  window.addEventListener('scroll', scrollHandler, { passive: true })
+  window.addEventListener('resize', scrollHandler, { passive: true })
+  scrollHandler()
 })
+
+function backToTop() {
+  if (typeof window === 'undefined') return
+  const reduce =
+    typeof window.matchMedia !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+}
 </script>
 
 <template>
@@ -200,9 +223,10 @@ onMounted(() => {
 
               <section v-else class="widget">
                 <div class="author">
-                  <div class="author__avatar author__avatar--text" aria-label="朱泽">朱泽</div>
-                  <div class="author__name">MarshVer</div>
-                  <div class="author__desc">个人博客</div>
+                  <div class="author__identity">
+                    <div class="author__name">MarshVer</div>
+                    <div class="author__desc">个人博客</div>
+                  </div>
 
                   <div class="author-actions" aria-label="Author links">
                     <a
@@ -239,5 +263,15 @@ onMounted(() => {
     <footer class="footer">
       <div class="container footer__inner">© 2026 MarshVer</div>
     </footer>
+
+    <button
+      v-if="showBackToTop"
+      class="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      @click="backToTop"
+    >
+      ↑
+    </button>
   </div>
 </template>
