@@ -1,3 +1,15 @@
+import {
+  DEFAULT_SITE_TIME_ZONE,
+  buildMarkdownFile,
+  formatDateTime,
+  isSafeSlug,
+  normalizePostMeta,
+  slugFromTitle,
+  sortPostMeta,
+  toPostMeta,
+  toPostObject,
+} from '../../shared/post-utils.js'
+
 const ALLOWED_ORIGINS = new Set([
   'https://marshver.github.io',
   'https://marshver.eu.org',
@@ -7,6 +19,10 @@ const ALLOWED_ORIGINS = new Set([
 ])
 
 const POSTS_INDEX_PATH = 'src/posts/index.json'
+
+function getSiteTimeZone(env) {
+  return String(env?.SITE_TIME_ZONE || env?.TIME_ZONE || DEFAULT_SITE_TIME_ZONE).trim() || DEFAULT_SITE_TIME_ZONE
+}
 
 function corsHeaders(origin) {
   const h = new Headers()
@@ -209,181 +225,6 @@ async function purgeReadCaches(requestUrl, env, pathname, slugs = []) {
   await Promise.allSettled(tasks)
 }
 
-function pad2(n) {
-  return String(n).padStart(2, '0')
-}
-
-function formatDateTime(d = new Date()) {
-  const yyyy = d.getFullYear()
-  const mm = pad2(d.getMonth() + 1)
-  const dd = pad2(d.getDate())
-  const hh = pad2(d.getHours())
-  const mi = pad2(d.getMinutes())
-  const ss = pad2(d.getSeconds())
-  return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`
-}
-
-function isSafeSlug(slug) {
-  const s = String(slug || '')
-  if (!s) return false
-  if (s.includes('..')) return false
-  if (s.includes('/') || s.includes('\\')) return false
-  return true
-}
-
-function slugFromTitle(title) {
-  let s = String(title || '').trim()
-  // Avoid Windows forbidden characters in file names (also keeps GitHub paths clean).
-  s = s.replace(/[\\/:*?"<>|]/g, '-')
-  // Keep it readable; avoid accidental newlines/tabs.
-  s = s
-    .replace(/[\r\n\t]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-  // Windows doesn't allow trailing dots/spaces.
-  s = s.replace(/[. ]+$/g, '')
-  if (!s) return ''
-  if (s.length > 120)
-    s = s
-      .slice(0, 120)
-      .trim()
-      .replace(/[. ]+$/g, '')
-  return s
-}
-
-function extractTitleFromMarkdown(md, fallback) {
-  const m = String(md).match(/^#\s+(.+)\s*$/m)
-  return (m?.[1] || fallback || '').trim()
-}
-
-function parseFrontmatter(raw) {
-  const s = String(raw || '')
-  if (!s.startsWith('---')) return { data: {}, content: s }
-
-  const end = s.indexOf('\n---', 3)
-  if (end === -1) return { data: {}, content: s }
-
-  const fmBlock = s.slice(3, end).replace(/^\r?\n/, '')
-  const rest = s.slice(end + '\n---'.length)
-
-  function parseFrontmatterValue(rawValue) {
-    let value = String(rawValue ?? '').trim()
-    if (!value) return ''
-
-    if (
-      (value.startsWith('[') && value.endsWith(']')) ||
-      (value.startsWith('{') && value.endsWith('}'))
-    ) {
-      try {
-        return JSON.parse(value)
-      } catch {
-        // fall through
-      }
-    }
-
-    if (value.startsWith('"') && value.endsWith('"')) {
-      try {
-        return JSON.parse(value)
-      } catch {
-        return value.slice(1, -1)
-      }
-    }
-
-    return value.replace(/^['"]/, '').replace(/['"]$/, '')
-  }
-
-  const data = {}
-  for (const line of fmBlock.split(/\r?\n/)) {
-    const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith('#')) continue
-    const m = trimmed.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/)
-    if (!m) continue
-    const key = m[1]
-    data[key] = parseFrontmatterValue(m[2])
-  }
-
-  return { data, content: rest.replace(/^\r?\n/, '') }
-}
-
-function normalizeStringArray(value) {
-  if (!value) return []
-  if (Array.isArray(value))
-    return value.map((v) => String(v || '').trim()).filter(Boolean)
-  const s = String(value || '').trim()
-  if (!s) return []
-  return s
-    .split(/[,，]/g)
-    .map((v) => v.trim())
-    .filter(Boolean)
-}
-
-function normalizeDate(value) {
-  if (!value) return '未设置日期'
-  const s = String(value).trim()
-  if (!s) return '未设置日期'
-  const normalized = s.replace('T', ' ').replace(/Z$/i, '')
-  const m = normalized.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2})(?::(\d{2}))?)?/)
-  if (!m) return s
-  if (!m[2]) return m[1]
-  const sec = m[3] || '00'
-  return `${m[1]} ${m[2]}:${sec}`
-}
-
-function compareDateDesc(a, b) {
-  if (a === '未设置日期' && b !== '未设置日期') return 1
-  if (b === '未设置日期' && a !== '未设置日期') return -1
-  return String(b).localeCompare(String(a))
-}
-
-function normalizePostMeta(p) {
-  const slug = String(p?.slug || '').trim()
-  if (!slug) return null
-  const title = String(p?.title || slug).trim() || slug
-  const date = normalizeDate(p?.date)
-  const tags = normalizeStringArray(p?.tags ?? p?.tag)
-  const categories = normalizeStringArray(p?.categories ?? p?.category)
-  return { slug, title, date, tags, categories }
-}
-
-function sortPostMeta(posts) {
-  return (posts || []).slice().sort((a, b) => compareDateDesc(a.date, b.date) || a.title.localeCompare(b.title))
-}
-
-function normalizeFrontmatterList(value) {
-  if (Array.isArray(value)) return value.map((v) => String(v || '').trim()).filter(Boolean)
-  const s = String(value || '').trim()
-  if (!s) return []
-  return s
-    .split(/[,，]/g)
-    .map((v) => v.trim())
-    .filter(Boolean)
-}
-
-function buildMarkdownFile({ title, date, tags, categories, content }) {
-  const t = String(title || '').trim()
-  const body = String(content || '')
-    .replace(/\r\n/g, '\n')
-    .trimEnd()
-  const d = String(date || '').trim()
-  const tagList = normalizeFrontmatterList(tags)
-  const categoryList = normalizeFrontmatterList(categories)
-
-  const fm = [
-    '---',
-    `title: ${JSON.stringify(t || '未命名')}`,
-    `date: ${JSON.stringify(d || formatDateTime(new Date()))}`,
-  ]
-  if (tagList.length) fm.push(`tags: ${JSON.stringify(tagList)}`)
-  if (categoryList.length) fm.push(`categories: ${JSON.stringify(categoryList)}`)
-  fm.push(
-    '---',
-    '',
-    body || '# 未命名\n\n在这里写点什么...\n',
-    '',
-  )
-  return fm.join('\n')
-}
-
 function encodeBase64Utf8(text) {
   const bytes = new TextEncoder().encode(String(text ?? ''))
   let bin = ''
@@ -437,27 +278,6 @@ function requireAdmin(request, env) {
     return false
   }
   return true
-}
-
-function toPostObject(slug, rawMd) {
-  const parsed = parseFrontmatter(rawMd)
-  const date = normalizeDate(parsed.data?.date)
-  const title = String(parsed.data?.title || extractTitleFromMarkdown(parsed.content, slug)).trim()
-  const tags = normalizeStringArray(parsed.data?.tags ?? parsed.data?.tag)
-  const categories = normalizeStringArray(parsed.data?.categories ?? parsed.data?.category)
-  return {
-    slug,
-    title: title || slug,
-    date,
-    tags,
-    categories,
-    content: String(parsed.content || '').trim(),
-  }
-}
-
-function toPostMeta(slug, rawMd) {
-  const p = toPostObject(slug, rawMd)
-  return { slug: p.slug, title: p.title, date: p.date, tags: p.tags, categories: p.categories }
 }
 
 async function getFile(env, repoPath) {
@@ -790,8 +610,9 @@ export default {
       if (request.method === 'POST' && url.pathname === '/api/admin/create') {
         const stamp = String(Date.now())
         const slug = await ensureUniqueSlug(env, stamp)
-        const now = formatDateTime(new Date())
-        const rawMd = buildMarkdownFile({ title: '未命名', date: now, content: '' })
+        const timeZone = getSiteTimeZone(env)
+        const now = formatDateTime(new Date(), timeZone)
+        const rawMd = buildMarkdownFile({ title: '未命名', date: now, content: '', timeZone })
         const currentIndex = await getPostsIndexOrRebuild(env)
         const nextIndex = applyIndexUpdates(currentIndex, { upserts: [{ slug, rawMd }] })
         const indexJson = stableJson({ posts: nextIndex })
@@ -817,8 +638,16 @@ export default {
         const desired = slugFromTitle(title) || slug
         const nextSlug = await ensureUniqueSlug(env, desired, slug)
 
-        const now = formatDateTime(new Date())
-        const rawMd = buildMarkdownFile({ title: title || nextSlug, date: now, tags, categories, content })
+        const timeZone = getSiteTimeZone(env)
+        const now = formatDateTime(new Date(), timeZone)
+        const rawMd = buildMarkdownFile({
+          title: title || nextSlug,
+          date: now,
+          tags,
+          categories,
+          content,
+          timeZone,
+        })
 
         if (nextSlug === slug) {
           const currentIndex = await getPostsIndexOrRebuild(env)

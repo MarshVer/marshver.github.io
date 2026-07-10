@@ -1,7 +1,14 @@
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getPostMetaBySlug, loadPostContent, postsRevision } from '@/lib/posts'
+import {
+  ensurePostsIndex,
+  getPostMetaBySlug,
+  invalidatePost,
+  invalidatePostsData,
+  loadPostContent,
+  postsRevision,
+} from '@/lib/posts'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import AdminKeyDialog from '@/components/AdminKeyDialog.vue'
 import { ADMIN_REMOTE } from '@/lib/adminConfig'
@@ -118,6 +125,22 @@ async function adminPost(url, payload) {
   return data
 }
 
+async function syncLocalPostsCache() {
+  if (isRemote) return
+  invalidatePostsData()
+  await ensurePostsIndex().catch(() => {})
+}
+
+function clearPostRuntimeCache(...slugs) {
+  const seen = new Set()
+  for (const s of slugs) {
+    const slug = String(s || '').trim()
+    if (!slug || seen.has(slug)) continue
+    seen.add(slug)
+    invalidatePost(slug)
+  }
+}
+
 async function onSave() {
   if (!selectedSlug.value) return
 
@@ -135,11 +158,14 @@ async function onSave() {
     dirty.value = false
     if (data?.date) savedDate.value = data.date
 
-    if (data?.slug && data.slug !== selectedSlug.value) {
+    const previousSlug = selectedSlug.value
+    if (data?.slug && data.slug !== previousSlug) {
       const nextQuery = { ...route.query, slug: data.slug }
       await router.replace({ name: 'admin', query: nextQuery })
     }
 
+    if (isRemote) clearPostRuntimeCache(previousSlug, data?.slug)
+    else await syncLocalPostsCache()
     bumpAdminPosts()
   } catch (err) {
     window.alert(err?.message || String(err))
@@ -150,11 +176,14 @@ async function doDelete() {
   if (!selectedSlug.value) return
 
   try {
-    if (isRemote) await apiDeletePost(selectedSlug.value)
-    else await adminPost('/__admin/delete', { slug: selectedSlug.value })
+    const removedSlug = selectedSlug.value
+    if (isRemote) await apiDeletePost(removedSlug)
+    else await adminPost('/__admin/delete', { slug: removedSlug })
     const nextQuery = { ...route.query }
     delete nextQuery.slug
     await router.replace({ name: 'admin', query: nextQuery })
+    if (isRemote) clearPostRuntimeCache(removedSlug)
+    else await syncLocalPostsCache()
     bumpAdminPosts()
   } catch (err) {
     window.alert(err?.message || String(err))

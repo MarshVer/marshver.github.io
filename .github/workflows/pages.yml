@@ -36,6 +36,10 @@ jobs:
           VITE_ENABLE_ADMIN: "true"
           # Set this repository variable to your Worker URL, e.g. https://blog-admin.<your>.workers.dev
           VITE_ADMIN_API_BASE: ${{ vars.VITE_ADMIN_API_BASE }}
+          # Optional: set when Worker TURNSTILE_SECRET is enabled.
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
+          # Optional: defaults to Asia/Shanghai when empty.
+          SITE_TIME_ZONE: ${{ vars.SITE_TIME_ZONE }}
       - name: GitHub Pages settings
         run: |
           # Serve dotfiles (e.g. `dist/.vite/*`) and keep our own `dist/404.html` SPA fallback.

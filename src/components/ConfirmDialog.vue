@@ -1,5 +1,6 @@
 <script setup>
-import { computed, onBeforeUnmount, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { focusFirstDescendant, restoreFocus, trapFocusKeydown } from '@/lib/focusTrap'
 
 const props = defineProps({
   open: { type: Boolean, default: false },
@@ -17,6 +18,9 @@ const show = computed({
   set: (v) => emit('update:open', Boolean(v)),
 })
 
+const dialogRef = ref(null)
+let previousActiveElement = null
+
 function closeAsCancel() {
   show.value = false
   emit('cancel')
@@ -30,14 +34,23 @@ function onConfirm() {
 function onKeyDown(e) {
   if (!props.open) return
   if (e.key === 'Escape') closeAsCancel()
+  else trapFocusKeydown(e, dialogRef.value)
 }
 
 watch(
   () => props.open,
-  (v) => {
+  async (v) => {
     if (typeof window === 'undefined') return
-    if (v) window.addEventListener('keydown', onKeyDown)
-    else window.removeEventListener('keydown', onKeyDown)
+    if (v) {
+      previousActiveElement = document.activeElement
+      window.addEventListener('keydown', onKeyDown)
+      await nextTick()
+      focusFirstDescendant(dialogRef.value)
+    } else {
+      window.removeEventListener('keydown', onKeyDown)
+      restoreFocus(previousActiveElement)
+      previousActiveElement = null
+    }
   },
   { immediate: true },
 )
@@ -45,13 +58,22 @@ watch(
 onBeforeUnmount(() => {
   if (typeof window === 'undefined') return
   window.removeEventListener('keydown', onKeyDown)
+  restoreFocus(previousActiveElement)
+  previousActiveElement = null
 })
 </script>
 
 <template>
   <Teleport to="body">
     <div v-if="open" class="confirm-mask" role="presentation" @click.self="closeAsCancel">
-      <div class="confirm-dialog" role="dialog" aria-modal="true" :aria-label="title">
+      <div
+        ref="dialogRef"
+        class="confirm-dialog"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="title"
+        tabindex="-1"
+      >
         <div class="confirm-dialog__title">{{ title }}</div>
         <div v-if="message" class="confirm-dialog__message">{{ message }}</div>
 

@@ -4,6 +4,12 @@ import crypto from 'node:crypto'
 import { pathToFileURL } from 'node:url'
 
 import { loadPostsFromDir } from './posts-data.mjs'
+import {
+  DEFAULT_SITE_TIME_ZONE,
+  toIsoDate,
+  toIsoDateTime,
+  toRfc2822Date,
+} from '../shared/post-utils.js'
 
 const DIST_DIR = path.resolve('dist')
 const SSR_DIR = path.resolve('dist-ssr')
@@ -231,31 +237,6 @@ function buildId() {
   return String(Date.now())
 }
 
-function toIsoDate(value) {
-  const s = String(value || '').trim()
-  const m = s.match(/^(\d{4}-\d{2}-\d{2})/)
-  return m?.[1] || ''
-}
-
-function toIsoDateTime(value) {
-  const s = String(value || '').trim()
-  const m = s.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2}:\d{2}))?/)
-  if (!m) return ''
-  const dt = `${m[1]}T${m[2] || '00:00:00'}`
-  const d = new Date(dt)
-  if (!Number.isFinite(d.getTime())) return ''
-  return d.toISOString()
-}
-
-function toRfc2822Date(value) {
-  const iso = toIsoDateTime(value)
-  if (!iso) return ''
-  const d = new Date(iso)
-  if (!Number.isFinite(d.getTime())) return ''
-  // RFC 2822-ish (same shape as RFC 1123) and accepted by RSS readers.
-  return d.toUTCString()
-}
-
 function escapeXml(s) {
   return escapeHtml(s)
 }
@@ -275,38 +256,41 @@ function upsertMetaHttpEquiv(html, httpEquiv, content) {
   )
 }
 
-function buildContentSecurityPolicy({ scriptHashes = [] } = {}) {
+function buildContentSecurityPolicy({ scriptHashes = [], allowTurnstile = false } = {}) {
   const hashes = (scriptHashes || [])
     .map((h) => String(h || '').trim())
     .filter(Boolean)
     .map((h) => `'sha256-${h}'`)
+  const turnstileOrigin = 'https://challenges.cloudflare.com'
 
   // Keep it strict for scripts (no unsafe-inline/eval) and reasonably compatible elsewhere.
   const parts = []
   parts.push(`default-src 'self'`)
   parts.push(`base-uri 'self'`)
   parts.push(`object-src 'none'`)
-  parts.push(`script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''}`)
+  parts.push(
+    `script-src 'self'${allowTurnstile ? ` ${turnstileOrigin}` : ''}${hashes.length ? ` ${hashes.join(' ')}` : ''}`,
+  )
   parts.push(`style-src 'self'`)
   parts.push(`img-src 'self' data: https:`)
   parts.push(`connect-src 'self' https:`)
   parts.push(`font-src 'self' data:`)
   parts.push(`manifest-src 'self'`)
-  parts.push(`frame-src 'none'`)
+  parts.push(`frame-src ${allowTurnstile ? `'self' ${turnstileOrigin}` : `'none'`}`)
   parts.push(`form-action 'self'`)
   parts.push('upgrade-insecure-requests')
   parts.push('block-all-mixed-content')
   return `${parts.join('; ')};`
 }
 
-function buildRssXml(siteOrigin, { title, description, items }) {
+function buildRssXml(siteOrigin, { title, description, items, timeZone = DEFAULT_SITE_TIME_ZONE }) {
   const now = new Date()
   const buildDate = now.toUTCString()
 
   const entryXml = (items || [])
     .map((it) => {
       const link = toAbsoluteUrl(siteOrigin, it.link)
-      const pubDate = toRfc2822Date(it.date) || buildDate
+      const pubDate = toRfc2822Date(it.date, timeZone) || buildDate
       return [
         '  <item>',
         `    <title>${escapeXml(it.title)}</title>`,
@@ -333,14 +317,14 @@ function buildRssXml(siteOrigin, { title, description, items }) {
   return `${lines.join('\n')}\n`
 }
 
-function buildAtomXml(siteOrigin, { title, subtitle, items }) {
+function buildAtomXml(siteOrigin, { title, subtitle, items, timeZone = DEFAULT_SITE_TIME_ZONE }) {
   const now = new Date()
-  const updated = toIsoDateTime(items?.[0]?.date) || now.toISOString()
+  const updated = toIsoDateTime(items?.[0]?.date, timeZone) || now.toISOString()
 
   const entryXml = (items || [])
     .map((it) => {
       const link = toAbsoluteUrl(siteOrigin, it.link)
-      const iso = toIsoDateTime(it.date) || updated
+      const iso = toIsoDateTime(it.date, timeZone) || updated
       return [
         '  <entry>',
         `    <title>${escapeXml(it.title)}</title>`,
@@ -404,6 +388,8 @@ function buildRobotsTxt(siteOrigin, { disallow = [] } = {}) {
 
 async function main() {
   const siteOrigin = await inferSiteOrigin()
+  const siteTimeZone = process.env.SITE_TIME_ZONE || process.env.TZ || DEFAULT_SITE_TIME_ZONE
+  const turnstileEnabled = Boolean(String(process.env.VITE_TURNSTILE_SITE_KEY || '').trim())
   const id = buildId()
 
   const templateHtml = await fs.readFile(TEMPLATE_FILE, 'utf8')
@@ -483,7 +469,7 @@ async function main() {
     html = upsertMetaHttpEquiv(
       html,
       'Content-Security-Policy',
-      buildContentSecurityPolicy({ scriptHashes }),
+      buildContentSecurityPolicy({ scriptHashes, allowTurnstile: turnstileEnabled }),
     )
 
     await writeFileEnsured(outFile, html)
@@ -559,14 +545,14 @@ async function main() {
         description: full.excerpt || SITE_DESC,
         siteName: SITE_TITLE,
         ogType: 'article',
-        articlePublishedTime: toIsoDateTime(full.date),
+        articlePublishedTime: toIsoDateTime(full.date, siteTimeZone),
         jsonLd: {
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: String(full.title || ''),
           description: String(full.excerpt || SITE_DESC),
-          datePublished: toIsoDateTime(full.date) || undefined,
-          dateModified: toIsoDateTime(full.date) || undefined,
+          datePublished: toIsoDateTime(full.date, siteTimeZone) || undefined,
+          dateModified: toIsoDateTime(full.date, siteTimeZone) || undefined,
           inLanguage: 'zh-CN',
           author: { '@type': 'Person', name: AUTHOR_NAME },
           mainEntityOfPage: {
@@ -612,7 +598,7 @@ async function main() {
     html = upsertMetaHttpEquiv(
       html,
       'Content-Security-Policy',
-      buildContentSecurityPolicy({ scriptHashes: [] }),
+      buildContentSecurityPolicy({ scriptHashes: [], allowTurnstile: turnstileEnabled }),
     )
 
     await writeFileEnsured(path.join(DIST_DIR, '404.html'), html)
@@ -643,7 +629,7 @@ async function main() {
     html = upsertMetaHttpEquiv(
       html,
       'Content-Security-Policy',
-      buildContentSecurityPolicy({ scriptHashes: [] }),
+      buildContentSecurityPolicy({ scriptHashes: [], allowTurnstile: turnstileEnabled }),
     )
 
     await writeFileEnsured(path.join(DIST_DIR, 'admin', 'index.html'), html)
@@ -679,11 +665,11 @@ async function main() {
 
     await writeFileEnsured(
       path.join(DIST_DIR, 'rss.xml'),
-      buildRssXml(siteOrigin, { title: SITE_TITLE, description: SITE_DESC, items }),
+      buildRssXml(siteOrigin, { title: SITE_TITLE, description: SITE_DESC, items, timeZone: siteTimeZone }),
     )
     await writeFileEnsured(
       path.join(DIST_DIR, 'atom.xml'),
-      buildAtomXml(siteOrigin, { title: SITE_TITLE, subtitle: SITE_DESC, items }),
+      buildAtomXml(siteOrigin, { title: SITE_TITLE, subtitle: SITE_DESC, items, timeZone: siteTimeZone }),
     )
   }
 

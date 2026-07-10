@@ -7,75 +7,29 @@ import vue from '@vitejs/plugin-vue'
 import VueDevTools from 'vite-plugin-vue-devtools'
 
 import { createMarkdownRenderer } from './scripts/posts-data.mjs'
+import {
+  DEFAULT_SITE_TIME_ZONE,
+  buildExcerpt,
+  buildMarkdownFile,
+  compareDateDesc,
+  extractTitleFromMarkdown,
+  formatDateTime,
+  isSafeSlug,
+  normalizeDate,
+  normalizeStringArray,
+  parseFrontmatter,
+  slugFromTitle,
+} from './shared/post-utils.js'
 
 function blogPostsPlugin({ enableAdmin = false } = {}) {
   const postsDir = fileURLToPath(new URL('./src/posts', import.meta.url))
   const postsDirResolved = path.resolve(postsDir)
+  const siteTimeZone = process.env.SITE_TIME_ZONE || process.env.TZ || DEFAULT_SITE_TIME_ZONE
 
   const VIRTUAL_META_ID = 'virtual:blog-posts-meta'
   const RESOLVED_VIRTUAL_META_ID = `\0${VIRTUAL_META_ID}`
 
   const markdown = createMarkdownRenderer()
-
-  const RESERVED_WINDOWS_NAMES = new Set(
-    [
-      'CON',
-      'PRN',
-      'AUX',
-      'NUL',
-      ...Array.from({ length: 9 }, (_, i) => `COM${i + 1}`),
-      ...Array.from({ length: 9 }, (_, i) => `LPT${i + 1}`),
-    ].map((s) => s.toUpperCase()),
-  )
-
-  function pad2(n) {
-    return String(n).padStart(2, '0')
-  }
-
-  function formatDateTime(d = new Date()) {
-    const yyyy = d.getFullYear()
-    const mm = pad2(d.getMonth() + 1)
-    const dd = pad2(d.getDate())
-    const hh = pad2(d.getHours())
-    const mi = pad2(d.getMinutes())
-    const ss = pad2(d.getSeconds())
-    return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`
-  }
-
-  function isSafeSlug(slug) {
-    const s = String(slug || '')
-    if (!s) return false
-    if (s.includes('..')) return false
-    if (s.includes('/') || s.includes('\\')) return false
-    return true
-  }
-
-  function slugFromTitle(title) {
-    let s = String(title || '').trim()
-    // Avoid Windows forbidden characters in file names.
-    s = s.replace(/[\\/:*?"<>|]/g, '-')
-    // Keep it readable; avoid accidental newlines/tabs.
-    s = s
-      .replace(/[\r\n\t]+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-    // Windows doesn't allow trailing dots/spaces.
-    s = s.replace(/[. ]+$/g, '')
-
-    if (!s) return ''
-
-    if (RESERVED_WINDOWS_NAMES.has(s.toUpperCase())) {
-      s = `_${s}`
-    }
-
-    // Keep paths reasonable.
-    if (s.length > 120)
-      s = s
-        .slice(0, 120)
-        .trim()
-        .replace(/[. ]+$/g, '')
-    return s
-  }
 
   function fileNameToSlug(name) {
     return String(name || '').replace(/\.md$/i, '')
@@ -104,113 +58,6 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
     } catch {
       return false
     }
-  }
-
-  function extractTitleFromMarkdown(md, fallback) {
-    const m = String(md).match(/^#\s+(.+)\s*$/m)
-    return (m?.[1] || fallback || '').trim()
-  }
-
-  function buildExcerpt(markdown, maxLen = 160) {
-    const s = String(markdown || '')
-      .replace(/```[\s\S]*?```/g, ' ')
-      .replace(/`[^`]*`/g, ' ')
-      .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
-      .replace(/\[(.*?)\]\([^)]+\)/g, '$1')
-      .replace(/^#+\s+/gm, '')
-      .replace(/>\s?/g, '')
-      .replace(/[*_~]+/g, '')
-      .replace(/\r?\n+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-
-    if (!s) return ''
-    return s.length > maxLen ? `${s.slice(0, maxLen).trim()}...` : s
-  }
-
-  function parseFrontmatter(raw) {
-    const s = String(raw || '')
-    if (!s.startsWith('---')) return { data: {}, content: s }
-
-    // Frontmatter block: ---\n...\n---\n
-    const end = s.indexOf('\n---', 3)
-    if (end === -1) return { data: {}, content: s }
-
-    const fmBlock = s.slice(3, end).replace(/^\r?\n/, '')
-    const rest = s.slice(end + '\n---'.length)
-
-    function parseFrontmatterValue(rawValue) {
-      let value = String(rawValue ?? '').trim()
-      if (!value) return ''
-
-      // Support JSON values: ["a","b"], {"k":"v"} (useful for tags/categories).
-      if (
-        (value.startsWith('[') && value.endsWith(']')) ||
-        (value.startsWith('{') && value.endsWith('}'))
-      ) {
-        try {
-          return JSON.parse(value)
-        } catch {
-          // fall through
-        }
-      }
-
-      // Support values written by JSON.stringify(...) in admin: "..."
-      if (value.startsWith('"') && value.endsWith('"')) {
-        try {
-          return JSON.parse(value)
-        } catch {
-          return value.slice(1, -1)
-        }
-      }
-
-      // strip optional quotes (best-effort)
-      return value.replace(/^['"]/, '').replace(/['"]$/, '')
-    }
-
-    const data = {}
-    for (const line of fmBlock.split(/\r?\n/)) {
-      const trimmed = line.trim()
-      if (!trimmed || trimmed.startsWith('#')) continue
-      const m = trimmed.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/)
-      if (!m) continue
-      const key = m[1]
-      data[key] = parseFrontmatterValue(m[2])
-    }
-
-    return { data, content: rest.replace(/^\r?\n/, '') }
-  }
-
-  function normalizeStringArray(value) {
-    if (!value) return []
-    if (Array.isArray(value))
-      return value.map((v) => String(v || '').trim()).filter(Boolean)
-    const s = String(value || '').trim()
-    if (!s) return []
-    return s
-      .split(/[,，]/g)
-      .map((v) => v.trim())
-      .filter(Boolean)
-  }
-
-  function normalizeDate(value) {
-    if (!value) return '未设置日期'
-    const s = String(value).trim()
-    if (!s) return '未设置日期'
-
-    // Prefer `YYYY-MM-DD HH:mm:ss` (admin writes this).
-    const normalized = s.replace('T', ' ').replace(/Z$/i, '')
-    const m = normalized.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2})(?::(\d{2}))?)?/)
-    if (!m) return s
-    if (!m[2]) return m[1]
-    const sec = m[3] || '00'
-    return `${m[1]} ${m[2]}:${sec}`
-  }
-
-  function compareDateDesc(a, b) {
-    if (a === '未设置日期' && b !== '未设置日期') return 1
-    if (b === '未设置日期' && a !== '未设置日期') return -1
-    return String(b).localeCompare(String(a))
   }
 
   async function readAllPostsFromFs() {
@@ -275,41 +122,6 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
       slug = `${base}-${i}`
       i += 1
     }
-  }
-
-  function normalizeFrontmatterList(value) {
-    if (Array.isArray(value)) return value.map((v) => String(v || '').trim()).filter(Boolean)
-    const s = String(value || '').trim()
-    if (!s) return []
-    return s
-      .split(/[,，]/g)
-      .map((v) => v.trim())
-      .filter(Boolean)
-  }
-
-  function buildMarkdownFile({ title, date, tags, categories, content }) {
-    const t = String(title || '').trim()
-    const body = String(content || '')
-      .replace(/\r\n/g, '\n')
-      .trimEnd()
-    const d = String(date || '').trim()
-    const tagList = normalizeFrontmatterList(tags)
-    const categoryList = normalizeFrontmatterList(categories)
-
-    const fm = [
-      '---',
-      `title: ${JSON.stringify(t || '未命名')}`,
-      `date: ${JSON.stringify(d || formatDateTime(new Date()))}`,
-    ]
-    if (tagList.length) fm.push(`tags: ${JSON.stringify(tagList)}`)
-    if (categoryList.length) fm.push(`categories: ${JSON.stringify(categoryList)}`)
-    fm.push(
-      '---',
-      '',
-      body || '# 未命名\n\n在这里写点什么...\n',
-      '',
-    )
-    return fm.join('\n')
   }
 
   function resolvePostPath(slug) {
@@ -422,8 +234,13 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
             const filePath = resolvePostPath(slug)
             if (!filePath) return json(res, 400, { error: 'Invalid slug.' })
 
-            const now = formatDateTime(new Date())
-            const md = buildMarkdownFile({ title: '未命名', date: now, content: '' })
+            const now = formatDateTime(new Date(), siteTimeZone)
+            const md = buildMarkdownFile({
+              title: '未命名',
+              date: now,
+              content: '',
+              timeZone: siteTimeZone,
+            })
             await fs.writeFile(filePath, md, 'utf8')
             return json(res, 200, { slug, date: now })
           }
@@ -453,8 +270,15 @@ function blogPostsPlugin({ enableAdmin = false } = {}) {
               }
             }
 
-            const now = formatDateTime(new Date())
-            const md = buildMarkdownFile({ title: title || nextSlug, date: now, tags, categories, content })
+            const now = formatDateTime(new Date(), siteTimeZone)
+            const md = buildMarkdownFile({
+              title: title || nextSlug,
+              date: now,
+              tags,
+              categories,
+              content,
+              timeZone: siteTimeZone,
+            })
             await fs.writeFile(newPath, md, 'utf8')
 
             return json(res, 200, { slug: nextSlug, date: now })

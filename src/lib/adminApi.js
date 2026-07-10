@@ -1,6 +1,7 @@
 import { ADMIN_API_BASE, ADMIN_REMOTE } from '@/lib/adminConfig'
 import { adminKey } from '@/lib/adminState'
 import { getAllPosts, getPostBySlug } from '@/lib/posts'
+import { getTurnstileToken } from '@/lib/turnstile'
 
 async function httpJson(url, { method = 'GET', body, auth = false } = {}) {
   const headers = { 'Content-Type': 'application/json' }
@@ -8,6 +9,11 @@ async function httpJson(url, { method = 'GET', body, auth = false } = {}) {
     const key = String(adminKey.value || '').trim()
     if (!key) throw new Error('请先设置管理密钥。')
     headers.Authorization = `Bearer ${key}`
+
+    if (method.toUpperCase() !== 'GET') {
+      const turnstileToken = await getTurnstileToken()
+      if (turnstileToken) headers['Cf-Turnstile-Token'] = turnstileToken
+    }
   }
 
   const res = await fetch(url, {

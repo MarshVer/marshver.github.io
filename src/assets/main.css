@@ -109,6 +109,15 @@ mark {
   z-index: 1;
 }
 
+.admin-turnstile-host {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .container {
   width: 100%;
   max-width: var(--next-container-max);

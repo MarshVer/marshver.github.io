@@ -82,6 +82,9 @@ npx wrangler secret put GITHUB_TOKEN(运行命令等待终端提示输入GITHUB_
 # 你自己设置的强口令（管理密钥），用于保护写接口
 npx wrangler secret put ADMIN_KEY(运行命令等待终端提示输入ADMIN_KEY的值)
 
+# 可选：启用 Cloudflare Turnstile 后再设置
+npx wrangler secret put TURNSTILE_SECRET(运行命令等待终端提示输入Turnstile secret key)
+
 # 部署
 npx wrangler deploy --name blog-admin
 ```
@@ -111,10 +114,19 @@ GitHub 仓库：Settings → Secrets and variables → Actions → Variables
 - Name：`VITE_ADMIN_API_BASE`
 - Value：填你的 Worker URL（不带末尾 `/`），例如：
   - `https://blog-admin.<your>.workers.dev`
+- Name：`SITE_TIME_ZONE`
+- Value：站点写入/SEO 使用的时区，例如：
+  - `Asia/Shanghai`
+
+如果你在 Worker 设置了 `TURNSTILE_SECRET`，还需要新增：
+
+- Name：`VITE_TURNSTILE_SITE_KEY`
+- Value：Cloudflare Turnstile 的 site key
 
 这个变量会在 Actions 构建时注入到前端：
 
 - 只有配置了 `VITE_ADMIN_API_BASE`，生产环境才会启用 `/admin` 并走远程 Worker。
+- `VITE_TURNSTILE_SITE_KEY` 和 Worker 的 `TURNSTILE_SECRET` 必须成对配置，否则写接口会缺少校验 token。
 
 ---
 
@@ -173,6 +185,7 @@ PowerShell：
 ```powershell
 $env:VITE_ENABLE_ADMIN='true'
 $env:VITE_ADMIN_API_BASE='https://blog-admin.<your>.workers.dev'
+$env:VITE_TURNSTILE_SITE_KEY='<your-turnstile-site-key>'
 npm run dev
 ```
 
@@ -183,3 +196,4 @@ npm run dev
 - 不要把 GitHub Token 写进前端代码；只放在 Worker 的 secret
 - `ADMIN_KEY` 请设置复杂一点；只在你自己的浏览器里输入
 - Token 建议设置过期时间，并定期轮换
+- 如果启用 Turnstile，请同时配置 Worker secret `TURNSTILE_SECRET` 和 Actions 变量 `VITE_TURNSTILE_SITE_KEY`

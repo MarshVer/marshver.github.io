@@ -11,6 +11,7 @@ const loadError = ref('')
 const searching = ref(false)
 const searchError = ref('')
 const searchResults = ref([])
+let searchSeq = 0
 
 const keyword = computed(() =>
   String(route.query.q || '')
@@ -42,23 +43,29 @@ const filteredPosts = computed(() => {
 watch(
   keyword,
   async (k) => {
+    const seq = (searchSeq += 1)
     const q = String(k || '').trim()
     searchError.value = ''
     searchResults.value = []
-    if (!q) return
+    if (!q) {
+      searching.value = false
+      return
+    }
 
     searching.value = true
     try {
       await ensureSearchIndex()
+      if (seq !== searchSeq) return
       searchResults.value = searchPosts(q)
     } catch (err) {
+      if (seq !== searchSeq) return
       searchError.value = err?.message || String(err)
       const qLower = q.toLowerCase()
       searchResults.value = allPosts.value.filter((p) =>
         String(p?.title || '').toLowerCase().includes(qLower),
       )
     } finally {
-      searching.value = false
+      if (seq === searchSeq) searching.value = false
     }
   },
   { immediate: true },

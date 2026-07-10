@@ -1,7 +1,13 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getAllPosts, postsRevision } from '@/lib/posts'
+import {
+  ensurePostsIndex,
+  getAllPosts,
+  invalidatePost,
+  invalidatePostsData,
+  postsRevision,
+} from '@/lib/posts'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import AdminKeyDialog from '@/components/AdminKeyDialog.vue'
 import { ADMIN_REMOTE } from '@/lib/adminConfig'
@@ -77,11 +83,18 @@ async function adminPost(url, payload) {
   return data
 }
 
+async function syncLocalPostsCache() {
+  if (isRemote) return
+  invalidatePostsData()
+  await ensurePostsIndex().catch(() => {})
+}
+
 async function createPost() {
   try {
     const data = isRemote ? await apiCreatePost() : await adminPost('/__admin/create', {})
     if (!data?.slug) return
     await setSelected(data.slug)
+    await syncLocalPostsCache()
     bumpAdminPosts()
   } catch (err) {
     window.alert(err?.message || String(err))
@@ -106,6 +119,8 @@ async function doRemove() {
       delete q.slug
       await router.replace({ name: 'admin', query: q })
     }
+    if (isRemote) invalidatePost(p.slug)
+    else await syncLocalPostsCache()
     bumpAdminPosts()
   } catch (err) {
     window.alert(err?.message || String(err))

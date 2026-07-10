@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 
+import { normalizePostMeta as normalizeSharedPostMeta } from '../../shared/post-utils.js'
+
 // In production, posts metadata/content are served as static JSON generated at build time.
 const POSTS_INDEX_URL = '/data/posts.json'
 const POST_URL_PREFIX = '/data/posts/'
@@ -32,59 +34,21 @@ function withBuildId(url) {
   return u.toString()
 }
 
-function normalizePostMeta(p) {
-  const slug = String(p?.slug || '').trim()
-  if (!slug) return null
-  const title = String(p?.title || '').trim() || slug
-  const date = String(p?.date || '').trim() || '未设置日期'
-  const excerpt = String(p?.excerpt || '').trim()
-
-  const normalizeArray = (value) => {
-    if (!value) return []
-    if (Array.isArray(value)) return value.map((v) => String(v || '').trim()).filter(Boolean)
-    return String(value || '')
-      .split(/[,，]/g)
-      .map((v) => v.trim())
-      .filter(Boolean)
-  }
-
-  const tags = normalizeArray(p?.tags ?? p?.tag)
-  const categories = normalizeArray(p?.categories ?? p?.category)
-
-  return { slug, title, date, excerpt, tags, categories }
-}
-
 function setPostsMeta(posts) {
   const raw = Array.isArray(posts) ? posts : []
   // We treat the index as "full" only when every item includes an `excerpt` field.
   // (In SSG, post pages may inline a slim index without excerpts to reduce HTML size.)
   POSTS_HAS_EXCERPT = raw.length > 0 && raw.every((p) => Object.prototype.hasOwnProperty.call(p || {}, 'excerpt'))
-  POSTS_META = raw.map(normalizePostMeta).filter(Boolean)
+  POSTS_META = raw.map((p) => normalizeSharedPostMeta(p, { includeExcerpt: true })).filter(Boolean)
   postsLoaded.value = true
   postsRevision.value += 1
 }
 
 function setPostCache(post) {
-  const slug = String(post?.slug || '').trim()
-  if (!slug) return
-  const title = String(post?.title || '').trim() || slug
-  const date = String(post?.date || '').trim() || '未设置日期'
-  const excerpt = String(post?.excerpt || '').trim()
+  const meta = normalizeSharedPostMeta(post, { includeExcerpt: true })
+  if (!meta) return
   const html = String(post?.html || '')
-
-  const normalizeArray = (value) => {
-    if (!value) return []
-    if (Array.isArray(value)) return value.map((v) => String(v || '').trim()).filter(Boolean)
-    return String(value || '')
-      .split(/[,，]/g)
-      .map((v) => v.trim())
-      .filter(Boolean)
-  }
-
-  const tags = normalizeArray(post?.tags ?? post?.tag)
-  const categories = normalizeArray(post?.categories ?? post?.category)
-
-  POST_CACHE.set(slug, { slug, title, date, excerpt, tags, categories, html })
+  POST_CACHE.set(meta.slug, { ...meta, html })
 }
 
 function readInitialState() {
@@ -140,9 +104,34 @@ export function applyInitialState(state) {
 
 export function resetPostsState() {
   POSTS_META = []
+  POSTS_HAS_EXCERPT = false
   POST_CACHE.clear()
   POST_PROMISES.clear()
+  postsIndexPromise = null
   postsLoaded.value = false
+  postsRevision.value += 1
+}
+
+export function invalidatePostsData({ clearPostCache = true } = {}) {
+  POSTS_META = []
+  POSTS_HAS_EXCERPT = false
+  postsIndexPromise = null
+  POST_PROMISES.clear()
+  if (clearPostCache) POST_CACHE.clear()
+  postsLoaded.value = false
+  postsRevision.value += 1
+}
+
+export async function reloadPostsIndex({ clearPostCache = true } = {}) {
+  invalidatePostsData({ clearPostCache })
+  return await ensurePostsIndex()
+}
+
+export function invalidatePost(slug) {
+  const s = String(slug || '').trim()
+  if (!s) return
+  POST_CACHE.delete(s)
+  POST_PROMISES.delete(s)
   postsRevision.value += 1
 }
 
@@ -163,7 +152,7 @@ export function getCachedPost(slug) {
 }
 
 export async function ensurePostsIndex() {
-  if (postsLoaded.value && POSTS_HAS_EXCERPT) return POSTS_META
+  if (postsLoaded.value && (POSTS_HAS_EXCERPT || POSTS_META.length === 0)) return POSTS_META
   if (postsIndexPromise) return postsIndexPromise
 
   postsIndexPromise = (async () => {

@@ -1,5 +1,6 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { focusFirstDescendant, restoreFocus, trapFocusKeydown } from '@/lib/focusTrap'
 
 const props = defineProps({
   open: { type: Boolean, default: false },
@@ -16,6 +17,9 @@ const show = computed({
 
 const input = ref(String(props.value || ''))
 const remember = ref(Boolean(props.remember))
+const dialogRef = ref(null)
+const inputRef = ref(null)
+let previousActiveElement = null
 
 watch(
   () => props.open,
@@ -38,15 +42,24 @@ function onSave() {
 function onKeyDown(e) {
   if (!props.open) return
   if (e.key === 'Escape') close()
-  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) onSave()
+  else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) onSave()
+  else trapFocusKeydown(e, dialogRef.value)
 }
 
 watch(
   () => props.open,
-  (v) => {
+  async (v) => {
     if (typeof window === 'undefined') return
-    if (v) window.addEventListener('keydown', onKeyDown)
-    else window.removeEventListener('keydown', onKeyDown)
+    if (v) {
+      previousActiveElement = document.activeElement
+      window.addEventListener('keydown', onKeyDown)
+      await nextTick()
+      focusFirstDescendant(dialogRef.value, inputRef.value)
+    } else {
+      window.removeEventListener('keydown', onKeyDown)
+      restoreFocus(previousActiveElement)
+      previousActiveElement = null
+    }
   },
   { immediate: true },
 )
@@ -54,13 +67,22 @@ watch(
 onBeforeUnmount(() => {
   if (typeof window === 'undefined') return
   window.removeEventListener('keydown', onKeyDown)
+  restoreFocus(previousActiveElement)
+  previousActiveElement = null
 })
 </script>
 
 <template>
   <Teleport to="body">
     <div v-if="open" class="confirm-mask" role="presentation" @click.self="close">
-      <div class="confirm-dialog" role="dialog" aria-modal="true" aria-label="设置管理密钥">
+      <div
+        ref="dialogRef"
+        class="confirm-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-label="设置管理密钥"
+        tabindex="-1"
+      >
         <div class="confirm-dialog__title">设置管理密钥</div>
         <div class="confirm-dialog__message">
           默认仅在当前会话有效（关闭浏览器后失效）；可选择“记住”以保存到 localStorage。
@@ -68,7 +90,13 @@ onBeforeUnmount(() => {
 
         <label class="key-field">
           <span class="key-field__label">ADMIN_KEY</span>
-          <input v-model="input" class="key-field__input" type="password" autocomplete="off" />
+          <input
+            ref="inputRef"
+            v-model="input"
+            class="key-field__input"
+            type="password"
+            autocomplete="off"
+          />
           <span class="key-field__hint">Ctrl/⌘ + Enter 保存</span>
         </label>
 

@@ -7,7 +7,6 @@ import {
   getAllPosts,
   getCachedPost,
   getPostMetaBySlug,
-  postsLoaded,
   postsRevision,
 } from '@/lib/posts'
 import { toTimeDatetime } from '@/lib/datetime'
@@ -23,8 +22,10 @@ const postMeta = computed(() => {
 const post = ref(null)
 const loading = ref(false)
 const loadError = ref('')
+let refreshSeq = 0
 
 async function refreshPost() {
+  const seq = (refreshSeq += 1)
   const s = slug.value
   if (!s) {
     post.value = null
@@ -48,13 +49,16 @@ async function refreshPost() {
   loadError.value = ''
   post.value = null
   try {
-    post.value = await ensurePost(s)
+    const nextPost = await ensurePost(s)
+    if (seq !== refreshSeq || slug.value !== s) return
+    post.value = nextPost
     if (!post.value) loadError.value = '文章不存在'
   } catch (err) {
+    if (seq !== refreshSeq || slug.value !== s) return
     loadError.value = err?.message || String(err)
     post.value = null
   } finally {
-    loading.value = false
+    if (seq === refreshSeq && slug.value === s) loading.value = false
   }
 }
 
@@ -75,7 +79,7 @@ const nextPost = computed(() =>
 
 const effectiveMeta = computed(() => postMeta.value || post.value)
 const html = computed(() => (post.value ? String(post.value.html || '') : ''))
-const initialLoading = computed(() => slug.value && !effectiveMeta.value && (loading.value || !postsLoaded.value))
+const initialLoading = computed(() => slug.value && !effectiveMeta.value && loading.value)
 
 function decodeHtmlEntities(s) {
   return String(s || '')

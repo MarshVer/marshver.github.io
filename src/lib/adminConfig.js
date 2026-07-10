@@ -1,4 +1,5 @@
 export const ADMIN_API_BASE = String(import.meta.env.VITE_ADMIN_API_BASE || '').replace(/\/+$/g, '')
+export const ADMIN_TURNSTILE_SITE_KEY = String(import.meta.env.VITE_TURNSTILE_SITE_KEY || '').trim()
 
 // Remote admin is typically used on GitHub Pages (no local filesystem).
 export const ADMIN_REMOTE = Boolean(ADMIN_API_BASE)

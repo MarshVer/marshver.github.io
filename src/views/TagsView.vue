@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ensurePostsIndex, getAllPosts, postsRevision } from '@/lib/posts'
+import { ensureSearchIndex, searchPosts } from '@/lib/search'
 import { toTimeDatetime } from '@/lib/datetime'
 
 const route = useRoute()
@@ -9,6 +10,10 @@ const router = useRouter()
 
 const loading = ref(false)
 const loadError = ref('')
+const searching = ref(false)
+const searchError = ref('')
+const searchResults = ref([])
+let searchSeq = 0
 
 const keyword = computed(() =>
   String(route.query.q || '')
@@ -59,13 +64,13 @@ const categoryStats = computed(() => {
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
 })
 
+const searchSourcePosts = computed(() => (keyword.value ? searchResults.value : allPosts.value))
+
 const filteredPosts = computed(() => {
-  const k = keyword.value
   const tag = selectedTag.value
   const category = selectedCategory.value
 
-  return allPosts.value.filter((p) => {
-    if (k && !String(p?.title || '').toLowerCase().includes(k)) return false
+  return searchSourcePosts.value.filter((p) => {
     if (tag) {
       const tags = normalizeArray(p?.tags)
       if (!tags.includes(tag)) return false
@@ -77,6 +82,37 @@ const filteredPosts = computed(() => {
     return true
   })
 })
+
+watch(
+  keyword,
+  async (k) => {
+    const seq = (searchSeq += 1)
+    const q = String(k || '').trim()
+    searchError.value = ''
+    searchResults.value = []
+    if (!q) {
+      searching.value = false
+      return
+    }
+
+    searching.value = true
+    try {
+      await ensureSearchIndex()
+      if (seq !== searchSeq) return
+      searchResults.value = searchPosts(q)
+    } catch (err) {
+      if (seq !== searchSeq) return
+      searchError.value = err?.message || String(err)
+      const qLower = q.toLowerCase()
+      searchResults.value = allPosts.value.filter((p) =>
+        String(p?.title || '').toLowerCase().includes(qLower),
+      )
+    } finally {
+      if (seq === searchSeq) searching.value = false
+    }
+  },
+  { immediate: true },
+)
 
 function setQuery(updates) {
   const next = { ...route.query, ...updates }
@@ -114,6 +150,8 @@ onMounted(async () => {
   <div class="post-block tags">
     <div v-if="loading" class="empty-block">加载中...</div>
     <div v-else-if="loadError" class="empty-block">{{ loadError }}</div>
+    <div v-else-if="keyword && searching" class="empty-block">搜索中...</div>
+    <div v-else-if="keyword && searchError" class="empty-block">{{ searchError }}</div>
 
     <template v-else>
       <header class="tags-head">
@@ -178,12 +216,16 @@ onMounted(async () => {
 
         <article v-for="p in filteredPosts" :key="p.slug" class="tag-post">
           <router-link class="tag-post__title" :to="{ name: 'post', params: { slug: p.slug } }">
-            {{ p.title }}
+            <span v-if="p.titleHtml" v-html="p.titleHtml" />
+            <span v-else>{{ p.title }}</span>
           </router-link>
           <div class="tag-post__meta">
             <time :datetime="toTimeDatetime(p.date)">{{ p.date }}</time>
           </div>
-          <div v-if="p.excerpt" class="tag-post__excerpt">{{ p.excerpt }}</div>
+          <div v-if="p.excerptHtml || p.excerpt" class="tag-post__excerpt">
+            <span v-if="p.excerptHtml" v-html="p.excerptHtml" />
+            <span v-else>{{ p.excerpt }}</span>
+          </div>
         </article>
       </section>
     </template>
